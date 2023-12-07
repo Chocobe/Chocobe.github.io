@@ -6,6 +6,7 @@ import {
 } from 'react';
 // UI Components
 import AllCategories from './AllCategories/AllCategories';
+import AllPosts from './AllPosts/AllPosts';
 import BlogPostCard from '@/components/ui/BlogPostCard/BlogPostCard';
 // icons
 import {
@@ -19,12 +20,16 @@ import {
 } from '@/components/ui/BlogPostCard/blogPostCard.type';
 
 const StyledHomePageRoot = styled.div`
-    > .featuredPostWrapper {
-        padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    > .featuredSection {
+        padding: 40px 0;
 
         background-color: ${({ theme }) => theme.designSystemColors.type.d};
 
-        > .blogPost {
+        > .sectionContent {
             margin-left: auto;
             margin-right: auto;
 
@@ -32,13 +37,12 @@ const StyledHomePageRoot = styled.div`
         }
     }
 
-    // FIXME: AllBlogPosts 컴포넌트 만든 후, className 하나로 만들기
-    > .allCategoriesSection,
-    > .allBlogPostsWrapper {
+    > .commonSection {
         margin-left: auto;
         margin-right: auto;
-        padding: 40px;
+        padding: 0 40px;
 
+        width: 100%;
         max-width: calc(980px + (40px * 2));
 
         > .sectionHeader {
@@ -59,32 +63,9 @@ const StyledHomePageRoot = styled.div`
                 font-weight: 700;
             }
         }
-    }
 
-    > .allCategoriesSection {
-        //
-
-        // FIXME: AllBlogPosts 컴포넌트 만든 후, className 하나로 만들기
-        > .allCategories {
+        > .sectionContent {
             margin-top: 8px;
-        }
-    }
-
-    > .allBlogPostsWrapper {
-        //
-
-        /* FIXME: AllBlogPosts 컴포넌트 만든 후, 삭제하기 */
-        > .blogPostList {
-            margin-top: 8px;
-
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-
-            // FIXME: AllBlogPosts 컴포넌트 만든 후, className 하나로 만들기
-            > .blogPost {
-                max-width: 980px;
-            }
         }
     }
 `;
@@ -92,17 +73,17 @@ const StyledHomePageRoot = styled.div`
 function HomePage() {
     return (
         <StyledHomePageRoot>
-            <div className="featuredPostWrapper">
+            <section className="featuredSection">
                 <BlogPostCard 
-                    className="blogPost"
+                    className="sectionContent"
                     variant={blogPostCardVariantMapper.FEATURED}
                     thumbnail="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
                     title="BlogPostCard - featured 구현 중"
                     date={'2023-12-06'}
                     description={`UI Component BlogPostCard 컴포넌트 구현 중입니다.\nHello World\n안녕하센요`} />
-            </div>
+            </section>
 
-            <section className="allCategoriesSection">
+            <section className="commonSection">
                 <div className="sectionHeader">
                     <TbList 
                         className="sectionIcon"
@@ -114,10 +95,10 @@ function HomePage() {
                     </div>
                 </div>
 
-                <AllCategories className="allCategories" />
+                <AllCategories className="sectionContent" />
             </section>
 
-            <section className="allBlogPostsWrapper">
+            <section className="commonSection">
                 <div className="sectionHeader">
                     <TbList 
                         className="sectionIcon"
@@ -129,43 +110,7 @@ function HomePage() {
                     </div>
                 </div>
 
-                {/* FIXME: AllBlogPosts 컴포넌트로 분리하기 */}
-                <div className="blogPostList">
-                    <BlogPostCard 
-                        className="blogPost"
-                        thumbnail="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
-                        title="BlogPostCard - featured 구현 중"
-                        date={'2023-12-06'}
-                        description={`UI Component BlogPostCard 컴포넌트 구현 중입니다.\nHello World\n안녕하센요`} />
-
-                    <BlogPostCard 
-                        className="blogPost"
-                        thumbnail="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
-                        title="BlogPostCard - featured 구현 중"
-                        date={'2023-12-06'}
-                        description={`UI Component BlogPostCard 컴포넌트 구현 중입니다.\nHello World\n안녕하센요`} />
-
-                    <BlogPostCard 
-                        className="blogPost"
-                        thumbnail="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
-                        title="BlogPostCard - featured 구현 중"
-                        date={'2023-12-06'}
-                        description={`UI Component BlogPostCard 컴포넌트 구현 중입니다.\nHello World\n안녕하센요`} />
-
-                    <BlogPostCard 
-                        className="blogPost"
-                        thumbnail="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
-                        title="BlogPostCard - featured 구현 중"
-                        date={'2023-12-06'}
-                        description={`UI Component BlogPostCard 컴포넌트 구현 중입니다.\nHello World\n안녕하센요`} />
-
-                    <BlogPostCard 
-                        className="blogPost"
-                        thumbnail="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
-                        title="BlogPostCard - featured 구현 중"
-                        date={'2023-12-06'}
-                        description={`UI Component BlogPostCard 컴포넌트 구현 중입니다.\nHello World\n안녕하센요`} />
-                </div>
+                <AllPosts className="sectionContent" />
             </section>
         </StyledHomePageRoot>
     );

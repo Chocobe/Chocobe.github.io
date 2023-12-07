@@ -14,9 +14,12 @@ export const readMarkdownDir = async (
         const isFile = /^.+\..*$/.test(name);
 
         switch (type) {
-            case 'file': return isFile;
-            case 'dir': return !isFile;
-            default: throw new Error('readMarkdownDir() 호출 시, type 은 "file" 또는 "dir" 만 가능합니다.');
+            case 'file': 
+                return isFile;
+            case 'dir': 
+                return !isFile;
+            default: 
+                throw new Error('readMarkdownDir() 호출 시, type 은 "file" 또는 "dir" 만 가능합니다.');
         }
     });
 
