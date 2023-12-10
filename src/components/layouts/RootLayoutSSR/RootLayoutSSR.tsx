@@ -21,7 +21,10 @@ function RootLayoutSSR(props: PropsWithChildren) {
         `.trim()}>
             <StyledComponentsProvider>
                 <RootLayoutHeader />
-                <RootLayoutBody>
+                <RootLayoutBody
+                    style={{
+                        minHeight: 'calc(100% - 72px)',
+                    }}>
                     {children}
                 </RootLayoutBody>
             </StyledComponentsProvider>

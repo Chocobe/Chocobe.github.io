@@ -2,6 +2,7 @@
 
 // react
 import {
+    useCallback,
     memo,
 } from 'react';
 // icons
@@ -127,7 +128,10 @@ type TBlogCategoryCardProps = {
     width?: string;
 
     category: string;
+    displayName: string;
     description: string;
+    onClick: (category: string) => void;
+
     IconComponent: IconType;
 };
 
@@ -137,14 +141,25 @@ function BlogCategoryCard(props: TBlogCategoryCardProps) {
         width = '100%',
 
         category,
+        displayName,
         description,
+        onClick,
+
         IconComponent,
     } = props;
+
+    //
+    // callback
+    //
+    const onClickRoot = useCallback(() => {
+        onClick(category);
+    }, [category, onClick]);
 
     return (
         <StyledBlogCategoryCardRoot 
             className={className}
-            $width={width}>
+            $width={width}
+            onClick={onClickRoot}>
             <div className="decoratorYellow" />
             <div className="decoratorGreen" />
 
@@ -155,7 +170,7 @@ function BlogCategoryCard(props: TBlogCategoryCardProps) {
                 </div>
 
                 <div className="category">
-                    {category}
+                    {displayName}
                 </div>
 
                 <div className="description">

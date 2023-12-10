@@ -31,10 +31,6 @@ function RootLayoutNav() {
     //
     const navItemList = useMemo(() => [
         {
-            name: 'Blog',
-            href: '/blog',
-        },
-        {
             name: 'Profile',
             href: '/profile',
         },

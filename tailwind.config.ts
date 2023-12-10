@@ -3,7 +3,7 @@ import colors from './src/styles/colors';
 
 const spacing = Array
     .from(
-        { length: 200 },
+        { length: 500 },
         (_, i) => {
             const value = `${i + 1}`;
             const key = `px-${value}`;

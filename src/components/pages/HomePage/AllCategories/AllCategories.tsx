@@ -2,8 +2,13 @@
 
 // react
 import {
+    useCallback,
     memo,
 } from 'react';
+// nextjs
+import { 
+    useRouter,
+} from 'next/navigation';
 // UI Components
 import BlogCategoryCard from '@/components/ui/BlogCategoryCard/BlogCategoryCard';
 // styled-components
@@ -34,11 +39,24 @@ function AllCategories(props: TAllCategoriesProps) {
         className,
     } = props;
 
+    //
+    // hook
+    //
+    const router = useRouter();
+
+    //
+    // callback
+    //
+    const onClickCategoryCard = useCallback((category: string) => {
+        router.push(`/blog/${category}`);
+    }, [router]);
+
     return (
         <StyledAllCategoriesRoot className={className}>
             {allBlogCategoryInfoList.map(info => {
                 const {
                     category,
+                    displayName,
                     description,
                     IconComponent,
                 } = info;
@@ -48,7 +66,9 @@ function AllCategories(props: TAllCategoriesProps) {
                         className="categoryItem"
                         key={category}
                         category={category}
+                        displayName={displayName}
                         description={description}
+                        onClick={onClickCategoryCard}
                         IconComponent={IconComponent} />
                 );
             })}

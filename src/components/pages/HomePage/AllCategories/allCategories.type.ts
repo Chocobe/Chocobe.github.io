@@ -12,33 +12,39 @@ import {
 
 export type TBlogCategoryInfo = {
     category: string;
+    displayName: string;
     description: string;
     IconComponent: IconType;
 };
 
 export const allBlogCategoryInfoList = [
     {
-        category: 'Nextjs',
+        category: 'nextjs',
+        displayName: 'Nextjs',
         description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
         IconComponent: TbBrandNextjs
     },
     {
-        category: 'Javascript',
+        category: 'javascript',
+        displayName: 'Javascript',
         description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
         IconComponent: TbBrandJavascript,
     },
     {
-        category: 'Vue',
+        category: 'vue',
+        displayName: 'Vue',
         description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
         IconComponent: TbBrandVue,
     },
     {
-        category: 'Typescript',
+        category: 'typescript',
+        displayName: 'Typescript',
         description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
         IconComponent: TbBrandTypescript,
     },
     {
-        category: 'Rxjs',
+        category: 'rxjs',
+        displayName: 'Rxjs',
         description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
         IconComponent: SiReactivex,
     },

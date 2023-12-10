@@ -339,6 +339,21 @@ export const designSystemColors = {
                 bg: '#009189',
             },
         },
+
+        NavMenuItem: {
+            color: '#6D6E76',
+            borderColor: '#EEEEEE',
+            decorator: '#ffffff00',
+
+            hover: {
+                color: '#333333',
+            },
+
+            active: {
+                color: '#009189',
+                decorator: '#FFD050',
+            },
+        }
     },
 
     // dark: {
