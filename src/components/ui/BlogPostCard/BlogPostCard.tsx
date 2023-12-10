@@ -198,7 +198,7 @@ const StyledBlogPostCardRoot = styled.div`
     }
 `;
 
-type TBlogPostCardProps = {
+export type TBlogPostCardProps = {
     className?: string;
 
     variant?: TBlogPostCardVariant;
