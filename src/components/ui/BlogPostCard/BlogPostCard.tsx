@@ -2,11 +2,15 @@
 
 // react
 import {
-    memo,
+    useCallback,
+    memo, 
 } from 'react';
 // nextjs
 import Image from 'next/image';
 import Link from 'next/link';
+import { 
+    useRouter,
+} from 'next/navigation';
 // styled-components
 import styled from 'styled-components';
 // type
@@ -136,6 +140,8 @@ const StyledBlogPostCardRoot = styled.div`
     &:not([data-variant=${blogPostCardVariantMapper.FEATURED}]):hover {
         box-shadow: ${({ theme }) => theme.designSystemColors.BlogPostCard.boxShadow};
 
+        cursor: pointer;
+
         > .cardBody {
             //
 
@@ -184,7 +190,12 @@ const StyledBlogPostCardRoot = styled.div`
             }
 
             > .description {
-                //
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                overflow: hidden;
+
+                white-space: pre-line;
             }
 
             > .readMoreLink {
@@ -204,9 +215,12 @@ export type TBlogPostCardProps = {
     variant?: TBlogPostCardVariant;
     thumbnail?: string;
 
+    category: string;
     title: string;
     date: string;
     description: string;
+
+    href: string;
 };
 
 function BlogPostCard(props: TBlogPostCardProps) {
@@ -215,16 +229,33 @@ function BlogPostCard(props: TBlogPostCardProps) {
 
         variant = blogPostCardVariantMapper.NORMAL,
         thumbnail,
+        category,
 
         title,
         date,
         description,
+
+        href,
     } = props;
+
+    const router = useRouter();
+
+    //
+    // callback
+    //
+    const onClick = useCallback(() => {
+        if (variant === blogPostCardVariantMapper.FEATURED) {
+            return;
+        }
+
+        router.push(href);
+    }, [variant, href, router]);
 
     return (
         <StyledBlogPostCardRoot
             className={className}
-            data-variant={variant}>
+            data-variant={variant}
+            onClick={onClick}>
             <figure className="thumbnailWrapper">
                 {thumbnail && (
                     <Image
@@ -240,7 +271,7 @@ function BlogPostCard(props: TBlogPostCardProps) {
                 <div className="hoverDecorator" />
 
                 <div className="category">
-                    Javascript
+                    {category}
                 </div>
 
                 <div className="title">
@@ -251,13 +282,15 @@ function BlogPostCard(props: TBlogPostCardProps) {
                     작성일: {date}
                 </div>
 
-                <div className="description">
-                    {description}
-                </div>
+                <div
+                    className="description"
+                    dangerouslySetInnerHTML={{
+                        __html: description,
+                    }} />
 
                 <Link
                     className="readMoreLink"
-                    href="#">
+                    href={href}>
                     Read More
                 </Link>
             </div>

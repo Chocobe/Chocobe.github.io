@@ -40,9 +40,11 @@ function BlogPostCardList(props: TBlogPostCardListProps) {
                     className,
                     variant,
                     thumbnail,
+                    category,
                     title,
                     date,
                     description,
+                    href,
                 } = blogPost;
 
                 return (
@@ -51,9 +53,11 @@ function BlogPostCardList(props: TBlogPostCardListProps) {
                         className={className}
                         variant={variant}
                         thumbnail={thumbnail}
+                        category={category}
                         title={title}
                         date={date}
-                        description={description} />
+                        description={description} 
+                        href={href} />
                 );
             })}
         </div>

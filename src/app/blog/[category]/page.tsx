@@ -1,5 +1,11 @@
-// type
+// markdown
 import BlogMarkdownManager from '@/utils/ssr/BlogMarkdownManager';
+// UI Components
+import BlogCategoryPage from '@/components/pages/BlogCategoryPage/BlogCategoryPage';
+// type
+import {
+    TBlogMarkdownRenderingData,
+} from '@/utils/ssr/blogMarkdownManager.type';
 
 type TBlogCategoryPageStaticParam = {
     category: string;
@@ -17,47 +23,53 @@ export const generateStaticParams = async () => {
     }));
 };
 
-function BlogCategoryPage(props: TBlogCategoryPageProps) {
+async function BlogCategoryPageSSR(props: TBlogCategoryPageProps) {
     const {
         params: {
             category,
         },
     } = props;
 
+    const markdownList = await BlogMarkdownManager.instance;
+    const promiseList = markdownList
+        .filter(markdown => {
+            return markdown.category === category;
+        })
+        .map(async ({ slug }) => {
+            const markdownFile = await BlogMarkdownManager.readMarkdownFile({
+                category,
+                slug,
+            });
+
+            if (!markdownFile) {
+                return null as unknown as TBlogMarkdownRenderingData;
+            }
+
+            const frontmatter = BlogMarkdownManager.readFrontmatterFromFile(markdownFile);
+
+            return {
+                category,
+                slug,
+                frontmatter,
+            } as TBlogMarkdownRenderingData;
+        })
+        .filter(frontmatter => !!frontmatter);
+
+    const blogMarkdownFrontmatterList = await Promise
+        .all(promiseList);
+
+    // TODO: BlogMarkdownManager 에서 Blog 데이터 가져오기 (node:fs)
+    // TODO: BlogMarkdownManager 에서 Blog 데이터 가져오기 (node:fs)
+    // TODO: BlogMarkdownManager 에서 Blog 데이터 가져오기 (node:fs)
+
+    console.log('markdownList: ', markdownList);
+    console.log('blogMarkdownFrontmatterList: ', blogMarkdownFrontmatterList);
+
     return (
-        <div>
-            <h1>Blog Category Page</h1>
-
-            <p>category: {category}</p>
-
-            <div>
-                <div style={{
-                    width: '200px',
-                    height: '500px',
-                    backgroundColor: '#ff1493',
-                }}>
-                    Box 1
-                </div>
-                <div style={{
-                    width: '300px',
-                    height: '800px',
-                    backgroundColor: '#03a9f4',
-                }}>
-                    Box 2
-                </div>
-                <div style={{
-                    width: '400px',
-                    height: '1000px',
-                    backgroundColor: '#006400',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    alignItems: 'flex-end',
-                }}>
-                    Box 3
-                </div>
-            </div>
-        </div>
+        <BlogCategoryPage 
+            featuredMarkdownRendeeringDataList={blogMarkdownFrontmatterList}
+            commonMarkdownRenderingDataList={blogMarkdownFrontmatterList} />
     );
 }
 
-export default BlogCategoryPage;
+export default BlogCategoryPageSSR;

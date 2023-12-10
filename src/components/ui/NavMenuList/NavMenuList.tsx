@@ -21,7 +21,7 @@ import {
 } from '@/components/pages/HomePage/AllCategories/allCategories.type';
 
 const StyledNavMenuListRoot = styled.nav`
-    //
+    border-right: 1px solid ${({ theme }) => theme.designSystemColors.NavMenuList.borderColor};
 
     > .navTitle {
         padding: 20px 10px;

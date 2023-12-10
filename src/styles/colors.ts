@@ -305,6 +305,13 @@ export const designSystemColors = {
             labelColor: '#232536',
         },
 
+        BlogSlugPage: {
+            prevPageButton: {
+                color: '#fff',
+                backgroundColor: '#009189',
+            },
+        },
+
         // TODO: 컴포넌트.color.ts 로 분리해야 할 듯...
         // TODO: 컴포넌트.color.ts 로 분리해야 할 듯...
         // TODO: 컴포넌트.color.ts 로 분리해야 할 듯...
@@ -338,6 +345,10 @@ export const designSystemColors = {
                 color: '#fff',
                 bg: '#009189',
             },
+        },
+
+        NavMenuList: {
+            borderColor: '#EEEEEE',
         },
 
         NavMenuItem: {

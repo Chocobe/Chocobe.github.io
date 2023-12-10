@@ -78,9 +78,11 @@ function HomePage() {
                     className="sectionContent"
                     variant={blogPostCardVariantMapper.FEATURED}
                     thumbnail="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
+                    category="Javascript"
                     title="BlogPostCard - featured 구현 중"
                     date={'2023-12-06'}
-                    description={`UI Component BlogPostCard 컴포넌트 구현 중입니다.\nHello World\n안녕하센요`} />
+                    description={`UI Component BlogPostCard 컴포넌트 구현 중입니다.\nHello World\n안녕하센요`} 
+                    href="#" />
             </section>
 
             <section className="commonSection">
@@ -88,7 +90,7 @@ function HomePage() {
                     <TbList 
                         className="sectionIcon"
                         size="20px" 
-                        strokeWidth="2px"/>
+                        strokeWidth="2px" />
 
                     <div className="sectionTitle">
                         All Categories
@@ -103,7 +105,7 @@ function HomePage() {
                     <TbList 
                         className="sectionIcon"
                         size="20px" 
-                        strokeWidth="2px"/>
+                        strokeWidth="2px" />
 
                     <div className="sectionTitle">
                         All Blog Posts

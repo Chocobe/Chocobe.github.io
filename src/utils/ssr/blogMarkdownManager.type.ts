@@ -16,6 +16,7 @@ export type TBlogMarkdownFrontmatter = {
     description: string;
     thumbnail?: string;
 
+    featured: boolean;
     tags?: TBlogMarkdownTag[];
 
     createdAt: Date;
@@ -23,4 +24,10 @@ export type TBlogMarkdownFrontmatter = {
         commitMessage: string;
         modifiedAt: Date;
     }>;
+};
+
+export type TBlogMarkdownRenderingData = {
+    category: string;
+    slug: string;
+    frontmatter: TBlogMarkdownFrontmatter;
 };

@@ -1,12 +1,8 @@
-'use client';
-
 // UI Components
 import HomePage from '@/components/pages/HomePage/HomePage';
 
 function HomePageSSR() {
-    return (
-        <HomePage />
-    );
+    return <HomePage />;
 }
 
 export default HomePageSSR;
