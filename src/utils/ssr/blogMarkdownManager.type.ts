@@ -26,8 +26,11 @@ export type TBlogMarkdownFrontmatter = {
     }>;
 };
 
-export type TBlogMarkdownRenderingData = {
+export type TBlogMarkdownFileData = {
     category: string;
     slug: string;
+    href: string;
+
     frontmatter: TBlogMarkdownFrontmatter;
+    markdownFile: string;
 };

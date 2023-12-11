@@ -2,10 +2,6 @@
 import BlogMarkdownManager from '@/utils/ssr/BlogMarkdownManager';
 // UI Components
 import BlogCategoryPage from '@/components/pages/BlogCategoryPage/BlogCategoryPage';
-// type
-import {
-    TBlogMarkdownRenderingData,
-} from '@/utils/ssr/blogMarkdownManager.type';
 
 type TBlogCategoryPageStaticParam = {
     category: string;
@@ -30,45 +26,26 @@ async function BlogCategoryPageSSR(props: TBlogCategoryPageProps) {
         },
     } = props;
 
-    const markdownList = await BlogMarkdownManager.instance;
-    const promiseList = markdownList
-        .filter(markdown => {
-            return markdown.category === category;
-        })
-        .map(async ({ slug }) => {
-            const markdownFile = await BlogMarkdownManager.readMarkdownFile({
-                category,
-                slug,
-            });
+    const markdownFileDataList = await BlogMarkdownManager
+        .instance
+        .readMarkdownFileDataList(category);
 
-            if (!markdownFile) {
-                return null as unknown as TBlogMarkdownRenderingData;
-            }
+    // FIXME: 실제 markdown file 추가 후, 아래 주석 해제
+    // const featuredList = markdownFileDataList
+    //     .filter(({ frontmatter }) => frontmatter.featured);
 
-            const frontmatter = BlogMarkdownManager.readFrontmatterFromFile(markdownFile);
-
-            return {
-                category,
-                slug,
-                frontmatter,
-            } as TBlogMarkdownRenderingData;
-        })
-        .filter(frontmatter => !!frontmatter);
-
-    const blogMarkdownFrontmatterList = await Promise
-        .all(promiseList);
-
-    // TODO: BlogMarkdownManager 에서 Blog 데이터 가져오기 (node:fs)
-    // TODO: BlogMarkdownManager 에서 Blog 데이터 가져오기 (node:fs)
-    // TODO: BlogMarkdownManager 에서 Blog 데이터 가져오기 (node:fs)
-
-    console.log('markdownList: ', markdownList);
-    console.log('blogMarkdownFrontmatterList: ', blogMarkdownFrontmatterList);
+    // FIXME: 실제 markdown file 추가 후, 아래 주석 해제
+    // const commonList = markdownFileDataList
+    //     .filter(({ frontmatter }) => !frontmatter.featured);
 
     return (
         <BlogCategoryPage 
-            featuredMarkdownRendeeringDataList={blogMarkdownFrontmatterList}
-            commonMarkdownRenderingDataList={blogMarkdownFrontmatterList} />
+            featuredMarkdownRendeeringDataList={markdownFileDataList}
+            commonMarkdownRenderingDataList={markdownFileDataList} />
+        // FIXME: 실제 markdown file 추가 후, 아래 주석 해제
+        // <BlogCategoryPage 
+        //     featuredMarkdownRendeeringDataList={featuredList}
+        //     commonMarkdownRenderingDataList={commonList} />
     );
 }
 

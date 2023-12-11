@@ -15,7 +15,7 @@ import {
     blogPostCardVariantMapper,
 } from '@/components/ui/BlogPostCard/blogPostCard.type';
 import { 
-    TBlogMarkdownRenderingData,
+    TBlogMarkdownFileData,
 } from '@/utils/ssr/blogMarkdownManager.type';
 // styled-components
 import styled from 'styled-components';
@@ -39,8 +39,8 @@ const StyledBlogCategoryPageRoot = styled.div`
 `;
 
 type TBlogCategoryPageProps = {
-    featuredMarkdownRendeeringDataList: TBlogMarkdownRenderingData[];
-    commonMarkdownRenderingDataList: TBlogMarkdownRenderingData[];
+    featuredMarkdownRendeeringDataList: TBlogMarkdownFileData[];
+    commonMarkdownRenderingDataList: TBlogMarkdownFileData[];
 };
 
 function BlogCategoryPage(props: TBlogCategoryPageProps) {
@@ -56,7 +56,7 @@ function BlogCategoryPage(props: TBlogCategoryPageProps) {
         const rr = commonMarkdownRenderingDataList.map<TBlogPostCardProps>(data => {
             const {
                 category,
-                slug,
+                href,
                 frontmatter: {
                     title,
                     description,
@@ -70,8 +70,8 @@ function BlogCategoryPage(props: TBlogCategoryPageProps) {
                 title,
                 description,
                 thumbnail,
+                href,
                 date: createdAt.toISOString(),
-                href: `/blog/${category}/${slug}`,
             };
         });
 
@@ -110,7 +110,7 @@ function BlogCategoryPage(props: TBlogCategoryPageProps) {
                         title={featuredMarkdownRendeeringDataList[0].frontmatter.title}
                         date={featuredMarkdownRendeeringDataList[0].frontmatter.createdAt.toISOString()}
                         description={featuredMarkdownRendeeringDataList[0].frontmatter.description} 
-                        href={`/blog/${featuredMarkdownRendeeringDataList[0].category}/${featuredMarkdownRendeeringDataList[0].slug}`} />
+                        href={featuredMarkdownRendeeringDataList[0].href} />
                 </section>
             )}
 

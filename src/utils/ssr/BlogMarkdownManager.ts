@@ -8,6 +8,7 @@ import matter from 'gray-matter';
 import { 
     TBlogMarkdownParam,
     TBlogMarkdownFrontmatter,
+    TBlogMarkdownFileData,
 } from './blogMarkdownManager.type';
 
 /**
@@ -24,10 +25,12 @@ import {
  *      * `instance`: 전체 `.mdx` 반환합니다.
  */
 class BlogMarkdownManager {
-    private static _instance: Promise<TBlogMarkdownParam[]>;
+    private static _instance: BlogMarkdownManager;
+
+    private _blogMarkdownParamList: Promise<TBlogMarkdownParam[]>;
 
     private constructor() {
-        BlogMarkdownManager._instance = this.generateInstance();
+        this._blogMarkdownParamList = this.generateInstance();
     }
 
     /**
@@ -74,7 +77,9 @@ class BlogMarkdownManager {
     }
 
     /**
-     * `src/markdown` 하위의 모든 `폴더명` 을 반환 합니다.
+     * `src/markdown` 하위의 모든 `폴더명` 을 반환 합니다. 
+     * 
+     * (전체 카테고리 이름)
      */
     static async readCategoryNameList() {
         return await readMarkdownDir('dir');
@@ -114,7 +119,7 @@ class BlogMarkdownManager {
      * const frontmatter = BlogMarkdownManager
      *     .readFrontmatterFromFile(markdown);
      */
-    static readFrontmatterFromFile(markdown: string) {
+    static readMarkdownFrontmatter(markdown: string) {
         const frontmatter = matter(markdown).data as TBlogMarkdownFrontmatter;
 
         const {
@@ -132,12 +137,75 @@ class BlogMarkdownManager {
         } as TBlogMarkdownFrontmatter;
     }
 
-    static get instance() {
-        if (!BlogMarkdownManager._instance) {
-            new BlogMarkdownManager();
+    /**
+     * `.mdx` 파일 정보를 가져옵니다.
+     */
+    static async readMarkdownFileData(params: {
+        category: string;
+        slug: string;
+    }) {
+        const {
+            category,
+            slug,
+        } = params;
+
+        const markdownFile = await BlogMarkdownManager.readMarkdownFile(params);
+
+        if (!markdownFile) {
+            return null;
         }
 
+        const frontmatter = BlogMarkdownManager.readMarkdownFrontmatter(markdownFile);
+        const href = `/blog/${category}/${slug}`;
+
+        return {
+            category,
+            slug,
+            href,
+
+            frontmatter,
+            markdownFile,
+        } as TBlogMarkdownFileData;
+    }
+
+    /**
+     * 특정 `category` 하위의 모든 `.mdx` 파일 정보를 가져옵니다.
+     */
+    async readMarkdownFileDataList(category: string) {
+        const targetParamList = await this
+            ._blogMarkdownParamList
+            .then(blogMarkdownParamList => {
+                return blogMarkdownParamList
+                    .filter(param => param.category === category);
+            });
+
+        const promiseList = targetParamList.map(async param => {
+            const promise = await BlogMarkdownManager.readMarkdownFileData(param);
+            return promise as TBlogMarkdownFileData;
+        });
+
+        const markdownFileDataList = await Promise.all(promiseList);
+
+        return markdownFileDataList
+            .filter(markdownFileData => !!markdownFileData);
+    }
+
+    private static initInstance() {
+        if (!BlogMarkdownManager._instance) {
+            BlogMarkdownManager._instance = new BlogMarkdownManager();
+        }
+    }
+
+    static get instance() {
+        BlogMarkdownManager.initInstance();
+
         return BlogMarkdownManager._instance;
+    }
+
+    get blogMarkdownParamList() {
+        return BlogMarkdownManager
+            ._instance
+            ._blogMarkdownParamList;
     }
 }
 

@@ -16,7 +16,9 @@ import {
 } from '@/utils/ssr/blogMarkdownManager.type';
 
 export const generateStaticParams = () => {
-    return BlogMarkdownManager.instance;
+    return BlogMarkdownManager
+        .instance
+        .blogMarkdownParamList;
 };
 
 type TBlogSlugPageProps = {
