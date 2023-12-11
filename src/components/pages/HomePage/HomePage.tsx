@@ -20,6 +20,8 @@ import {
 } from '@/components/ui/BlogPostCard/blogPostCard.type';
 
 const StyledHomePageRoot = styled.div`
+    padding-bottom: 20px;
+
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -33,17 +35,17 @@ const StyledHomePageRoot = styled.div`
             margin-left: auto;
             margin-right: auto;
 
-            max-width: 980px;
+            max-width: ${({ theme }) => theme.designSystemColors.common.maxWidth};
         }
     }
 
     > .commonSection {
         margin-left: auto;
         margin-right: auto;
-        padding: 0 40px;
+        padding: 0 ${({ theme }) => theme.designSystemColors.common.paddingX};
 
         width: 100%;
-        max-width: calc(980px + (40px * 2));
+        max-width: ${({ theme }) => theme.designSystemColors.common.maxWidthWithPaddingX};
 
         > .sectionHeader {
             display: flex;

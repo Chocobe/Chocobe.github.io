@@ -17,7 +17,8 @@ function RootLayoutSSR(props: PropsWithChildren) {
         <div className={`
             w-full
             h-full
-            overflow-auto
+            overflow-y-scroll
+            overflow-x-auto
         `.trim()}>
             <StyledComponentsProvider>
                 <RootLayoutHeader />

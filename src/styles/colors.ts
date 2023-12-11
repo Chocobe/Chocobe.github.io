@@ -301,6 +301,12 @@ export const designSystemColors = {
             h: '#009189',
         },
 
+        common: {
+            paddingX: '40px',
+            maxWidth: '980px',
+            maxWidthWithPaddingX: `calc(980px + (40px * 2))`,
+        },
+
         HomePage: {
             labelColor: '#232536',
         },

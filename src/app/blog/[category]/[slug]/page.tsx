@@ -31,9 +31,8 @@ async function BlogSlugPageSSR(props: TBlogSlugPageProps) {
     } = props;
 
     const markdown = await BlogMarkdownManager.readMarkdownFile(params);
-    const categoryNameList = await BlogMarkdownManager.readCategoryNameList();
 
-    if (!markdown || !categoryNameList) {
+    if (!markdown) {
         return null;
     }
 
@@ -63,45 +62,6 @@ async function BlogSlugPageSSR(props: TBlogSlugPageProps) {
                 }}
                 source={markdown} />
         </BlogSlugPage>
-        // <div style={{
-        //     height: '100%',
-        //     overflow: 'hidden',
-        //     display: 'flex',
-        //     flexDirection: 'column',
-        // }}>
-        //     <div style={{ padding: '20px', color: '#ff1493' }}>
-        //         {categoryNameList.map((c, index) => (
-        //             <div key={index}>
-        //                 {c}
-        //             </div>
-        //         ))}
-        //     </div>
-        //     <BlogSlugPageCSR>
-        //         <MDXRemote
-        //             options={{
-        //                 parseFrontmatter: true,
-        //                 mdxOptions: {
-        //                     remarkPlugins: [
-        //                         remarkGfm,
-        //                     ],
-        //                     rehypePlugins: [
-        //                         [rehypePrettyCode as any, {
-        //                             grid: false,
-        //                             theme: moonlightTheme,
-        //                             defaultLang: {
-        //                                 inline: 'txt',
-        //                                 block: 'typescript',
-        //                             },
-        //                         }]
-        //                     ]
-        //                 },
-        //             }}
-        //             components={{
-        //                 a: MarkdownAnchor,
-        //             }}
-        //             source={markdown} />
-        //     </BlogSlugPageCSR>
-        // </div>
     );
 }
 

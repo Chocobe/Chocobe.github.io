@@ -41,9 +41,8 @@ const StyledNavMenuItemRoot = styled.li`
         background-color: ${({ theme }) => theme.designSystemColors.NavMenuItem.decorator};
 
         transform-origin: top right;
-        transform: rotateZ(15deg);
+        transform: rotateZ(15deg) skewY(-15deg);
         transition: all 1s ease;
-
     }
 
     > .inner {
