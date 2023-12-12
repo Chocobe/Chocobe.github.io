@@ -1,15 +1,8 @@
+// UI Component
+import BlogSlugPage from '@/components/pages/BlogSlugPage/BlogSlugPage';
+import MarkdownViewerSSR from '@/components/ui/MarkdownViewerSSR/MarkdownViewerSSR';
 // markdown
 import BlogMarkdownManager from '@/utils/ssr/BlogMarkdownManager';
-import { 
-    MDXRemote,
-} from 'next-mdx-remote/rsc';
-import remarkGfm from 'remark-gfm';
-import rehypePrettyCode from 'rehype-pretty-code';
-import moonlightTheme from '@/styles/codeBlockThemes/moonlight-2.json';
-// UI Component
-// import StyledBlogSlugPageRoot from './page.styled';
-import BlogSlugPage from '@/components/pages/BlogSlugPage/BlogSlugPage';
-import MarkdownAnchor from '@/markdownComponents/MarkdownAnchor/MarkdownAnchor';
 // type
 import { 
     TBlogMarkdownParam,
@@ -38,28 +31,8 @@ async function BlogSlugPageSSR(props: TBlogSlugPageProps) {
 
     return (
         <BlogSlugPage>
-            <MDXRemote
-                options={{
-                    parseFrontmatter: true,
-                    mdxOptions: {
-                        remarkPlugins: [
-                            remarkGfm,
-                        ],
-                        rehypePlugins: [
-                            [rehypePrettyCode as any, {
-                                theme: moonlightTheme,
-                                defaultLang: {
-                                    inline: 'javascript',
-                                    block: 'typescript',
-                                },
-                            }]
-                        ]
-                    },
-                }}
-                components={{
-                    a: MarkdownAnchor,
-                }}
-                source={markdown} />
+            <MarkdownViewerSSR
+                markdown={markdown} />
         </BlogSlugPage>
     );
 }

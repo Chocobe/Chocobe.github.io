@@ -48,10 +48,11 @@ async function BlogCategoryLayout(props: PropsWithChildren) {
             {/* <footer className={`
                 mx-auto
                 w-[90%] h-[500px]
+                flex justify-end items-end
                 bg-orange-700
-                text-white
+                text-cyan-800 font-bold text-[20px]
             `}>
-                Footer
+                Category Layout Component Footer
             </footer> */}
         </div>
     );
