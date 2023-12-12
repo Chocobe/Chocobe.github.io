@@ -39,6 +39,7 @@ async function BlogCategoryLayout(props: PropsWithChildren) {
                         flex-1
                         mr-auto
                         w-full
+                        overflow-x-hidden
                     `.trim()}>
                     {children}
                 </div>

@@ -47,7 +47,6 @@ async function BlogSlugPageSSR(props: TBlogSlugPageProps) {
                         ],
                         rehypePlugins: [
                             [rehypePrettyCode as any, {
-                                grid: false,
                                 theme: moonlightTheme,
                                 defaultLang: {
                                     inline: 'javascript',

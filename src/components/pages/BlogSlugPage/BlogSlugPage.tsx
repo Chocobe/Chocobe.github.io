@@ -30,15 +30,9 @@ const StyledBlogSlugPageRoot = styled.div`
 
         /* 코드 블록 */
         pre {
-            scrollbar-width: none;
-
-            &::-webkit-scrollbar {
-                display: none;
-            }
+            counter-reset: line;
 
             code {
-                display: grid;
-
                 font-size: 16px;
 
                 span[data-line] {
@@ -71,7 +65,7 @@ const StyledBlogSlugPageRoot = styled.div`
                     }
 
                     span[data-line] {
-                        padding: 2px 0;
+                        padding: 2px 16px 2px 0;
                         display: inline-block;
                     }
                 }
