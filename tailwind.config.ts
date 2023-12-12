@@ -1,24 +1,6 @@
 import type { Config } from 'tailwindcss';
 import colors from './src/styles/colors';
 
-const spacing = Array
-    .from(
-        { length: 500 },
-        (_, i) => {
-            const value = `${i + 1}`;
-            const key = `px-${value}`;
-
-            return ({
-                key,
-                value: `${value}px`,
-            });
-        }
-    )
-    .reduce((spaceMap, { key, value }) => ({
-        ...spaceMap,
-        [key]: value,
-    }), {});
-
 const config: Config = {
     content: [
         "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -27,7 +9,6 @@ const config: Config = {
     theme: {
         extend: {
             colors,
-            spacing,
             // backgroundImage: {
             //     'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
             //     'gradient-conic':

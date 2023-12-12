@@ -29,7 +29,7 @@ function BlogPostCardList(props: TBlogPostCardListProps) {
             className={classNames(
                 className,
                 `
-                    flex flex-col gap-px-20
+                    flex flex-col gap-[20px]
                 `.trim(),
             )}
             style={{
