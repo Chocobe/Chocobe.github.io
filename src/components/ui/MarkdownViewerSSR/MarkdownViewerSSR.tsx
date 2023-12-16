@@ -6,8 +6,9 @@ import remarkGfm from 'remark-gfm';
 import rehypePrettyCode from 'rehype-pretty-code';
 import moonlightTheme from '@/styles/codeBlockThemes/moonlight-2.json';
 // UI Components
-import MarkdownAnchor from '@/markdownComponents/MarkdownAnchor/MarkdownAnchor';
-import MarkdownStrong from '@/markdownComponents/MarkdownAnchor/MarkdownStrong';
+import MarkdownAnchor from '@/components/markdownComponents/MarkdownAnchor';
+import MarkdownStrong from '@/components/markdownComponents/MarkdownStrong';
+import MarkdownUL from '@/components/markdownComponents/MarkdownUl';
 
 type TMarkdownViewerSSRProps = {
     markdown: string | null;
@@ -44,6 +45,7 @@ function MarkdownViewerSSR(props: TMarkdownViewerSSRProps) {
             components={{
                 a: MarkdownAnchor,
                 strong: MarkdownStrong,
+                ul: MarkdownUL,
             }}
             source={markdown} />
     );
