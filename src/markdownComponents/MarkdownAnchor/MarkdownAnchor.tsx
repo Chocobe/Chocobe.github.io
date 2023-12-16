@@ -21,7 +21,7 @@ const StyledMarkdownAnchorRoot = styled.a`
         left: 0;
         right: 100%;
 
-        background-color: #ff1493;
+        background-color: ${({ theme }) => theme.designSystemColors.MarkdownAnchor.backgroundColor};
         opacity: 1;
     }
 

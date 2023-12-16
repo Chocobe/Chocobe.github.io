@@ -370,7 +370,15 @@ export const designSystemColors = {
                 color: '#009189',
                 decorator: '#FFD050',
             },
-        }
+        },
+
+        MarkdownAnchor:  {
+            backgroundColor: '#ff1493',
+        },
+
+        MarkdownStrong: {
+            background: 'linear-gradient(0deg, rgba(121,255,113,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%)',
+        },
     },
 
     // dark: {

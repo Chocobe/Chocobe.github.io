@@ -7,6 +7,7 @@ import rehypePrettyCode from 'rehype-pretty-code';
 import moonlightTheme from '@/styles/codeBlockThemes/moonlight-2.json';
 // UI Components
 import MarkdownAnchor from '@/markdownComponents/MarkdownAnchor/MarkdownAnchor';
+import MarkdownStrong from '@/markdownComponents/MarkdownAnchor/MarkdownStrong';
 
 type TMarkdownViewerSSRProps = {
     markdown: string | null;
@@ -42,6 +43,7 @@ function MarkdownViewerSSR(props: TMarkdownViewerSSRProps) {
             }}
             components={{
                 a: MarkdownAnchor,
+                strong: MarkdownStrong,
             }}
             source={markdown} />
     );
