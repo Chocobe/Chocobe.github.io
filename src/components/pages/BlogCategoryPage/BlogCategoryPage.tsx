@@ -2,7 +2,6 @@
 
 // react
 import {
-    useMemo,
     memo,
 } from 'react';
 // UI Components
@@ -39,21 +38,22 @@ const StyledBlogCategoryPageRoot = styled.div`
 `;
 
 type TBlogCategoryPageProps = {
-    featuredMarkdownRendeeringDataList: TBlogMarkdownFileData[];
-    commonMarkdownRenderingDataList: TBlogMarkdownFileData[];
+    featuredMarkdownFileDataList: TBlogMarkdownFileData[];
+    commonMarkdownFileDataList: TBlogMarkdownFileData[];
 };
 
 function BlogCategoryPage(props: TBlogCategoryPageProps) {
     const {
-        featuredMarkdownRendeeringDataList,
-        commonMarkdownRenderingDataList,
+        featuredMarkdownFileDataList,
+        commonMarkdownFileDataList,
     } = props;
 
-    //
-    // cache
-    //
-    const mockCommonMarkdownRenderingData = useMemo(() => {
-        const rr = commonMarkdownRenderingDataList.map<TBlogPostCardProps>(data => {
+    const firstFeaturedBlogPostCardProps = [featuredMarkdownFileDataList[0]]
+        .reduce((_, markdownFileData) => {
+            if (!markdownFileData) {
+                return null;
+            }
+
             const {
                 category,
                 href,
@@ -63,7 +63,30 @@ function BlogCategoryPage(props: TBlogCategoryPageProps) {
                     thumbnail,
                     createdAt,
                 },
-            } = data;
+            } = markdownFileData;
+
+            return {
+                category,
+                title,
+                description,
+                thumbnail,
+                href,
+                date: createdAt.toISOString(),
+            } as TBlogPostCardProps;
+        }, {} as TBlogPostCardProps | null);
+
+    const commonBlogPostCardPropsList: TBlogPostCardProps[] = commonMarkdownFileDataList
+        .map(markdownFileData => {
+            const {
+                category,
+                href,
+                frontmatter: {
+                    title,
+                    description,
+                    thumbnail,
+                    createdAt,
+                },
+            } = markdownFileData;
 
             return {
                 category,
@@ -75,48 +98,24 @@ function BlogCategoryPage(props: TBlogCategoryPageProps) {
             };
         });
 
-        return [
-            ...rr.map(ff => ({
-                ...ff,
-                title: `${ff.title}-1`,
-            })),
-            ...rr.map(ff => ({
-                ...ff,
-                title: `${ff.title}-2`,
-            })),
-            ...rr.map(ff => ({
-                ...ff,
-                title: `${ff.title}-3`,
-            })),
-            ...rr.map(ff => ({
-                ...ff,
-                title: `${ff.title}-4`,
-            })),
-            ...rr.map(ff => ({
-                ...ff,
-                title: `${ff.title}-5`,
-            })),
-        ];
-    }, [commonMarkdownRenderingDataList]);
-
     return (
         <StyledBlogCategoryPageRoot>
-            {featuredMarkdownRendeeringDataList?.[0] && (
+            {firstFeaturedBlogPostCardProps && (
                 <section className="featuredSection">
                     <BlogPostCard
                         variant={blogPostCardVariantMapper.FEATURED}
-                        thumbnail={featuredMarkdownRendeeringDataList[0].frontmatter.thumbnail}
-                        category={featuredMarkdownRendeeringDataList[0].category}
-                        title={featuredMarkdownRendeeringDataList[0].frontmatter.title}
-                        date={featuredMarkdownRendeeringDataList[0].frontmatter.createdAt.toISOString()}
-                        description={featuredMarkdownRendeeringDataList[0].frontmatter.description} 
-                        href={featuredMarkdownRendeeringDataList[0].href} />
+                        category={firstFeaturedBlogPostCardProps.category}
+                        title={firstFeaturedBlogPostCardProps.title}
+                        description={firstFeaturedBlogPostCardProps.description} 
+                        thumbnail={firstFeaturedBlogPostCardProps.thumbnail}
+                        href={firstFeaturedBlogPostCardProps.href}
+                        date={firstFeaturedBlogPostCardProps.date} />
                 </section>
             )}
 
             <section className="commonSection">
                 <BlogPostCardList 
-                    blogPostList={mockCommonMarkdownRenderingData} />
+                    blogPostList={commonBlogPostCardPropsList} />
             </section>
         </StyledBlogCategoryPageRoot>
     );

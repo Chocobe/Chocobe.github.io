@@ -30,22 +30,19 @@ async function BlogCategoryPageSSR(props: TBlogCategoryPageProps) {
         .instance
         .readMarkdownFileDataList(category);
 
-    // FIXME: 실제 markdown file 추가 후, 아래 주석 해제
-    // const featuredList = markdownFileDataList
-    //     .filter(({ frontmatter }) => frontmatter.featured);
+    const featuredList = markdownFileDataList
+        .filter(({ frontmatter }) => frontmatter.featured);
 
-    // FIXME: 실제 markdown file 추가 후, 아래 주석 해제
-    // const commonList = markdownFileDataList
-    //     .filter(({ frontmatter }) => !frontmatter.featured);
+    const commonList = markdownFileDataList
+        .filter(({ frontmatter }) => !frontmatter.featured);
 
     return (
-        <BlogCategoryPage 
-            featuredMarkdownRendeeringDataList={markdownFileDataList}
-            commonMarkdownRenderingDataList={markdownFileDataList} />
-        // FIXME: 실제 markdown file 추가 후, 아래 주석 해제
         // <BlogCategoryPage 
-        //     featuredMarkdownRendeeringDataList={featuredList}
-        //     commonMarkdownRenderingDataList={commonList} />
+        //     featuredMarkdownFileDataList={markdownFileDataList}
+        //     commonMarkdownFileDataList={markdownFileDataList} />
+        <BlogCategoryPage 
+            featuredMarkdownFileDataList={featuredList}
+            commonMarkdownFileDataList={commonList} />
     );
 }
 
