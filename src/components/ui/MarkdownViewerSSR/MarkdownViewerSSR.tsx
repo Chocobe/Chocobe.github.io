@@ -8,7 +8,7 @@ import moonlightTheme from '@/styles/codeBlockThemes/moonlight-2.json';
 // UI Components
 import MarkdownAnchor from '@/components/markdownComponents/MarkdownAnchor';
 import MarkdownStrong from '@/components/markdownComponents/MarkdownStrong';
-import MarkdownUL from '@/components/markdownComponents/MarkdownUl';
+import MarkdownUL from '@/components/markdownComponents/MarkdownUL';
 
 type TMarkdownViewerSSRProps = {
     markdown: string | null;
