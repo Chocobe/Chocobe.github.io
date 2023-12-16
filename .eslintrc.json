@@ -19,6 +19,7 @@
   "ignorePatterns": [
     "next.config.js",
     "postcss.config.js",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    "jest.config.ts"
   ]
 }
