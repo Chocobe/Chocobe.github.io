@@ -1,0 +1,253 @@
+---
+id: 1
+title: Nextjs 프로젝트의 유닛 테스트
+description: '유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'nextjs',
+    'jest',
+    '@testing-library',
+    'react',
+    '유닛 테스트',
+]
+
+createdAt: '2023-12-16 22:13:00'
+modifiedHistories: []
+---
+
+# Nextjs 프로젝트의 유닛 테스트
+
+* 참고: [Next.js with React Testing Library, Jest, and TypeScript](https://medium.com/readytowork-org/next-js-with-react-testing-library-jest-and-typescript-a6aa11b85434)
+* 참고: [Nextjs 공식문서](https://nextjs.org/docs/pages/building-your-application/testing/jest)
+
+
+
+<br />
+
+
+
+<details>
+<summary>유닛 테스트를 멀리한 핑계와 결심</summary>
+
+<br />
+
+스타트업에 재직하며 다양한 프로젝트를 개발하고 있습니다.
+
+진행했던 프로젝트를 되돌아보면, 한결같이 시간이 부족하였고, 이를 핑계삼아 유닛 테스트 없이 기능 구현만을 하였습니다.
+
+<br />
+
+### 🤪 유닛 테스트 없이도 개발 가능한데?
+
+테스트에 관한 블로그 글이나 **클린코드** 와 같은 책에서 언급한 **코드에 대한 신뢰도** 는 사실 체감을 하지 못하였습니다.
+
+오히려 유닛 테스트 작성 때문에 기능 구현할 시간을 뺏긴다는 느낌이 컸고, 유닛 테스트 없이도 기능 개발은 충분히 가능했습니다.
+
+<br />
+
+### 😰 `console.log` 와 수작업 테스트 노가다...
+
+기능 개발을 완료한 후, 기억이 흐릿해질 정도로 시간이 지나서 기능 추가/수정 작업이 생겼습니다.
+
+기억을 상기하기 위해 여기 저기에 `console.log()` 를 작성하였고, 기능 추가 후에는 남아있는 `console.log()` 를 제거하는 귀찮은 작업들이 남게 되었습니다.
+
+사실 함수명, 메소드명, 변수명 등이 모두 명확하고, 모든 코드가 서로 의존성 없이 독립적인 기능을 한다면 `console.log()` 로 확인하는 작업이 필요 없을 수 있습니다.
+
+하지만 기능이 언제나 단순 명료하게 구현될 수 없고, 더더욱 이 코드를 작성한 저의 코드 품질에 부족함이 많기 때문에 `console.log()` 노가다와 함께할 가능성이 보였습니다.
+
+그리고 가장 큰 문제는, 변경된 기능이 다른 부분에 영향을 미치는지, 버그를 찾기위한 반복된 수작업 테스트를 하게 되었습니다.
+
+기능을 추가하는 코드 베이스가 클 수록, 수작업 테스트는 상당한 시간을 소비하게 하였습니다.
+
+<br />
+
+### 🤓 유닛 테스트를 사용한 테스트 자동화가 필요해!
+
+만약 유닛 테스트를 작성해 두었다면, 아래와 같은 보상이 있었다고 생각됩니다.
+
+* 현재 코드가 테스트에 통과하고 있으므로, 적어도 작성된 **Test Case** 내에서는 신뢰할 수 있는 코드다.
+* 테스트 대상이 지원하는 모든 기능과 `porps` 에 대하여, 독립적인 **Use Case** 를 확인할 수 있다.
+* **수정한 코드가 의도한 부분에만 적용됨을 보장 받을 수 있다.**
+
+<br />
+
+위와 같은 기대값을 가지며, **유닛 테스트에 대한 결심** 을 하게 되었습니다.
+
+</details>
+
+
+
+<br />
+
+
+
+## 유닛 테스트 라이브러리 설치
+
+유닛 테스트를 위해, `jest` 와 `@testing-library` 를 사용하고자 합니다.
+
+```bash title="jest 관련 패키지"
+yarn add -D jest ts-jest ts-node jest-environment-jsdom @types/jest
+```
+
+```bash title="@testing-library 관련 패키지"
+yarn add -D @testing-library/jest-dom @testing-library/react @testing-library/user-event
+```
+
+
+<br />
+
+
+
+## jest 실행을 위한 명령어 추가하기
+
+`package.json` 의 `scripts` 를 통해 프로젝트에 대한 명령어를 추가할 수 있습니다.
+
+단발성 테스트를 위한 명령어와 코드 변경마다 테스트를 실행하는 명령어를 추가합니다.
+
+```json title="package.json" {4} /jest/1,2
+{
+    // ...
+    "scripts": {
+        // ...
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:watchAll": "jest --watchAll"
+    },
+    // ...
+}
+```
+
+
+
+<br />
+
+
+
+## jest 설정하기
+
+[Nextjs 공식 문서](https://nextjs.org/docs/pages/building-your-application/testing/jest#manual-setup) 에서도 **jest** 와 **@testing-library** 를 사용하는 방법에 대해 안내하고 있습니다.
+
+<br />
+
+**jest.config.ts** 파일을 사용하여 설정할 수 있습니다.
+
+직접 파일을 생성하지 않고, CLI 를 통해 설정 템플릿을 생성하여 수정하는 방향으로 설정하겠습니다.
+
+터미널에서 아래의 명령을 실행합니다.
+
+```bash title="npm 으로 jest.config.ts 생성하기"
+npm init jest@latest
+```
+
+```bash title="yarn 으로 jest.config.ts 생성하기"
+yarn create jest@latest
+```
+
+<br />
+
+명령을 실행하면, 몇가지 질문(Y/N)으로 기본 설정값이 반영된 **jest.config.ts** 파일이 생성됩니다.
+
+생성된 **jest.config.ts** 를 아래와 같이 수정합니다.
+
+```typescript showLineNumbers
+import {
+  Config,
+} from 'jest';
+import nextJest from 'next/jest.js';
+
+const createJestConfig = nextJest({
+  dir: './',
+});
+
+/**
+ * For a detailed explanation regarding each configuration property, visit:
+ * https://jestjs.io/docs/configuration
+ */
+
+const config: Config = {
+  // The directory where Jest should output its coverage files
+  coverageDirectory: "coverage",
+
+  // Indicates which provider should be used to instrument code for coverage
+  coverageProvider: "babel",
+
+  // A preset that is used as a base for Jest's configuration
+  preset: "ts-jest",
+
+  // A list of paths to modules that run some code to configure or set up the testing framework before each test
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+
+  // The test environment that will be used for testing
+  testEnvironment: "jest-environment-jsdom",
+};
+
+export default createJestConfig(config);
+```
+
+<br />
+
+`jest.config.ts` 파일의 **26번줄** 에서 설정한 **jest.setup.ts** 파일을 생성하고 아래의 코드를 작성합니다.
+
+```typescript title="jest.setup.ts"
+import '@testing-library/jest-dom';
+```
+
+**jest.setup.ts** 에서 `import` 하는 모듈은 **@testing-library** 에서 제공하는 **확장 matcher** 를 사용할 수 있게 해줍니다.
+
+이로써 Nextjs 의 유닛 테스트 설정을 완료 하였습니다.
+
+
+
+<br />
+
+
+
+## 첫번째 컴포넌트 테스트 만들기
+
+먼저 테스트를 할 React 컴포넌트를 만들겠습니다.
+
+```typescript title="Hello.tsx"
+function Hello() {
+  return (
+    <h1>
+      Hello World
+    </h1>
+  );
+}
+
+export default Hello;
+```
+
+<br />
+
+*Hello.tsx* 와 동일한 경로에 **Hello.spec.tsx** 파일을 생성하고, 유닛 테스트를 작성합니다.
+
+```typescript title="Hello.spec.tsx"
+import Hello from './Hello';
+import {
+  render,
+  screen,
+} from '@testing-library/react';
+
+describe('<Hello /> 컴포넌트 유닛 테스트', () => {
+  it('Dom 에 렌더링 됨', () => {
+    render(<Hello />);
+
+    const $hello = screen.getByRole('heading', {
+      level: 1,
+    });
+
+    expect($hello).toBeInTheDocument();
+  });
+});
+```
+
+<br />
+
+유닛 테스트를 작성한 후, 터미널에 아래의 명령어로 테스트를 실행할 수 있으며, 모든 테스트가 통과됨을 확인할 수 있습니다.
+
+```bash title="jest 실행하기"
+yarn test
+```
