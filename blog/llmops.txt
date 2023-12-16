@@ -1,0 +1,260 @@
+1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+2:HL["/_next/static/css/67530b676c04ec45.css","style",{"crossOrigin":""}]
+0:["4CeGgcL549BXGIBgHUjcd",[[["",{"children":["blog",{"children":[["category","llmops","d"],{"children":["__PAGE__?{\"category\":\"llmops\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/67530b676c04ec45.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+5:I[9248,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-298ae95c95bcb356.js"],""]
+6:I[179,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-298ae95c95bcb356.js"],""]
+7:I[6962,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-298ae95c95bcb356.js"],""]
+8:I[6954,[],""]
+9:I[7264,[],""]
+3:[null,["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__className_7bb6ba","children":["$","div",null,{"className":"w-full\n            h-full\n            overflow-y-scroll\n            overflow-x-auto","children":["$","$L5",null,{"children":[["$","$L6",null,{}],["$","$L7",null,{"style":{"minHeight":"calc(100% - 72px)"},"children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[],"childProp":{"current":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":[null,"$La",null],"segment":["category","llmops","d"]},"styles":null}],"segment":"blog"},"styles":null}]}]]}]}]}]}],null]
+4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
+b:I[689,["281","static/chunks/08ffe114-7cd4461da7c73b25.js","465","static/chunks/48507feb-7386a0560d369291.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","75","static/chunks/app/blog/%5Bcategory%5D/layout-969daddec49eacb9.js"],""]
+a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","llmops","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"llmops\"}"},"styles":null}]}]]}]}]
+c:null
+e:I[2317,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","340","static/chunks/340-435c56927bca2087.js","254","static/chunks/app/blog/%5Bcategory%5D/page-a3dc3d010bc92c7f.js"],""]
+f:T1dcc,---
+id: 0
+title: LLMOps 와 친해지기 1 - 용어 정리
+description: 'AI 학습 모델인 Large Language Model 에 대한 정리입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: []
+
+createdAt: '2023-12-16 15:00:00'
+modifiedHistories: []
+---
+
+# LLMOps 와 친해지기 1 - 용어 정리
+
+**LLMOps** 란, Large Language Model 의 약자이며 대규모 언어 모델 입니다.
+
+사내 신규 프로젝트로 **LLMOps** 를 사용하기 위한 UI 툴 서비스를 개발하게 되었습니다.
+
+개발할 서비스에 대한 도메인 지식이 필요함을 느끼게 되었기에, 관련 용어와 개념을 정리하고자 합니다.
+
+일반인의 시야에서 조사한 내용을 정리하는 목적을 가지고 LLM 에 초점을 가지므로, 좀 더 정확한 내용은 첨부한 **참고 링크** 를 확인해주세요.
+
+
+
+<br />
+
+
+
+## 용어 정리
+
+### 머신러닝
+
+> 참고: [Machine learning (ML) –  머신러닝 이란?](https://www.ibm.com/kr-ko/topics/machine-learning)
+
+<br />
+
+기계학습 방법을 말합니다.
+
+**딥러닝** 이 아닌 **머신러닝** 은 정형화된 데이터를 학습하며 사람의 개입이 많이 필요합니다.
+
+정형화된 데이터란 데이터 각가을 **labeling** 이나 **tagging** 작업을 한 학습 데이터를 말합니다.
+
+데이터가 많을수록 좋은 결과를 기대할 수 있기 때문에, 정형화된 데이터를 만드는 과정부터 어렵습니다.
+
+
+
+<br />
+
+
+
+### 딥러닝
+
+> 참고: [Machine learning (ML) –  머신러닝 이란?](https://www.ibm.com/kr-ko/topics/machine-learning)
+
+<br />
+
+머신러닝의 하위 분야이며, 머신러닝 처럼 벙형화된 데이터로 학습할 수 있으며, 추가로 비정형 데이터를 학습할 수도 있습니다.
+
+비정형 데이터 학습을 위해 사용되는 개념으로 **신경망** 이 있습니다.
+
+
+
+<br />
+
+
+
+### 신경망
+
+> 참고: [AWS - 신경망이란 무엇인가요?](https://aws.amazon.com/ko/what-is/neural-network/)
+>
+> 참고: [Machine learning (ML) –  머신러닝 이란?](https://www.ibm.com/kr-ko/topics/machine-learning)
+
+<br />
+
+신경망은 머신러닝의 하위 분야이며 딥러닝의 기계 학습 알고리즘 중 하나입니다.
+
+신경망은 구조화 되지 않은 데이터와 명시적이지 않은 훈련 방식을 사용하며, 이렇게 학습한 데이터를 **일반화** 하고 **추론** 할 수 있습니다.
+
+예를 들면 다음과 같습니다.
+
+```bash
+질문1: "결제 방법을 알려줘"
+
+질문2: "비용 송금 방법을 알려줘"
+```
+
+위 질문은 문장은 다르지만, 컴퓨터는 신경망을 통해 "결제 방법 안내" 라는 동일한 문맥임을 이해합니다.
+
+<br />
+
+신경망은 **노드** 로 구성되며, 노드에는 **입력 노드**, **출력 노드** 등, 무수히 많은 노드로 구성됩니다.
+
+각 노드는 **관련성에 대한 임계치** 가 있으며, 임계치에 다다르면 활성화 되는데, 이러한 방식으로 관련된 노드들의 활성화를 통해 **일반화** 와 **추론** 을 할 수 있게 됩니다.
+
+
+
+<br />
+
+
+
+### MLOps
+
+> 참고: [MLOps란?](https://www.ibm.com/kr-ko/topics/machine-learning)
+
+<br />
+
+**MLOps** 는 **Machine Learning** 과 **Operations** 의 합성어로, 효율적인 머신러닝 **모델 개발**, **배포**, **운용** 을 위한 개발 방법론이며, **새로운 모델 개발이 목적** 입니다.
+
+**MLOps** 를 구성하는 요소는 다음과 같습니다.
+
+* 지속적 통합 (**CI**: Continuous Integration)
+* 지속적 배포 (**CD**: Continuous Deployment)
+* 지속적 학습 (**CT**: Continuous Training)
+
+
+
+<br />
+
+
+
+### FMOps
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+**FM(Foundation Model)** 을 한국어로 **기반 모델** 이라고 합니다.
+
+**FMOps(Foundation Model Operations)** 는 **기반 모델** 을 개발, 배포, 운용을 위한 개발 방법론 입니다.
+
+에기에는 자연어 뿐만 아니라, 이미지나 음성을 기반으로 하는 모델(예시: **DALL-E**) 을 모두 포함합니다.
+
+
+
+<br />
+
+
+
+### LLMOps
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+<br />
+
+**FMOps** 에 포함되는 개념이며, **자연어 처리** 를 위한 개념으로 **LLM: Large Language Model** 이 있습니다.
+
+**LLMOps(Large Langague Model Operations)** 는 **LLM** 을 개발, 배포, 운용을 위한 개발 방법론입니다.
+
+
+
+<br />
+
+
+
+### MLOps 와 FMOps 비교
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+<br />
+
+* 목적
+    * MLOps: **새로운 모델을 개발** 합니다.
+    * FMOps: 이미 학습이 완료된 모델과 자신의 데이터를 사용하여, **자신만의 AI 앱을 개발** 합니다.
+* 다루는 모델 유형
+    * MLOps: 기업이 직접 모델과 파이프라인 모두 개발하게 됩니다.
+    * FMOps: **API 를 통해서 원하는 모델을 사용** 합니다.
+* 산출물
+    * MLOps: **Model** 과 이를 사용할 수 있는 **API** 를 만들게 됩니다.
+    * FMOps: LLM 과 사용자의 커스텀 데이터를 사용한 **AI 어플리케이션** 을 만들게 됩니다.
+
+
+
+<br />
+
+
+
+### 프롬프트
+
+> [프롬프트 (Prompt) 란 무엇인가? - 정의, 원리, fine tuning](https://www.thedatahunt.com/trend-insight/what-is-prompt)
+
+<br />
+
+개발 환경에서는 다양한 설정과 실행방법이 있습니다.
+
+이를 UI 로 모두 제공하는 것은 어렵기도 하고, 사용성도 복잡해집니다.
+
+그래서 CLI 를 사용하는 경우가 많습니다.
+
+프롬프트란, 컴퓨터에게 실행할 태스크를 전달하는 메시지, 명령어 라는 의미를 가집니다.
+
+AI 가 발전함에 따라 현재는 명령어뿐만 아니라, 자연어까지 컴퓨터가 이해할 수 있게 되어서, 프롬프트의 의미는 **컴퓨터에게 어떤 태스크를 수행할지 전달하는 자연어 메시지** 라는 의미로 확장되었습니다.
+
+
+
+<br />
+
+
+
+### 프롬프트 체이닝
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+<br />
+
+프롬프트를 잘 작성할수록 AI 는 더 정확한 응답을 할 수 있습니다.
+
+LLM 에 하나의 프롬프트를 연결하여 AI 앱을 만들수도 있지만, 더 정확한 기능을 구현하기 위해 LLM 에 외부의 프롬프트를 포함하여 복수의 프롬프트를 연결하여 개발하게 되는데, 이를 **프롬프트 체이닝(Prompt Chaing)** 이라고 합니다.
+
+
+
+<br />
+
+
+
+### LangChain
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+<br />
+
+**LangChain** 은 **프롬프트 체이닝** 을 지원하는 프레임워크 입니다.
+
+LLM 과 외부의 프롬프트들을 자유롭게 연결할 수 있는 기능을 제공합니다.
+
+
+
+<br />
+
+
+
+### LLM 앱 개발 플렛폼
+
+LLM 과 LangChain 을 사용하여 AI 앱을 만들 수 있는 플렛폼이 있습니다. (프롬프트 체이닝 서비스 플렛폼)
+
+대표적으로 **LangFlow** 와 **FlowiseAI** 가 있습니다.
+
+<br />
+
+* LangFlow:
+    * [LangFlow Github](https://github.com/logspace-ai/langflow)
+    * 서버: `Python`
+    * 프론트: `React(Typescript)`
+* FlowiseAI
+    * [FlowiseAI Github](https://github.com/FlowiseAI/Flowise)
+    * 서버: `Express(Typescript)`
+    * 프론트: `React(Javascript)`
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[],"commonMarkdownFileDataList":[{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":0,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}]}]
