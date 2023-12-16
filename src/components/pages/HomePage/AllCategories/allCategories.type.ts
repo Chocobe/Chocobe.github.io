@@ -2,9 +2,10 @@
 import {
     TbBrandNextjs,
     TbBrandJavascript,
-    TbBrandVue,
-    TbBrandTypescript,
+    // TbBrandVue,
+    // TbBrandTypescript,
     SiReactivex,
+    FaGraduationCap,
 } from '@icons';
 import { 
     IconType,
@@ -31,21 +32,15 @@ export const allBlogCategoryInfoList = [
         IconComponent: TbBrandJavascript,
     },
     {
-        category: 'vue',
-        displayName: 'Vue',
-        description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-        IconComponent: TbBrandVue,
-    },
-    {
-        category: 'typescript',
-        displayName: 'Typescript',
-        description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-        IconComponent: TbBrandTypescript,
-    },
-    {
         category: 'rxjs',
         displayName: 'Rxjs',
         description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
         IconComponent: SiReactivex,
+    },
+    {
+        category: 'llmops',
+        displayName: 'LLMOps',
+        description: 'LLMOps 관련 용어를 정리합니다.',
+        IconComponent: FaGraduationCap,
     },
 ] as Readonly<TBlogCategoryInfo[]>;
