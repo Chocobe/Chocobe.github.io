@@ -22,13 +22,13 @@ export const allBlogCategoryInfoList = [
     {
         category: 'nextjs',
         displayName: 'Nextjs',
-        description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
+        description: 'SSR 과 CSR 을 자유롭게 사용할 수 있는 Nextjs 에 대한 정리입니다.',
         IconComponent: TbBrandNextjs
     },
     {
-        category: 'javascript',
-        displayName: 'Javascript',
-        description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
+        category: 'jest',
+        displayName: 'Jest',
+        description: 'Jest 를 사용한 유닛 테스트 관련 정리입니다.',
         IconComponent: TbBrandJavascript,
     },
     {
@@ -40,7 +40,7 @@ export const allBlogCategoryInfoList = [
     {
         category: 'llmops',
         displayName: 'LLMOps',
-        description: 'LLMOps 관련 용어를 정리합니다.',
+        description: 'LLMOps 를 통해 AI 와 가까워지기 위한 정리입니다.',
         IconComponent: FaGraduationCap,
     },
 ] as Readonly<TBlogCategoryInfo[]>;

@@ -1,7 +1,7 @@
 // node
 import fs from 'node:fs/promises';
 
-const MARKDOWN_ROOT_DIR = 'src/markdown';
+export const MARKDOWN_ROOT_DIR = 'src/markdown';
 
 export const readMarkdownDir = async (
     type: 'file' | 'dir',
