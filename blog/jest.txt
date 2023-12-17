@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/67530b676c04ec45.css","style",{"crossOrigin":""}]
-0:["YD8_9UKYMWnTNFqOzxwHq",[[["",{"children":["blog",{"children":[["category","jest","d"],{"children":["__PAGE__?{\"category\":\"jest\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/67530b676c04ec45.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["_VrZa-m_Gmi5QY93DBuTA",[[["",{"children":["blog",{"children":[["category","jest","d"],{"children":["__PAGE__?{\"category\":\"jest\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/67530b676c04ec45.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-298ae95c95bcb356.js"],""]
 6:I[179,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-298ae95c95bcb356.js"],""]
 7:I[6962,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-298ae95c95bcb356.js"],""]
@@ -12,7 +12,7 @@ b:I[689,["281","static/chunks/08ffe114-7cd4461da7c73b25.js","465","static/chunks
 a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","jest","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"jest\"}"},"styles":null}]}]]}]}]
 c:null
 e:I[2317,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","340","static/chunks/340-435c56927bca2087.js","254","static/chunks/app/blog/%5Bcategory%5D/page-a3dc3d010bc92c7f.js"],""]
-f:T161b,---
+f:T162a,---
 id: 1
 title: '"node:fs" 테스트 하기'
 description: 'node 모듈중 File System 기능, "fs" 를 테스트하는 방법에 대해 정리합니다.'
@@ -31,6 +31,7 @@ tags: [
 createdAt: '2023-12-17 15:33:00'
 modifiedHistories: []
 ---
+
 
 # "node:fs" 테스트 하기
 
@@ -79,7 +80,7 @@ Jest 공식문서에 의하면, built-in modules 를 테스트하기 위해 몇�
 
 만약 **Typescript** 를 사용한다면, **@types/mock-fs** 모듈도 함께 설치합니다.
 
-```bash title="Javascript 사용 시"
+```bash title="Javascript 사용 시" 
 yarn add -D mock-fs
 ```
 
@@ -135,7 +136,7 @@ describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
 
 이제 **node:fs** 는 mockup 에서 정의한 mock file system 을 사용하게 됩니다.
 
-```typescript showLineNumbers
+```typescript {22} showLineNumbers
 import fs from 'node:fs/promises';
 import mock from 'mock-fs';
 
@@ -171,7 +172,7 @@ describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
 
 마지막으로 **mock-fs** 를 해제할 수 있도록 `jest.afterEach()` 를 작성하면 "node:fs" 유닛 테스트는 작성완료 됩니다.
 
-```typescript showLineNumbers
+```typescript {21} showLineNumbers
 import fs from 'node:fs/promises';
 import mock from 'mock-fs';
 
@@ -211,7 +212,7 @@ describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
 
 
 
-## 정리
+## 마치며
 
 이번 포스팅에서는 built-in modules 중 "fs" 를 테스트하는 방법에 대해 정리해 보았습니다.
 
