@@ -25,59 +25,12 @@ const StyledBlogSlugPageRoot = styled.div`
     padding: 20px;
     width: 100%;
 
-    > .markdown-body {
+    > .contentsWrapper {
         //
-
-        /* 코드 블록 */
-        pre {
-            counter-reset: line;
-
-            code {
-                font-size: 16px;
-
-                span[data-line] {
-                    padding: 2px 16px;
-                    display: inline-block;
-                }
-
-                &[data-line-numbers] {
-                    &[data-line-numbers-max-digits="2"] {
-                        [data-line]::before {
-                            width: 2rem;
-                        }
-                    }
-
-                    &[data-line-numbers-max-digits="3"] {
-                        [data-line]::before {
-                            width: 3rem;
-                        }
-                    }
-
-                    > [data-line]::before {
-                        counter-increment: line;
-                        content: counter(line);
-
-                        display: inline-block;
-                        width: 1rem;
-                        margin-right: 1.5rem;
-                        text-align: right;
-                        color: gray;
-                    }
-
-                    span[data-line] {
-                        padding: 2px 16px 2px 0;
-                        display: inline-block;
-                    }
-                }
-            }
-        }
     }
 
     > .actionsWrapper {
         margin-top: 40px;
-
-        /* width: 100%;
-        height: 300px; */
 
         display: flex;
         justify-content: flex-end;
@@ -116,9 +69,8 @@ function BlogSlugPage(props: PropsWithChildren) {
     }, [router]);
 
     return (
-        <StyledBlogSlugPageRoot 
-            className="markdown-body">
-            <div className="markdown-body">
+        <StyledBlogSlugPageRoot>
+            <div className="contentsWrapper">
                 {children}
             </div>
 
