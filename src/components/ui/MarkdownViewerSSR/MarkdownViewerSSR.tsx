@@ -6,9 +6,9 @@ import remarkGfm from 'remark-gfm';
 import rehypePrettyCode from 'rehype-pretty-code';
 import moonlightTheme from '@/styles/codeBlockThemes/moonlight-2.json';
 // UI Components
-import MarkdownAnchor from '@/components/markdownComponents/MarkdownAnchor';
-import MarkdownStrong from '@/components/markdownComponents/MarkdownStrong';
-import MarkdownUL from '@/components/markdownComponents/MarkdownUL';
+import MarkdownAnchor from '@/components/ui/MarkdownViewerSSR/markdownComponents/MarkdownAnchor';
+import MarkdownStrong from '@/components/ui/MarkdownViewerSSR/markdownComponents/MarkdownStrong';
+import MarkdownUL from '@/components/ui/MarkdownViewerSSR/markdownComponents/MarkdownUL';
 // styled-components
 import StyledMarkdownViewerRoot from './StyledMarkdownViewerRoot';
 

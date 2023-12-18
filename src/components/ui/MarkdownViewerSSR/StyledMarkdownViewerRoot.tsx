@@ -90,6 +90,59 @@ const _StyledMarkdownViewerRoot = styled.div`
             border-top-right-radius: 0;
         }
     }
+
+    /* 
+     * <details /> 스타일 
+     *
+     * (MDXRemote.components.details 미지원)
+     */
+    details {
+        padding: 12px;
+
+        position: relative;
+
+        border: 1px solid #eee;
+
+        transition: all 0.28s ease-in-out;
+
+        &::before {
+            content: '';
+
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            border: 8px solid #ffffff00;
+
+            transition: all 0.28s ease-in-out;
+        }
+
+        &::after {
+            content: '';
+
+            position: absolute;
+            bottom: 0;
+            right: 0;
+
+            border: 8px solid #ffffff00;
+
+            transition: all 0.28s ease-in-out;
+        }
+
+        &[open] {
+            background-color: #fffdec;
+
+            &::before {
+                border-top-color: #ff1493;
+                border-left-color: #ff1493;
+            }
+
+            &::after {
+                border-bottom-color: #ff1493;
+                border-right-color: #ff1493;
+            }
+        }
+    }
 `;
 
 function StyledMarkdownViewerRoot(props: PropsWithChildren) {

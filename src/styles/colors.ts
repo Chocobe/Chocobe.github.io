@@ -377,7 +377,7 @@ export const designSystemColors = {
         },
 
         MarkdownStrong: {
-            background: 'linear-gradient(0deg, rgba(121,255,113,1) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%)',
+            background: 'linear-gradient(0deg, rgba(121, 255, 113, 1) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0) 100%)',
         },
     },
 

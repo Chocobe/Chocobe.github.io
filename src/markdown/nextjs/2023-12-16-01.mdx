@@ -106,7 +106,7 @@ yarn add -D @testing-library/jest-dom @testing-library/react @testing-library/us
 
 단발성 테스트를 위한 명령어와 코드 변경마다 테스트를 실행하는 명령어를 추가합니다.
 
-```json title="package.json" {4} /jest/1,2
+```json title="package.json" {5-7}
 {
     // ...
     "scripts": {
@@ -153,12 +153,12 @@ yarn create jest@latest
 
 ```typescript showLineNumbers
 import {
-  Config,
+    Config,
 } from 'jest';
 import nextJest from 'next/jest.js';
 
 const createJestConfig = nextJest({
-  dir: './',
+    dir: './',
 });
 
 /**
@@ -167,20 +167,20 @@ const createJestConfig = nextJest({
  */
 
 const config: Config = {
-  // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+    // The directory where Jest should output its coverage files
+    coverageDirectory: "coverage",
 
-  // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "babel",
+    // Indicates which provider should be used to instrument code for coverage
+    coverageProvider: "babel",
 
-  // A preset that is used as a base for Jest's configuration
-  preset: "ts-jest",
+    // A preset that is used as a base for Jest's configuration
+    preset: "ts-jest",
 
-  // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+    // A list of paths to modules that run some code to configure or set up the testing framework before each test
+    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 
-  // The test environment that will be used for testing
-  testEnvironment: "jest-environment-jsdom",
+    // The test environment that will be used for testing
+    testEnvironment: "jest-environment-jsdom",
 };
 
 export default createJestConfig(config);
@@ -208,13 +208,13 @@ import '@testing-library/jest-dom';
 
 먼저 테스트를 할 React 컴포넌트를 만들겠습니다.
 
-```typescript title="Hello.tsx"
+```tsx title="Hello.tsx"
 function Hello() {
-  return (
-    <h1>
-      Hello World
-    </h1>
-  );
+    return (
+        <h1>
+            Hello World
+        </h1>
+    );
 }
 
 export default Hello;
@@ -227,20 +227,20 @@ export default Hello;
 ```typescript title="Hello.spec.tsx"
 import Hello from './Hello';
 import {
-  render,
-  screen,
+    render,
+    screen,
 } from '@testing-library/react';
 
 describe('<Hello /> 컴포넌트 유닛 테스트', () => {
-  it('Dom 에 렌더링 됨', () => {
-    render(<Hello />);
+    it('Dom 에 렌더링 됨', () => {
+        render(<Hello />);
 
-    const $hello = screen.getByRole('heading', {
-      level: 1,
+        const $hello = screen.getByRole('heading', {
+            level: 1,
+        });
+
+        expect($hello).toBeInTheDocument();
     });
-
-    expect($hello).toBeInTheDocument();
-  });
 });
 ```
 
