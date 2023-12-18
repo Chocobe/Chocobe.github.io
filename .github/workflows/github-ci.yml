@@ -18,15 +18,29 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🎬 Use Node.js 18.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '18.x'
 
-      - name: 🏗️ Install and Build
+      - name: 💾 Install and Build
         run: |
           yarn install
+          echo 💻 Done install
+
+      - name: 📐 Lint
+        run: |
+          yarn lint
+          echo ✅ Passed Lint
+
+      - name: 🧪 Test
+        run: |
+          yarn test --coverage
+          echo ✅ Passed Test
+
+      - name: 🧱 Build
+        run: |
           yarn build && touch ./out/.nojekyll
-          echo 🛖 Done install
+          echo 🏡 Done Build
 
       - name: 🚀 Deploy
         uses: JamesIves/github-pages-deploy-action@v4
