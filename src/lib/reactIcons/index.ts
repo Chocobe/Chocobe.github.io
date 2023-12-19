@@ -1,6 +1,7 @@
 // tabler-icons
 export { 
     TbBrandNextjs,
+    TbBrandReact,
     TbBrandJavascript,
     TbBrandVue,
     TbBrandTypescript,

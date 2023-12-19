@@ -1,0 +1,390 @@
+---
+id: 1
+title: Custom Hook 으로 분리하며 발생한 실수
+description: 'Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'react',
+    'custom hook',
+]
+
+createdAt: '2023-12-19 22:50:00'
+modifiedHistories: []
+---
+
+# Custom Hook 으로 분리하며 발생한 실수
+
+## 실수가 발생한 상황
+
+페이지가 mount 되면 API 를 호출하는 흐름은 빈번히 사용됩니다.
+
+그리고 API 응답을 받으면, 후처리를 하는 `useEffect` 를 사용할 수 있습니다.
+
+<br />
+
+이번 이슈에서는 Custom Hook 으로 나누기 전까지는 의도한 대로 API 응답과 Effect 가 1:1 로 실행되었습니다.
+
+```tsx title="MyPage.tsx" showLineNumbers {28-30, 32-34}
+import {
+    useCallback,
+    useEffect,
+} from 'react';
+import {
+    useAppSelector,
+} from '@/redux/hooks';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    const callApi_1 = useCallback(() => {
+        // API 호출 1
+    }, []);
+
+    const callApi_2 = useCallback(() => {
+        // API 호출 2
+    }, []);
+
+    useEffect(function handleTriggerState() {
+        callApi_1();
+        callApi_2();
+    }, [triggerState]);
+
+    useEffect(function onSuccessApi_1() {
+        // API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    useEffect(function onSuccessApi_2() {
+        // API 2 응답 후처리
+    }, [responseOfApi_2]);
+
+    return (
+        // ...
+    );
+}
+
+export default MyPage;
+```
+
+<br />
+
+이런 방식으로 **호출하는 API 가 늘어나자, 컴포넌트가 점점 복잡해졌습니다.**
+
+**또한 사용자 인터렉션에 의해 다시 호출해야 하는 API 도 있어서** Custom Hook 으로 분리하여 재사용하는 방향으로 생각하게 되었습니다.
+
+<br />
+
+리펙토링 결과, API 후처리를 담당하는 `useEffect` 가 번복 실행되는 현상이 나타났습니다.
+
+```tsx title="./hooks/useApi_1.ts" showLineNumbers {16-18}
+import {
+    useCallback,
+    useEffect,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_1 = () => {
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+
+    const callApi_1 = useCallback(() => {
+        // API 호출 1
+    }, []);
+
+    useEffect(function onSuccessApi_1() {
+        // (번복 실행됨) API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    return {
+        callApi_1,
+    };
+};
+
+export default useApi_1;
+```
+
+```tsx title="./hooks/useApi_2.ts" showLineNumbers {16-18}
+import {
+    useCallback,
+    useEffect,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_2 = () => {
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    const callApi_2 = useCallback(() => {
+        // API 호출 2
+    }, []);
+
+    useEffect(function onSuccessApi_2() {
+        // (번복 실행됨) API 2 응답 후처리
+    }, [responseOfApi_2]);
+
+    return {
+        callApi_2,
+    };
+};
+
+export default useApi_2;
+```
+
+```tsx title="MyPage.tsx" showLineNumbers {10-11, 13-16}
+import {
+    useEffect,
+} from 'react';
+import useApi_1 from './hooks/useApi_1';
+import useApi_2 from './hooks/useApi_2';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const { callApi_1 } = useApi_1();
+    const { callApi_2 } = useApi_2();
+
+    useEffect(function onSuccessApi_2() {
+        callApi_1();
+        callApi_2();
+    }, [triggerState]);
+
+    return (
+        // ...
+    );
+};
+
+export default MyPage;
+```
+
+
+
+<br />
+
+
+
+## useEffect 의 dependencies 는 무죄
+
+`useEffect` 의 `dependencies` 는 redux 에서 가져온 state 였습니다.
+
+(위의 예시 코드에서는 `triggerState` 로 표현하였습니다.)
+
+**`triggerState` 에 의도치 않은 mutate 가 발생하는 것인가** 라고 생각했지만, 이는 아니였습니다.
+
+
+
+<br />
+
+
+
+## Custom Hook 을 재사용한 만큼 번복되는 useEffect
+
+Custom Hook 으로 분리하는 단위를 **특정 API 호출 함수** 와 **해당 API 응답 후처리 Effect** 로 묶어서 구성하였습니다.
+
+그리고 필요한 곳에서 재사용을 하였습니다.
+
+<br />
+
+결과적으로 재사용한 횟수만큼 `useEffect` 가 번복 실행된 것입니다.
+
+Custom Hook 은 사용하는 곳에 scope 를 만드는 것이므로, 당연한 결과임에도 알아차리지 못하였습니다.
+
+
+
+<br />
+
+
+
+## API 호출함수와 Effect 를 분리한 Custom Hook 으로 이슈 해결
+
+원인을 찾은 후, API 의 후처리를 담당하는 `useEffect` 를 Custom Hook 에서 빼고, 기존의 `MyPage` 에 위치시켰습니다.
+
+그러자 번복되는 `useEffect` 이슈는 해결 되었습니다.
+
+
+```tsx title="./hooks/useApi_1.ts" showLineNumbers {15-17}
+import {
+    useCallback,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_1 = () => {
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+
+    const callApi_1 = useCallback(() => {
+        // API 호출 1
+    }, []);
+
+    // useEffect(function onSuccessApi_1() {
+    //     // API 1 응답 후처리
+    // }, [responseOfApi_1]);
+
+    return {
+        callApi_1,
+    };
+};
+
+export default useApi_1;
+```
+
+```tsx title="./hooks/useApi_2.ts" showLineNumbers {15-17}
+import {
+    useCallback,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_2 = () => {
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    const callApi_2 = useCallback(() => {
+        // API 호출 2
+    }, []);
+
+    // useEffect(function onSuccessApi_2() {
+    //     // API 2 응답 후처리
+    // }, [responseOfApi_2]);
+
+    return {
+        callApi_2,
+    };
+};
+
+export default useApi_2;
+```
+
+```tsx title="MyPage.tsx" showLineNumbers {20-22, 24-26}
+import {
+    useEffect,
+} from 'react';
+import useApi_1 from './hooks/useApi_1';
+import useApi_2 from './hooks/useApi_2';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const { callApi_1 } = useApi_1();
+    const { callApi_2 } = useApi_2();
+
+    useEffect(function onSuccessApi_2() {
+        callApi_1();
+        callApi_2();
+
+        // eslint-disable-next-line
+    }, [triggerState]);
+
+    useEffect(function onSuccessApi_1() {
+        // API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    useEffect(function onSuccessApi_2() {
+        // API 2 응답 후처리
+    }, [responseOfApi_2]);
+
+    return (
+        // ...
+    );
+};
+
+export default MyPage;
+```
+
+
+
+<br />
+
+
+
+## MyPage 에서 API 후처리를 담당하는 useEffect 분리
+
+위 코드처럼 리펙토링한 이후, 의도한 동작은 되었습니다.
+
+하지만, **MyPage.tsx 파일을 열어보기 전까지는 API 후처리를 어디서 하는지 파악하기가 어렵다고 느껴졌습니다.**
+
+<br />
+
+그래서 MyPage.tsx 의 **API 후처리 Effect 들을 Custom Hook 으로** 나눠보기로 하였습니다.
+
+```ts title="./hooks/useMyPageApiEffects.ts" showLineNumbers {9-11, 13-15}
+import {
+    useEffect,
+} from 'react';
+
+const useMyPageApiEffects = () => {
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    useEffect(function onSuccessApi_1() {
+        // API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    useEffect(function onSuccessApi_2() {
+        // API 2 응답 후처리
+    }, [responseOfApi_2]);
+}
+
+export default useMyPageApiEffects;
+```
+
+```tsx title="MyPage.tsx" showLineNumbers {13}
+import {
+    useEffect,
+} from 'react';
+import useApi_1 from './hooks/useApi_1';
+import useApi_2 from './hooks/useApi_2';
+import useMyPageApiEffects from './hooks/useMyPageApiEffects';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const { callApi_1 } = useApi_1();
+    const { callApi_2 } = useApi_2();
+    useMyPagteApiEffects();
+
+    useEffect(function onSuccessApi_2() {
+        callApi_1();
+        callApi_2();
+    }, [triggerState]);
+
+    return (
+        // ...
+    );
+};
+
+export default MyPage;
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+여기까지 수정한 결과, MyPage.tsx 에서 API 에 대한 후처리 Effect 가 있다는 것을 파일 목록을 통해서도 파악할 수 있게 되었습니다.
+
+개인적으로는 위와 같은 구조의 Custom Hook 이 마음에 들었습니다.
+
+이렇게 분리한 Custom Hook 은 아래와 같은 파일 구조가 되었습니다.
+
+```bash
+└── MyPage
+    ├── MyPage.tsx
+    └── hooks
+        ├── useApi_1.ts
+        ├── useApi_2.ts
+        └── useMyPageApiEffects.ts
+``` 
+
+<br />
+
+사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.

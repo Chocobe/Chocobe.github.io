@@ -4,8 +4,9 @@ import {
     TbBrandJavascript,
     // TbBrandVue,
     // TbBrandTypescript,
-    SiReactivex,
+    // SiReactivex,
     FaGraduationCap,
+    TbBrandReact,
 } from '@icons';
 import { 
     IconType,
@@ -20,6 +21,12 @@ export type TBlogCategoryInfo = {
 
 export const allBlogCategoryInfoList = [
     {
+        category: 'react',
+        displayName: 'React',
+        description: 'React 를 사용하며 마주친 이슈나 생각을 정리하고자 합니다.',
+        IconComponent: TbBrandReact,
+    },
+    {
         category: 'nextjs',
         displayName: 'Nextjs',
         description: 'SSR 과 CSR 을 자유롭게 사용할 수 있는 Nextjs 에 대한 정리입니다.',
@@ -31,12 +38,12 @@ export const allBlogCategoryInfoList = [
         description: 'Jest 를 사용한 유닛 테스트 관련 정리입니다.',
         IconComponent: TbBrandJavascript,
     },
-    {
-        category: 'rxjs',
-        displayName: 'Rxjs',
-        description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-        IconComponent: SiReactivex,
-    },
+    // {
+    //     category: 'rxjs',
+    //     displayName: 'Rxjs',
+    //     description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
+    //     IconComponent: SiReactivex,
+    // },
     {
         category: 'llmops',
         displayName: 'LLMOps',
