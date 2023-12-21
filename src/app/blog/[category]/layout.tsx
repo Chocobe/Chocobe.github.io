@@ -28,6 +28,7 @@ async function BlogCategoryLayout(props: PropsWithChildren) {
                         h-[calc(100vh-72px)]
                         sticky top-[72px]
                         overflow-auto
+                        max-[600px]:w-0
                     `.trim()}
                     navTitle="블로그 카테고리" />
 
