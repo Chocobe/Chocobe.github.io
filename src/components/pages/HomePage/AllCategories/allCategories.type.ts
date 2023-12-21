@@ -7,6 +7,7 @@ import {
     // SiReactivex,
     FaGraduationCap,
     TbBrandReact,
+    SiJest,
 } from '@icons';
 import { 
     IconType,
@@ -20,6 +21,12 @@ export type TBlogCategoryInfo = {
 };
 
 export const allBlogCategoryInfoList = [
+    {
+        category: 'javascript',
+        displayName: 'Javascript',
+        description: 'Javascript 에 대한 보강할 부분들을 정리합니다.',
+        IconComponent: TbBrandJavascript
+    },
     {
         category: 'react',
         displayName: 'React',
@@ -36,7 +43,7 @@ export const allBlogCategoryInfoList = [
         category: 'jest',
         displayName: 'Jest',
         description: 'Jest 를 사용한 유닛 테스트 관련 정리입니다.',
-        IconComponent: TbBrandJavascript,
+        IconComponent: SiJest,
     },
     // {
     //     category: 'rxjs',

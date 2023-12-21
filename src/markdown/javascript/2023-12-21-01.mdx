@@ -1,0 +1,165 @@
+---
+id: 1
+title: 구조 분해 할당의 기본값 지정, null 은 사용 불가!
+description: '구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'javascript',
+]
+
+createdAt: '2023-12-21 20:20:00'
+modifiedHistories: []
+---
+
+# 구조 분해 할당의 기본값 지정, Null 은 사용 불가!
+
+plain object 를 사용하여, 데이터를 의미단위로 묶어서 사용합니다.
+
+의미를 가지는 key 와 쌍을 이루는 value 로 구성되며, Javascript built-in object 에도 많은 기능을 제공합니다.
+
+이번 포스팅에서는 이러한 plain object 의 기능들 중, **구조 분해 할당의 기본값 설정** 에 대해 정리합니다.
+
+
+
+<br />
+
+
+
+## 구조 분해 할당의 기본값
+
+구조 분해 할당은 plain object 의 하위 프로퍼티에 좀 더 효율적으로 참조하는 기능입니다.
+
+```javascript title="구조 분해 할당 예시" showLineNumbers {8-14}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+// 구조 분해 할당
+const {
+    keyA,
+    keyB,
+    keyC,
+    keyD,
+} = obj;
+```
+
+<br />
+
+위 예시처럼 value 가 `undefined` 인 경우도 있고, `null` 인 경우가 있었습니다.
+
+이러한 경우 **기본값을 지정하여 유효한 value 를 보장** 하도록 의도하였습니다.
+
+```javascript title="구조 분해 할당의 기본값 예시" showLineNumbers {8-14}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+// 구조 분해 할당 기본값 지정
+const {
+    keyA,
+    keyB,
+    keyC =. '빈 값',
+    keyD = '빈 값',
+};
+```
+
+<br />
+
+여기서 제가 실수한 부분이 있습니다.
+
+~~`value` 가 `Nullish (undefined 또는 null)` 일 경우, 기본값을 설정할 수 있다고 생각했습니다.~~
+
+하지만 `null` 에는 기본값 설정이 불가능 하고, **`value` 가 `undefined` 일 경우에만 기본값을 설정** 할 수 있었습니다.
+
+* [MDN - 구조 분해 할당](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#%EA%B8%B0%EB%B3%B8%EA%B0%92)
+
+<br />
+
+제가 실수한 부분이 일으킨 이슈는 아래의 코드와 같습니다.
+
+```javascript title="구조 분해 할당의 기본값 이슈" showLineNumbers {11-12, 15-17}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+const {
+    keyA,
+    keyB,
+    keyC = '값 없음',
+    keyD = '값 없음',
+} = obj;
+
+// 에러 발생
+// Error: Cannot read properties of null (reading 'toUpperCase')
+console.log('keyD.toUpperCase(): ', keyD.toUpperCase());
+```
+
+<br />
+
+`keyD` 에 기본값을 `string` 으로 지정하였지만, `null` 이므로 기본값 지정이 적용되지 않습니다.
+
+그러므로 `keyD.toUpperCase()` 를 호출할 경우, `null` 에 대한 메소드 호출이 되며 에러가 발생하게 됩니다.
+
+
+
+<br />
+
+
+
+## null 은 명시적으로 표현한 값이 없음!
+
+값이 없을을 나타내는 `undefined` 와 `null` 은 타입도 다르지만, 더 **중요한 것은 의미** 인 것 같습니다.
+
+변수나 프로퍼티에 할당한 값이 없는 경우 `undefined` 를 가지고, `null` 은 개발자가 의도를 가지고 값을 비운다는 의미입니다.
+
+즉, 의도를 가지고 비워둔 값에는 구조 분해 할당의 기본값은 적용되지 않는 것 입니다.
+
+<br />
+
+만약 `Nullish` 에 대한 기본값을 지정하고 싶을 경우는 **Nullish 병합 연산자** 를 사용합니다.
+
+```javascript title="Nullish 병합 연산자" showLineNumbers {11-12, 15-16}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null
+};
+
+const {
+    keyA,
+    keyB,
+    keyC: _keyC,
+    keyD: _keyD,
+};
+
+const keyC = _keyC ?? '값 없음';
+const keyD = _keyD ?? '값 없음';
+```
+
+
+
+<br />
+
+
+
+## 유감스러운 구조 분해 할당의 기본값
+
+`undefined` 뿐만 아니라, `Nullish` 에 대한 기본값을 설정하고 싶다면, 위 예시코드와 같이 코드 1줄씩 추가로 작성하게 됩니다.
+
+이 기능의 의미는 이해하지만, 작성할 코드가 늘어난다는 점에서는 아쉽습니다.
+
+<br />
+
+다른분들은 저와 같은 실수가 없기를 바라며, 이번 포스팅을 마무리 합니다.
