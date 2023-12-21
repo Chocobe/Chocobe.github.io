@@ -157,6 +157,7 @@ function BlogCategoryCard(props: TBlogCategoryCardProps) {
 
     return (
         <StyledBlogCategoryCardRoot 
+            role="listitem"
             className={className}
             $width={width}
             onClick={onClickRoot}>
