@@ -1,12 +1,1271 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/67530b676c04ec45.css","style",{"crossOrigin":""}]
-0:["t0vojcp-PqEMBluWQu_B-",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/67530b676c04ec45.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["J3Qp4YSUhW0XKu0M7aQqc",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/67530b676c04ec45.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-8a7fb2600334237c.js"],""]
 6:I[179,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-8a7fb2600334237c.js"],""]
 7:I[6962,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-8a7fb2600334237c.js"],""]
 8:I[6954,[],""]
 9:I[7264,[],""]
-b:I[463,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-c1ab1dfb4d41db11.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","340","static/chunks/340-435c56927bca2087.js","931","static/chunks/app/page-e633dd4bc0e65ce9.js"],""]
-3:[null,["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__className_7bb6ba","children":["$","div",null,{"className":"w-full\n            h-full\n            overflow-y-scroll\n            overflow-x-auto","children":["$","$L5",null,{"children":[["$","$L6",null,{}],["$","$L7",null,{"style":{"minHeight":"calc(100% - 72px)"},"children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[],"childProp":{"current":["$La",["$","$Lb",null,{}],null],"segment":"__PAGE__"},"styles":null}]}]]}]}]}]}],null]
+3:[null,["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__className_7bb6ba","children":["$","div",null,{"className":"w-full\n            h-full\n            overflow-y-scroll\n            overflow-x-auto","children":["$","$L5",null,{"children":[["$","$L6",null,{}],["$","$L7",null,{"style":{"minHeight":"calc(100% - 72px)"},"children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[],"childProp":{"current":["$La","$Lb",null],"segment":"__PAGE__"},"styles":null}]}]]}]}]}]}],null]
 4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
 a:null
+c:I[463,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-c1ab1dfb4d41db11.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","340","static/chunks/340-435c56927bca2087.js","931","static/chunks/app/page-7539f7bceaf717ec.js"],""]
+d:T2360,---
+id: 1
+title: Custom Hook 으로 분리하며 발생한 실수
+description: 'Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: true
+tags: [
+    'react',
+    'custom hook',
+]
+
+createdAt: '2023-12-19 22:50:00'
+modifiedHistories: []
+---
+
+# Custom Hook 으로 분리하며 발생한 실수
+
+## 실수가 발생한 상황
+
+페이지가 mount 되면 API 를 호출하는 흐름은 빈번히 사용됩니다.
+
+그리고 API 응답을 받으면, 후처리를 하는 `useEffect` 를 사용할 수 있습니다.
+
+<br />
+
+이번 이슈에서는 Custom Hook 으로 나누기 전까지는 의도한 대로 API 응답과 Effect 가 1:1 로 실행되었습니다.
+
+```tsx title="MyPage.tsx" showLineNumbers {28-30, 32-34}
+import {
+    useCallback,
+    useEffect,
+} from 'react';
+import {
+    useAppSelector,
+} from '@/redux/hooks';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    const callApi_1 = useCallback(() => {
+        // API 호출 1
+    }, []);
+
+    const callApi_2 = useCallback(() => {
+        // API 호출 2
+    }, []);
+
+    useEffect(function handleTriggerState() {
+        callApi_1();
+        callApi_2();
+    }, [triggerState]);
+
+    useEffect(function onSuccessApi_1() {
+        // API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    useEffect(function onSuccessApi_2() {
+        // API 2 응답 후처리
+    }, [responseOfApi_2]);
+
+    return (
+        // ...
+    );
+}
+
+export default MyPage;
+```
+
+<br />
+
+이런 방식으로 **호출하는 API 가 늘어나자, 컴포넌트가 점점 복잡해졌습니다.**
+
+**또한 사용자 인터렉션에 의해 다시 호출해야 하는 API 도 있어서** Custom Hook 으로 분리하여 재사용하는 방향으로 생각하게 되었습니다.
+
+<br />
+
+리펙토링 결과, API 후처리를 담당하는 `useEffect` 가 번복 실행되는 현상이 나타났습니다.
+
+```tsx title="./hooks/useApi_1.ts" showLineNumbers {16-18}
+import {
+    useCallback,
+    useEffect,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_1 = () => {
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+
+    const callApi_1 = useCallback(() => {
+        // API 호출 1
+    }, []);
+
+    useEffect(function onSuccessApi_1() {
+        // (번복 실행됨) API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    return {
+        callApi_1,
+    };
+};
+
+export default useApi_1;
+```
+
+```tsx title="./hooks/useApi_2.ts" showLineNumbers {16-18}
+import {
+    useCallback,
+    useEffect,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_2 = () => {
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    const callApi_2 = useCallback(() => {
+        // API 호출 2
+    }, []);
+
+    useEffect(function onSuccessApi_2() {
+        // (번복 실행됨) API 2 응답 후처리
+    }, [responseOfApi_2]);
+
+    return {
+        callApi_2,
+    };
+};
+
+export default useApi_2;
+```
+
+```tsx title="MyPage.tsx" showLineNumbers {10-11, 13-16}
+import {
+    useEffect,
+} from 'react';
+import useApi_1 from './hooks/useApi_1';
+import useApi_2 from './hooks/useApi_2';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const { callApi_1 } = useApi_1();
+    const { callApi_2 } = useApi_2();
+
+    useEffect(function onSuccessApi_2() {
+        callApi_1();
+        callApi_2();
+    }, [triggerState]);
+
+    return (
+        // ...
+    );
+};
+
+export default MyPage;
+```
+
+
+
+<br />
+
+
+
+## useEffect 의 dependencies 는 무죄
+
+`useEffect` 의 `dependencies` 는 redux 에서 가져온 state 였습니다.
+
+(위의 예시 코드에서는 `triggerState` 로 표현하였습니다.)
+
+**`triggerState` 에 의도치 않은 mutate 가 발생하는 것인가** 라고 생각했지만, 이는 아니였습니다.
+
+
+
+<br />
+
+
+
+## Custom Hook 을 재사용한 만큼 번복되는 useEffect
+
+Custom Hook 으로 분리하는 단위를 **특정 API 호출 함수** 와 **해당 API 응답 후처리 Effect** 로 묶어서 구성하였습니다.
+
+그리고 필요한 곳에서 재사용을 하였습니다.
+
+<br />
+
+결과적으로 재사용한 횟수만큼 `useEffect` 가 번복 실행된 것입니다.
+
+Custom Hook 은 사용하는 곳에 scope 를 만드는 것이므로, 당연한 결과임에도 알아차리지 못하였습니다.
+
+
+
+<br />
+
+
+
+## API 호출함수와 Effect 를 분리한 Custom Hook 으로 이슈 해결
+
+원인을 찾은 후, API 의 후처리를 담당하는 `useEffect` 를 Custom Hook 에서 빼고, 기존의 `MyPage` 에 위치시켰습니다.
+
+그러자 번복되는 `useEffect` 이슈는 해결 되었습니다.
+
+
+```tsx title="./hooks/useApi_1.ts" showLineNumbers {15-17}
+import {
+    useCallback,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_1 = () => {
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+
+    const callApi_1 = useCallback(() => {
+        // API 호출 1
+    }, []);
+
+    // useEffect(function onSuccessApi_1() {
+    //     // API 1 응답 후처리
+    // }, [responseOfApi_1]);
+
+    return {
+        callApi_1,
+    };
+};
+
+export default useApi_1;
+```
+
+```tsx title="./hooks/useApi_2.ts" showLineNumbers {15-17}
+import {
+    useCallback,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_2 = () => {
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    const callApi_2 = useCallback(() => {
+        // API 호출 2
+    }, []);
+
+    // useEffect(function onSuccessApi_2() {
+    //     // API 2 응답 후처리
+    // }, [responseOfApi_2]);
+
+    return {
+        callApi_2,
+    };
+};
+
+export default useApi_2;
+```
+
+```tsx title="MyPage.tsx" showLineNumbers {20-22, 24-26}
+import {
+    useEffect,
+} from 'react';
+import useApi_1 from './hooks/useApi_1';
+import useApi_2 from './hooks/useApi_2';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const { callApi_1 } = useApi_1();
+    const { callApi_2 } = useApi_2();
+
+    useEffect(function onSuccessApi_2() {
+        callApi_1();
+        callApi_2();
+
+        // eslint-disable-next-line
+    }, [triggerState]);
+
+    useEffect(function onSuccessApi_1() {
+        // API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    useEffect(function onSuccessApi_2() {
+        // API 2 응답 후처리
+    }, [responseOfApi_2]);
+
+    return (
+        // ...
+    );
+};
+
+export default MyPage;
+```
+
+
+
+<br />
+
+
+
+## MyPage 에서 API 후처리를 담당하는 useEffect 분리
+
+위 코드처럼 리펙토링한 이후, 의도한 동작은 되었습니다.
+
+하지만, **MyPage.tsx 파일을 열어보기 전까지는 API 후처리를 어디서 하는지 파악하기가 어렵다고 느껴졌습니다.**
+
+<br />
+
+그래서 MyPage.tsx 의 **API 후처리 Effect 들을 Custom Hook 으로** 나눠보기로 하였습니다.
+
+```ts title="./hooks/useMyPageApiEffects.ts" showLineNumbers {9-11, 13-15}
+import {
+    useEffect,
+} from 'react';
+
+const useMyPageApiEffects = () => {
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    useEffect(function onSuccessApi_1() {
+        // API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    useEffect(function onSuccessApi_2() {
+        // API 2 응답 후처리
+    }, [responseOfApi_2]);
+}
+
+export default useMyPageApiEffects;
+```
+
+```tsx title="MyPage.tsx" showLineNumbers {13}
+import {
+    useEffect,
+} from 'react';
+import useApi_1 from './hooks/useApi_1';
+import useApi_2 from './hooks/useApi_2';
+import useMyPageApiEffects from './hooks/useMyPageApiEffects';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const { callApi_1 } = useApi_1();
+    const { callApi_2 } = useApi_2();
+    useMyPagteApiEffects();
+
+    useEffect(function onSuccessApi_2() {
+        callApi_1();
+        callApi_2();
+    }, [triggerState]);
+
+    return (
+        // ...
+    );
+};
+
+export default MyPage;
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+여기까지 수정한 결과, MyPage.tsx 에서 API 에 대한 후처리 Effect 가 있다는 것을 파일 목록을 통해서도 파악할 수 있게 되었습니다.
+
+개인적으로는 위와 같은 구조의 Custom Hook 이 마음에 들었습니다.
+
+이렇게 분리한 Custom Hook 은 아래와 같은 파일 구조가 되었습니다.
+
+```bash
+└── MyPage
+    ├── MyPage.tsx
+    └── hooks
+        ├── useApi_1.ts
+        ├── useApi_2.ts
+        └── useMyPageApiEffects.ts
+``` 
+
+<br />
+
+사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
+e:T1171,---
+id: 1
+title: 구조 분해 할당의 기본값 지정, null 은 사용 불가!
+description: '구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'javascript',
+]
+
+createdAt: '2023-12-21 20:20:00'
+modifiedHistories: []
+---
+
+# 구조 분해 할당의 기본값 지정, Null 은 사용 불가!
+
+plain object 를 사용하여, 데이터를 의미단위로 묶어서 사용합니다.
+
+의미를 가지는 key 와 쌍을 이루는 value 로 구성되며, Javascript built-in object 에도 많은 기능을 제공합니다.
+
+이번 포스팅에서는 이러한 plain object 의 기능들 중, **구조 분해 할당의 기본값 설정** 에 대해 정리합니다.
+
+
+
+<br />
+
+
+
+## 구조 분해 할당의 기본값
+
+구조 분해 할당은 plain object 의 하위 프로퍼티에 좀 더 효율적으로 참조하는 기능입니다.
+
+```javascript title="구조 분해 할당 예시" showLineNumbers {8-14}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+// 구조 분해 할당
+const {
+    keyA,
+    keyB,
+    keyC,
+    keyD,
+} = obj;
+```
+
+<br />
+
+위 예시처럼 value 가 `undefined` 인 경우도 있고, `null` 인 경우가 있었습니다.
+
+이러한 경우 **기본값을 지정하여 유효한 value 를 보장** 하도록 의도하였습니다.
+
+```javascript title="구조 분해 할당의 기본값 예시" showLineNumbers {8-14}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+// 구조 분해 할당 기본값 지정
+const {
+    keyA,
+    keyB,
+    keyC =. '빈 값',
+    keyD = '빈 값',
+};
+```
+
+<br />
+
+여기서 제가 실수한 부분이 있습니다.
+
+~~`value` 가 `Nullish (undefined 또는 null)` 일 경우, 기본값을 설정할 수 있다고 생각했습니다.~~
+
+하지만 `null` 에는 기본값 설정이 불가능 하고, **`value` 가 `undefined` 일 경우에만 기본값을 설정** 할 수 있었습니다.
+
+* [MDN - 구조 분해 할당](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#%EA%B8%B0%EB%B3%B8%EA%B0%92)
+
+<br />
+
+제가 실수한 부분이 일으킨 이슈는 아래의 코드와 같습니다.
+
+```javascript title="구조 분해 할당의 기본값 이슈" showLineNumbers {11-12, 15-17}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+const {
+    keyA,
+    keyB,
+    keyC = '값 없음',
+    keyD = '값 없음',
+} = obj;
+
+// 에러 발생
+// Error: Cannot read properties of null (reading 'toUpperCase')
+console.log('keyD.toUpperCase(): ', keyD.toUpperCase());
+```
+
+<br />
+
+`keyD` 에 기본값을 `string` 으로 지정하였지만, `null` 이므로 기본값 지정이 적용되지 않습니다.
+
+그러므로 `keyD.toUpperCase()` 를 호출할 경우, `null` 에 대한 메소드 호출이 되며 에러가 발생하게 됩니다.
+
+
+
+<br />
+
+
+
+## null 은 명시적으로 표현한 값이 없음!
+
+값이 없을을 나타내는 `undefined` 와 `null` 은 타입도 다르지만, 더 **중요한 것은 의미** 인 것 같습니다.
+
+변수나 프로퍼티에 할당한 값이 없는 경우 `undefined` 를 가지고, `null` 은 개발자가 의도를 가지고 값을 비운다는 의미입니다.
+
+즉, 의도를 가지고 비워둔 값에는 구조 분해 할당의 기본값은 적용되지 않는 것 입니다.
+
+<br />
+
+만약 `Nullish` 에 대한 기본값을 지정하고 싶을 경우는 **Nullish 병합 연산자** 를 사용합니다.
+
+```javascript title="Nullish 병합 연산자" showLineNumbers {11-12, 15-16}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null
+};
+
+const {
+    keyA,
+    keyB,
+    keyC: _keyC,
+    keyD: _keyD,
+};
+
+const keyC = _keyC ?? '값 없음';
+const keyD = _keyD ?? '값 없음';
+```
+
+
+
+<br />
+
+
+
+## 유감스러운 구조 분해 할당의 기본값
+
+`undefined` 뿐만 아니라, `Nullish` 에 대한 기본값을 설정하고 싶다면, 위 예시코드와 같이 코드 1줄씩 추가로 작성하게 됩니다.
+
+이 기능의 의미는 이해하지만, 작성할 코드가 늘어난다는 점에서는 아쉽습니다.
+
+<br />
+
+다른분들은 저와 같은 실수가 없기를 바라며, 이번 포스팅을 마무리 합니다.
+f:T162a,---
+id: 1
+title: '"node:fs" 테스트 하기'
+description: 'node 모듈중 File System 기능, "fs" 를 테스트하는 방법에 대해 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'mock-fs',
+    'fs',
+    'node:fs',
+    'jest',
+    '@testing-library',
+    '유닛 테스트',
+]
+
+createdAt: '2023-12-17 15:33:00'
+modifiedHistories: []
+---
+
+
+# "node:fs" 테스트 하기
+
+Nextjs 를 사용하게 되면서 SSG(static site generators) 와 SSR(server side rendering) 을 사용하게 되었습니다.
+
+그동안 CSR(client side rendering) 의 단점인 SEO 를 해소할 수 있게 되었습니다.
+
+SSG(static site generators) 와 SSR(server side rendering) 을 사용하게 되면, **node** 모듈들을 사용할 수 있습니다.
+
+이번 포스팅은 **node:fs** 를 사용하는 코드를 테스트하는 방법에 대해 정리합니다.
+
+
+
+<br />
+
+
+
+## Jest 에서 안내하는 built-in modules 테스트
+
+* 참고: [[Jest 공식문서] Mocking Node modules](https://jestjs.io/docs/manual-mocks#mocking-node-modules)
+
+<br />
+
+Jest 공식문서에 의하면, built-in modules 를 테스트하기 위해 몇가지 사전준비가 필요합니다.
+
+1. **node_modules** 와 인접한 경로에 **__mocks__** 폴더 만들기
+2. 테스트할 built-in module 과 동일한 이름의 파일(**fs.js**) 을 **__mocks__** 하위에 만들기
+3. **fs.js** 파일 구현하기
+    1. `jest.createMockFromModule('fs')` 를 호출하여 mock 적용하기
+    2. `fs` 의 메시드 중, 테스트 대상이 사용하는 모든 메서드에 mock 구현
+4. 유닛 테스트 파일에서 `jest.mock('fs')` 로 mock 적용하기
+
+<br />
+
+위 과정을 모두 구현할 수도 있지만, 좀 더 편리한 방법을 찾아본 결과 **mock-fs** 라는 라이브러리를 찾게 되었습니다.
+
+**mock-fs** 는 Jest 에서 안내하는 "node:fs" 테스트 준비 과정을 제공합니다.
+
+
+
+<br />
+
+
+
+## **mock-fs** 설치하기
+
+만약 **Typescript** 를 사용한다면, **@types/mock-fs** 모듈도 함께 설치합니다.
+
+```bash title="Javascript 사용 시" 
+yarn add -D mock-fs
+```
+
+```bash title="Typescript 사용 시"
+yarn add -D mock-fs @types/mock-fs
+```
+
+
+
+<br />
+
+
+
+## **node:fs** 테스크 코드 작성하기
+
+* 참고: [mock-fs 공식 문서](https://github.com/tschaub/mock-fs?tab=readme-ov-file#mock-fs)
+* 참고: [[지나가던 개발자]jest와 mock-fs로 fs 유닛 테스트하기](https://znagadeon.dev/post/test-fs/index.html)
+
+<br />
+
+**mock-fs** 를 사용하게 되면 아래의 2가지 작업이 필요합니다.
+
+* `jest.beforeEach()`: **mock-fs** 를 사용한 file system mockup
+* `jest.afterEach()`: **mock-fs** 해제
+
+<br />
+
+먼저 테스트 준비를 위한 mockup 을 구현하면 다음과 같습니다.
+
+```typescript showLineNumbers
+import mock from 'mock-fs';
+
+describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
+    beforeEach(() => {
+        mock({
+            '경로1': {
+                '하위_경로1': {
+                    '파일_1.mdx': '파일 내용 mockup',
+                    '파일_2.mdx': '파일 내용 mockup',
+                },
+            },
+            '경로2/경로3': {
+                '하위_경로2': {
+                    // 빈 폴더
+                },
+            },
+        });
+    });
+});
+```
+
+<br />
+
+이제 **node:fs** 는 mockup 에서 정의한 mock file system 을 사용하게 됩니다.
+
+```typescript {22} showLineNumbers
+import fs from 'node:fs/promises';
+import mock from 'mock-fs';
+
+describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
+    beforeEach(() => {
+        mock({
+            '경로1': {
+                '하위_경로1': {
+                    '파일_1.mdx': '파일 내용 mockup',
+                    '파일_2.mdx': '파일 내용 mockup',
+                },
+            },
+            '경로2/경로3': {
+                '하위_경로2': {
+                    // 빈 폴더
+                },
+            },
+        });
+    });
+
+    it('"node:fs" 를 사용하여 파일을 가져올 수 있다.', async () => {
+        const fileNameList = await fs.readdir('경로1/하위_경로1');
+
+        expect(fileNameList).toEqual([
+            '파일_1.mdx',
+            '파일_2.mdx',
+        ]);
+    });
+});
+```
+
+<br />
+
+마지막으로 **mock-fs** 를 해제할 수 있도록 `jest.afterEach()` 를 작성하면 "node:fs" 유닛 테스트는 작성완료 됩니다.
+
+```typescript {21} showLineNumbers
+import fs from 'node:fs/promises';
+import mock from 'mock-fs';
+
+describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
+    beforeEach(() => {
+        mock({
+            '경로1': {
+                '하위_경로1': {
+                    '파일_1.mdx': '파일 내용 mockup',
+                    '파일_2.mdx': '파일 내용 mockup',
+                },
+            },
+            '경로2/경로3': {
+                '하위_경로2': {
+                    // 빈 폴더
+                },
+            },
+        });
+    });
+
+    afterEach(mock.restore);
+
+    it('"node:fs" 를 사용하여 파일을 가져올 수 있다.', async () => {
+        const fileNameList = await fs.readdir('경로1/하위_경로1');
+
+        expect(fileNameList).toEqual([
+            '파일_1.mdx',
+            '파일_2.mdx',
+        ]);
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+이번 포스팅에서는 built-in modules 중 "fs" 를 테스트하는 방법에 대해 정리해 보았습니다.
+
+"fs" 가 아닌 다른 module 에 대한 테스트를 한다면, 결국은 Jest 공식문서에서 안내하는 mockup 방법도 사용해 보아야 할 것 같습니다.
+10:T1dfb,---
+id: 1
+title: LLMOps 와 친해지기 1 - 용어 정리
+description: 'AI 학습 모델인 Large Language Model 에 대한 정리입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: []
+
+createdAt: '2023-12-16 15:00:00'
+modifiedHistories: []
+---
+
+# LLMOps 와 친해지기 1 - 용어 정리
+
+**LLMOps** 란, Large Language Model 의 약자이며 대규모 언어 모델 입니다.
+
+사내 신규 프로젝트로 **LLMOps** 를 사용하기 위한 UI 툴 서비스를 개발하게 되었습니다.
+
+개발할 서비스에 대한 도메인 지식이 필요함을 느끼게 되었기에, 관련 용어와 개념을 정리하고자 합니다.
+
+일반인의 시야에서 조사한 내용을 정리하는 목적을 가지고 LLM 에 초점을 가지므로, 좀 더 정확한 내용은 첨부한 **참고 링크** 를 확인해주세요.
+
+
+
+<br />
+
+
+
+## 용어 정리
+
+### 머신러닝
+
+> 참고: [Machine learning (ML) –  머신러닝 이란?](https://www.ibm.com/kr-ko/topics/machine-learning)
+
+<br />
+
+기계학습 방법을 말합니다.
+
+**딥러닝** 이 아닌 **머신러닝** 은 정형화된 데이터를 학습하며 사람의 개입이 많이 필요합니다.
+
+정형화된 데이터란 데이터 각가을 **labeling** 이나 **tagging** 작업을 한 학습 데이터를 말합니다.
+
+데이터가 많을수록 좋은 결과를 기대할 수 있기 때문에, 정형화된 데이터를 만드는 과정부터 어렵습니다.
+
+
+
+<br />
+
+
+
+### 딥러닝
+
+> 참고: [Machine learning (ML) –  머신러닝 이란?](https://www.ibm.com/kr-ko/topics/machine-learning)
+
+<br />
+
+머신러닝의 하위 분야이며, 머신러닝 처럼 벙형화된 데이터로 학습할 수 있으며, 추가로 비정형 데이터를 학습할 수도 있습니다.
+
+비정형 데이터 학습을 위해 사용되는 개념으로 **신경망** 이 있습니다.
+
+
+
+<br />
+
+
+
+### 신경망
+
+> 참고: [AWS - 신경망이란 무엇인가요?](https://aws.amazon.com/ko/what-is/neural-network/)
+>
+> 참고: [Machine learning (ML) –  머신러닝 이란?](https://www.ibm.com/kr-ko/topics/machine-learning)
+
+<br />
+
+신경망은 머신러닝의 하위 분야이며 딥러닝의 기계 학습 알고리즘 중 하나입니다.
+
+신경망은 구조화 되지 않은 데이터와 명시적이지 않은 훈련 방식을 사용하며, 이렇게 학습한 데이터를 **일반화** 하고 **추론** 할 수 있습니다.
+
+예를 들면 다음과 같습니다.
+
+```bash
+질문1: "결제 방법을 알려줘"
+
+질문2: "비용 송금 방법을 알려줘"
+```
+
+위 질문은 문장은 다르지만, 컴퓨터는 신경망을 통해 "결제 방법 안내" 라는 동일한 문맥임을 이해합니다.
+
+<br />
+
+신경망은 **노드** 로 구성되며, 노드에는 **입력 노드**, **출력 노드** 등, 무수히 많은 노드로 구성됩니다.
+
+각 노드는 **관련성에 대한 임계치** 가 있으며, 임계치에 다다르면 활성화 되는데, 이러한 방식으로 관련된 노드들의 활성화를 통해 **일반화** 와 **추론** 을 할 수 있게 됩니다.
+
+
+
+<br />
+
+
+
+### MLOps
+
+> 참고: [MLOps란?](https://www.ibm.com/kr-ko/topics/machine-learning)
+
+<br />
+
+**MLOps** 는 **Machine Learning** 과 **Operations** 의 합성어로, 효율적인 머신러닝 **모델 개발**, **배포**, **운용** 을 위한 개발 방법론이며, **새로운 모델 개발이 목적** 입니다.
+
+**MLOps** 를 구성하는 요소는 다음과 같습니다.
+
+* 지속적 통합 (**CI**: Continuous Integration)
+* 지속적 배포 (**CD**: Continuous Deployment)
+* 지속적 학습 (**CT**: Continuous Training)
+
+
+
+<br />
+
+
+
+### FMOps
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+**FM(Foundation Model)** 을 한국어로 **기반 모델** 이라고 합니다.
+
+**FMOps(Foundation Model Operations)** 는 **기반 모델 개발**, **배포**, **운용** 을 위한 개발 방법론 입니다.
+
+**FMOps(Foundation Model Operations)** 에는 자연어 뿐만 아니라, 이미지나 음성을 기반으로 하는 모델(예시: **DALL-E**) 을 모두 포함합니다.
+
+
+
+<br />
+
+
+
+### LLMOps
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+<br />
+
+**FMOps** 에 포함되는 개념이며, **자연어 처리** 를 위한 개념으로 **LLM(Large Language Model)** 이 있습니다.
+
+**LLMOps(Large Langague Model Operations)** 는 **LLM 개발**, **배포**, **운용** 을 위한 개발 방법론입니다.
+
+
+
+<br />
+
+
+
+### MLOps 와 FMOps 비교
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+<br />
+
+* 목적
+    * MLOps: **새로운 모델을 개발** 합니다.
+    * FMOps: 이미 학습이 완료된 모델과 자신의 데이터를 사용하여, **자신만의 AI 앱을 개발** 합니다.
+* 다루는 모델 유형
+    * MLOps: 기업이 직접 모델과 파이프라인 모두 개발하게 됩니다.
+    * FMOps: **API 를 통해서 원하는 모델을 사용** 합니다.
+* 산출물
+    * MLOps: **Model** 과 이를 사용할 수 있는 **API** 를 만들게 됩니다.
+    * FMOps: LLM 과 사용자의 커스텀 데이터를 사용한 **AI 어플리케이션** 을 만들게 됩니다.
+
+
+
+<br />
+
+
+
+### 프롬프트
+
+> [프롬프트 (Prompt) 란 무엇인가? - 정의, 원리, fine tuning](https://www.thedatahunt.com/trend-insight/what-is-prompt)
+
+<br />
+
+개발 환경에서는 다양한 설정과 실행방법이 있습니다.
+
+이를 UI 로 모두 제공하는 것은 어렵기도 하고, 사용성도 복잡해집니다.
+
+그래서 CLI 를 사용하는 경우가 많습니다.
+
+프롬프트란, 컴퓨터에게 실행할 태스크를 전달하는 메시지, **명령어** 라는 의미를 가집니다.
+
+AI 가 발전함에 따라 현재는 명령어뿐만 아니라, 자연어까지 컴퓨터가 이해할 수 있게 되어서, 프롬프트의 의미는 **컴퓨터에게 어떤 태스크를 수행할지 전달하는 자연어 메시지** 라는 의미로 확장되었습니다.
+
+
+
+<br />
+
+
+
+### 프롬프트 체이닝
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+<br />
+
+프롬프트를 잘 작성할수록 AI 는 더 정확한 응답을 할 수 있습니다.
+
+LLM 에 하나의 프롬프트를 연결하여 AI 앱을 만들수도 있지만, 더 정확한 기능을 구현하기 위해 LLM 에 외부의 프롬프트를 포함하여 복수의 프롬프트를 연결하여 개발하게 되는데, 이를 **프롬프트 체이닝(Prompt Chaing)** 이라고 합니다.
+
+
+
+<br />
+
+
+
+### LangChain
+
+> 참고: [카카오엔터프라이즈 기술블로그 Tech&(테크앤):티스토리](https://tech.kakaoenterprise.com/196)
+
+<br />
+
+**LangChain** 은 **프롬프트 체이닝** 을 지원하는 프레임워크 입니다.
+
+LLM 과 외부의 프롬프트들을 자유롭게 연결할 수 있는 기능을 제공합니다.
+
+
+
+<br />
+
+
+
+### LLM 앱 개발 플렛폼
+
+LLM 과 LangChain 을 사용하여 AI 앱을 만들 수 있는 플렛폼이 있습니다. (프롬프트 체이닝 서비스 플렛폼)
+
+대표적으로 **LangFlow** 와 **FlowiseAI** 가 있습니다.
+
+<br />
+
+* LangFlow:
+    * [LangFlow Github](https://github.com/logspace-ai/langflow)
+    * 서버: `Python`
+    * 프론트: `React(Typescript)`
+* FlowiseAI
+    * [FlowiseAI Github](https://github.com/FlowiseAI/Flowise)
+    * 서버: `Express(Typescript)`
+    * 프론트: `React(Javascript)`
+11:T1d73,---
+id: 1
+title: Nextjs 프로젝트의 유닛 테스트
+description: '유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'nextjs',
+    'jest',
+    '@testing-library',
+    'react',
+    '유닛 테스트',
+]
+
+createdAt: '2023-12-16 22:13:00'
+modifiedHistories: []
+---
+
+# Nextjs 프로젝트의 유닛 테스트
+
+* 참고: [Next.js with React Testing Library, Jest, and TypeScript](https://medium.com/readytowork-org/next-js-with-react-testing-library-jest-and-typescript-a6aa11b85434)
+* 참고: [Nextjs 공식문서](https://nextjs.org/docs/pages/building-your-application/testing/jest)
+
+
+
+<br />
+
+
+
+<details>
+<summary>유닛 테스트를 멀리한 핑계와 결심</summary>
+
+<br />
+
+스타트업에 재직하며 다양한 프로젝트를 개발하고 있습니다.
+
+진행했던 프로젝트를 되돌아보면, 한결같이 시간이 부족하였고, 이를 핑계삼아 유닛 테스트 없이 기능 구현만을 하였습니다.
+
+<br />
+
+### 🤪 유닛 테스트 없이도 개발 가능한데?
+
+테스트에 관한 블로그 글이나 **클린코드** 와 같은 책에서 언급한 **코드에 대한 신뢰도** 는 사실 체감을 하지 못하였습니다.
+
+오히려 유닛 테스트 작성 때문에 기능 구현할 시간을 뺏긴다는 느낌이 컸고, 유닛 테스트 없이도 기능 개발은 충분히 가능했습니다.
+
+<br />
+
+### 😰 `console.log` 와 수작업 테스트 노가다...
+
+기능 개발을 완료한 후, 기억이 흐릿해질 정도로 시간이 지나서 기능 추가/수정 작업이 생겼습니다.
+
+기억을 상기하기 위해 여기 저기에 `console.log()` 를 작성하였고, 기능 추가 후에는 남아있는 `console.log()` 를 제거하는 귀찮은 작업들이 남게 되었습니다.
+
+사실 함수명, 메소드명, 변수명 등이 모두 명확하고, 모든 코드가 서로 의존성 없이 독립적인 기능을 한다면 `console.log()` 로 확인하는 작업이 필요 없을 수 있습니다.
+
+하지만 기능이 언제나 단순 명료하게 구현될 수 없고, 더더욱 이 코드를 작성한 저의 코드 품질에 부족함이 많기 때문에 `console.log()` 노가다와 함께할 가능성이 보였습니다.
+
+그리고 가장 큰 문제는, 변경된 기능이 다른 부분에 영향을 미치는지, 버그를 찾기위한 반복된 수작업 테스트를 하게 되었습니다.
+
+기능을 추가하는 코드 베이스가 클 수록, 수작업 테스트는 상당한 시간을 소비하게 하였습니다.
+
+<br />
+
+### 🤓 유닛 테스트를 사용한 테스트 자동화가 필요해!
+
+만약 유닛 테스트를 작성해 두었다면, 아래와 같은 보상이 있었다고 생각됩니다.
+
+* 현재 코드가 테스트에 통과하고 있으므로, 적어도 작성된 **Test Case** 내에서는 신뢰할 수 있는 코드다.
+* 테스트 대상이 지원하는 모든 기능과 `porps` 에 대하여, 독립적인 **Use Case** 를 확인할 수 있다.
+* **수정한 코드가 의도한 부분에만 적용됨을 보장 받을 수 있다.**
+
+<br />
+
+위와 같은 기대값을 가지며, **유닛 테스트에 대한 결심** 을 하게 되었습니다.
+
+</details>
+
+
+
+<br />
+
+
+
+## 유닛 테스트 라이브러리 설치
+
+유닛 테스트를 위해, `jest` 와 `@testing-library` 를 사용하고자 합니다.
+
+```bash title="jest 관련 패키지"
+yarn add -D jest ts-jest ts-node jest-environment-jsdom @types/jest
+```
+
+```bash title="@testing-library 관련 패키지"
+yarn add -D @testing-library/jest-dom @testing-library/react @testing-library/user-event
+```
+
+
+<br />
+
+
+
+## jest 실행을 위한 명령어 추가하기
+
+`package.json` 의 `scripts` 를 통해 프로젝트에 대한 명령어를 추가할 수 있습니다.
+
+단발성 테스트를 위한 명령어와 코드 변경마다 테스트를 실행하는 명령어를 추가합니다.
+
+```json title="package.json" {5-7}
+{
+    // ...
+    "scripts": {
+        // ...
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:watchAll": "jest --watchAll"
+    },
+    // ...
+}
+```
+
+
+
+<br />
+
+
+
+## jest 설정하기
+
+[Nextjs 공식 문서](https://nextjs.org/docs/pages/building-your-application/testing/jest#manual-setup) 에서도 **jest** 와 **@testing-library** 를 사용하는 방법에 대해 안내하고 있습니다.
+
+<br />
+
+**jest.config.ts** 파일을 사용하여 설정할 수 있습니다.
+
+직접 파일을 생성하지 않고, CLI 를 통해 설정 템플릿을 생성하여 수정하는 방향으로 설정하겠습니다.
+
+터미널에서 아래의 명령을 실행합니다.
+
+```bash title="npm 으로 jest.config.ts 생성하기"
+npm init jest@latest
+```
+
+```bash title="yarn 으로 jest.config.ts 생성하기"
+yarn create jest@latest
+```
+
+<br />
+
+명령을 실행하면, 몇가지 질문(Y/N)으로 기본 설정값이 반영된 **jest.config.ts** 파일이 생성됩니다.
+
+생성된 **jest.config.ts** 를 아래와 같이 수정합니다.
+
+```typescript showLineNumbers
+import {
+    Config,
+} from 'jest';
+import nextJest from 'next/jest.js';
+
+const createJestConfig = nextJest({
+    dir: './',
+});
+
+/**
+ * For a detailed explanation regarding each configuration property, visit:
+ * https://jestjs.io/docs/configuration
+ */
+
+const config: Config = {
+    // The directory where Jest should output its coverage files
+    coverageDirectory: "coverage",
+
+    // Indicates which provider should be used to instrument code for coverage
+    coverageProvider: "babel",
+
+    // A preset that is used as a base for Jest's configuration
+    preset: "ts-jest",
+
+    // A list of paths to modules that run some code to configure or set up the testing framework before each test
+    setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+
+    // The test environment that will be used for testing
+    testEnvironment: "jest-environment-jsdom",
+};
+
+export default createJestConfig(config);
+```
+
+<br />
+
+`jest.config.ts` 파일의 **26번줄** 에서 설정한 **jest.setup.ts** 파일을 생성하고 아래의 코드를 작성합니다.
+
+```typescript title="jest.setup.ts"
+import '@testing-library/jest-dom';
+```
+
+**jest.setup.ts** 에서 `import` 하는 모듈은 **@testing-library** 에서 제공하는 **확장 matcher** 를 사용할 수 있게 해줍니다.
+
+이로써 Nextjs 의 유닛 테스트 설정을 완료 하였습니다.
+
+
+
+<br />
+
+
+
+## 첫번째 컴포넌트 테스트 만들기
+
+먼저 테스트를 할 React 컴포넌트를 만들겠습니다.
+
+```tsx title="Hello.tsx"
+function Hello() {
+    return (
+        <h1>
+            Hello World
+        </h1>
+    );
+}
+
+export default Hello;
+```
+
+<br />
+
+*Hello.tsx* 와 동일한 경로에 **Hello.spec.tsx** 파일을 생성하고, 유닛 테스트를 작성합니다.
+
+```typescript title="Hello.spec.tsx"
+import Hello from './Hello';
+import {
+    render,
+    screen,
+} from '@testing-library/react';
+
+describe('<Hello /> 컴포넌트 유닛 테스트', () => {
+    it('Dom 에 렌더링 됨', () => {
+        render(<Hello />);
+
+        const $hello = screen.getByRole('heading', {
+            level: 1,
+        });
+
+        expect($hello).toBeInTheDocument();
+    });
+});
+```
+
+<br />
+
+유닛 테스트를 작성한 후, 터미널에 아래의 명령어로 테스트를 실행할 수 있으며, 모든 테스트가 통과됨을 확인할 수 있습니다.
+
+```bash title="jest 실행하기"
+yarn test
+```
+b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$d"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$e"},{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$11"}]}]
