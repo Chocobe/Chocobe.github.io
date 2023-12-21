@@ -37,9 +37,6 @@ async function BlogCategoryPageSSR(props: TBlogCategoryPageProps) {
         .filter(({ frontmatter }) => !frontmatter.featured);
 
     return (
-        // <BlogCategoryPage 
-        //     featuredMarkdownFileDataList={markdownFileDataList}
-        //     commonMarkdownFileDataList={markdownFileDataList} />
         <BlogCategoryPage 
             featuredMarkdownFileDataList={featuredList}
             commonMarkdownFileDataList={commonList} />

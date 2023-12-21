@@ -7,7 +7,9 @@ import {
 // UI Components
 import AllCategories from './AllCategories/AllCategories';
 import AllPosts from './AllPosts/AllPosts';
-import BlogPostCard from '@/components/ui/BlogPostCard/BlogPostCard';
+import BlogPostCard, { 
+    TBlogPostCardProps,
+} from '@/components/ui/BlogPostCard/BlogPostCard';
 // icons
 import {
     TbList,
@@ -18,6 +20,9 @@ import styled from 'styled-components';
 import { 
     blogPostCardVariantMapper,
 } from '@/components/ui/BlogPostCard/blogPostCard.type';
+import { 
+    TBlogMarkdownFileData,
+} from '@/utils/ssr/blogMarkdownManager.type';
 
 const StyledHomePageRoot = styled.div`
     padding-bottom: 20px;
@@ -72,20 +77,82 @@ const StyledHomePageRoot = styled.div`
     }
 `;
 
-function HomePage() {
+type THomePageProps = {
+    featuredMarkdownFileDataList: TBlogMarkdownFileData[];
+    commonMarkdownFileDataList: TBlogMarkdownFileData[];
+};
+
+function HomePage(props: THomePageProps) {
+    const {
+        featuredMarkdownFileDataList,
+        commonMarkdownFileDataList,
+    } = props;
+    
+    const firstFeaturedBlogPostCardProps = [featuredMarkdownFileDataList[0]]
+        .reduce((_, markdownFileData) => {
+            if (!markdownFileData) {
+                return null;
+            }
+
+            const {
+                category,
+                href,
+                frontmatter: {
+                    title,
+                    description,
+                    thumbnail,
+                    createdAt,
+                },
+            } = markdownFileData;
+
+            return {
+                category,
+                title,
+                description,
+                thumbnail,
+                href,
+                date: createdAt.toISOString(),
+            } as TBlogPostCardProps;
+        }, {} as TBlogPostCardProps | null);
+
+    const commonBlogPostCardPropsList: TBlogPostCardProps[] = commonMarkdownFileDataList
+        .map(markdownFileData => {
+            const {
+                category,
+                href,
+                frontmatter: {
+                    title,
+                    description,
+                    thumbnail,
+                    createdAt,
+                },
+            } = markdownFileData;
+
+            return {
+                category,
+                title,
+                description,
+                thumbnail,
+                href,
+                date: createdAt.toISOString(),
+            };
+        });
+
     return (
         <StyledHomePageRoot>
-            <section className="featuredSection">
-                <BlogPostCard 
-                    className="sectionContent"
-                    variant={blogPostCardVariantMapper.FEATURED}
-                    thumbnail="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
-                    category="Javascript"
-                    title="BlogPostCard - featured 구현 중"
-                    date={'2023-12-06'}
-                    description={`UI Component BlogPostCard 컴포넌트 구현 중입니다.\nHello World\n안녕하센요`} 
-                    href="#" />
-            </section>
+            {firstFeaturedBlogPostCardProps && (
+                <section className="featuredSection">
+                    <BlogPostCard 
+                        className="sectionContent"
+                        variant={blogPostCardVariantMapper.FEATURED}
+                        thumbnail="https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
+                        category={firstFeaturedBlogPostCardProps.category}
+                        title={firstFeaturedBlogPostCardProps.title}
+                        date={firstFeaturedBlogPostCardProps.date}
+                        description={firstFeaturedBlogPostCardProps.description}
+                        href={firstFeaturedBlogPostCardProps.href} />
+                </section>
+            )}
 
             <section className="commonSection">
                 <div className="sectionHeader">
@@ -114,7 +181,9 @@ function HomePage() {
                     </div>
                 </div>
 
-                <AllPosts className="sectionContent" />
+                <AllPosts 
+                    className="sectionContent"
+                    blogPostList={commonBlogPostCardPropsList} />
             </section>
         </StyledHomePageRoot>
     );
