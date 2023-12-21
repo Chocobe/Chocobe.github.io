@@ -1,0 +1,180 @@
+1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+2:HL["/_next/static/css/67530b676c04ec45.css","style",{"crossOrigin":""}]
+0:["t0vojcp-PqEMBluWQu_B-",[[["",{"children":["blog",{"children":[["category","javascript","d"],{"children":["__PAGE__?{\"category\":\"javascript\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/67530b676c04ec45.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+5:I[9248,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-8a7fb2600334237c.js"],""]
+6:I[179,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-8a7fb2600334237c.js"],""]
+7:I[6962,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-8a7fb2600334237c.js"],""]
+8:I[6954,[],""]
+9:I[7264,[],""]
+3:[null,["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__className_7bb6ba","children":["$","div",null,{"className":"w-full\n            h-full\n            overflow-y-scroll\n            overflow-x-auto","children":["$","$L5",null,{"children":[["$","$L6",null,{}],["$","$L7",null,{"style":{"minHeight":"calc(100% - 72px)"},"children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[],"childProp":{"current":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":[null,"$La",null],"segment":["category","javascript","d"]},"styles":null}],"segment":"blog"},"styles":null}]}]]}]}]}]}],null]
+4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
+b:I[689,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-c1ab1dfb4d41db11.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","75","static/chunks/app/blog/%5Bcategory%5D/layout-99b469175d8ed6ee.js"],""]
+a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","javascript","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"javascript\"}"},"styles":null}]}]]}]}]
+c:null
+e:I[2317,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","340","static/chunks/340-435c56927bca2087.js","254","static/chunks/app/blog/%5Bcategory%5D/page-a3dc3d010bc92c7f.js"],""]
+f:T1171,---
+id: 1
+title: 구조 분해 할당의 기본값 지정, null 은 사용 불가!
+description: '구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'javascript',
+]
+
+createdAt: '2023-12-21 20:20:00'
+modifiedHistories: []
+---
+
+# 구조 분해 할당의 기본값 지정, Null 은 사용 불가!
+
+plain object 를 사용하여, 데이터를 의미단위로 묶어서 사용합니다.
+
+의미를 가지는 key 와 쌍을 이루는 value 로 구성되며, Javascript built-in object 에도 많은 기능을 제공합니다.
+
+이번 포스팅에서는 이러한 plain object 의 기능들 중, **구조 분해 할당의 기본값 설정** 에 대해 정리합니다.
+
+
+
+<br />
+
+
+
+## 구조 분해 할당의 기본값
+
+구조 분해 할당은 plain object 의 하위 프로퍼티에 좀 더 효율적으로 참조하는 기능입니다.
+
+```javascript title="구조 분해 할당 예시" showLineNumbers {8-14}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+// 구조 분해 할당
+const {
+    keyA,
+    keyB,
+    keyC,
+    keyD,
+} = obj;
+```
+
+<br />
+
+위 예시처럼 value 가 `undefined` 인 경우도 있고, `null` 인 경우가 있었습니다.
+
+이러한 경우 **기본값을 지정하여 유효한 value 를 보장** 하도록 의도하였습니다.
+
+```javascript title="구조 분해 할당의 기본값 예시" showLineNumbers {8-14}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+// 구조 분해 할당 기본값 지정
+const {
+    keyA,
+    keyB,
+    keyC =. '빈 값',
+    keyD = '빈 값',
+};
+```
+
+<br />
+
+여기서 제가 실수한 부분이 있습니다.
+
+~~`value` 가 `Nullish (undefined 또는 null)` 일 경우, 기본값을 설정할 수 있다고 생각했습니다.~~
+
+하지만 `null` 에는 기본값 설정이 불가능 하고, **`value` 가 `undefined` 일 경우에만 기본값을 설정** 할 수 있었습니다.
+
+* [MDN - 구조 분해 할당](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#%EA%B8%B0%EB%B3%B8%EA%B0%92)
+
+<br />
+
+제가 실수한 부분이 일으킨 이슈는 아래의 코드와 같습니다.
+
+```javascript title="구조 분해 할당의 기본값 이슈" showLineNumbers {11-12, 15-17}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+const {
+    keyA,
+    keyB,
+    keyC = '값 없음',
+    keyD = '값 없음',
+} = obj;
+
+// 에러 발생
+// Error: Cannot read properties of null (reading 'toUpperCase')
+console.log('keyD.toUpperCase(): ', keyD.toUpperCase());
+```
+
+<br />
+
+`keyD` 에 기본값을 `string` 으로 지정하였지만, `null` 이므로 기본값 지정이 적용되지 않습니다.
+
+그러므로 `keyD.toUpperCase()` 를 호출할 경우, `null` 에 대한 메소드 호출이 되며 에러가 발생하게 됩니다.
+
+
+
+<br />
+
+
+
+## null 은 명시적으로 표현한 값이 없음!
+
+값이 없을을 나타내는 `undefined` 와 `null` 은 타입도 다르지만, 더 **중요한 것은 의미** 인 것 같습니다.
+
+변수나 프로퍼티에 할당한 값이 없는 경우 `undefined` 를 가지고, `null` 은 개발자가 의도를 가지고 값을 비운다는 의미입니다.
+
+즉, 의도를 가지고 비워둔 값에는 구조 분해 할당의 기본값은 적용되지 않는 것 입니다.
+
+<br />
+
+만약 `Nullish` 에 대한 기본값을 지정하고 싶을 경우는 **Nullish 병합 연산자** 를 사용합니다.
+
+```javascript title="Nullish 병합 연산자" showLineNumbers {11-12, 15-16}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null
+};
+
+const {
+    keyA,
+    keyB,
+    keyC: _keyC,
+    keyD: _keyD,
+};
+
+const keyC = _keyC ?? '값 없음';
+const keyD = _keyD ?? '값 없음';
+```
+
+
+
+<br />
+
+
+
+## 유감스러운 구조 분해 할당의 기본값
+
+`undefined` 뿐만 아니라, `Nullish` 에 대한 기본값을 설정하고 싶다면, 위 예시코드와 같이 코드 1줄씩 추가로 작성하게 됩니다.
+
+이 기능의 의미는 이해하지만, 작성할 코드가 늘어난다는 점에서는 아쉽습니다.
+
+<br />
+
+다른분들은 저와 같은 실수가 없기를 바라며, 이번 포스팅을 마무리 합니다.
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}]}]
