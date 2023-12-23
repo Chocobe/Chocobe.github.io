@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["Eb9s8XEAuL9EsFl2512q5",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["gE4rnSCnrhsOqogaQY5YS",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
 6:I[179,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
 7:I[6962,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
@@ -525,7 +525,7 @@ console.log('keyD.toUpperCase(): ', keyD.toUpperCase());
 
 변수나 프로퍼티에 할당한 값이 없는 경우 `undefined` 를 가지고, `null` 은 개발자가 의도를 가지고 값을 비운다는 의미입니다.
 
-즉, 의도를 가지고 비워둔 값에는 구조 분해 할당의 기본값은 적용되지 않는 것 입니다.
+즉, 의도를 가지고 비워둔 값에는 구조 분해 할당의 기본값이 적용되지 않는 것 입니다.
 
 <br />
 
@@ -565,7 +565,7 @@ const keyD = _keyD ?? '값 없음';
 <br />
 
 다른분들은 저와 같은 실수가 없기를 바라며, 이번 포스팅을 마무리 합니다.
-f:T162a,---
+f:T162b,---
 id: 1
 title: '"node:fs" 테스트 하기'
 description: 'node 모듈중 File System 기능, "fs" 를 테스트하는 방법에 대해 정리합니다.'
@@ -590,11 +590,11 @@ modifiedHistories: []
 
 Nextjs 를 사용하게 되면서 SSG(static site generators) 와 SSR(server side rendering) 을 사용하게 되었습니다.
 
-그동안 CSR(client side rendering) 의 단점인 SEO 를 해소할 수 있게 되었습니다.
+덕분에 CSR(client side rendering) 의 단점인 SEO 를 해소할 수 있게 되었습니다.
 
 SSG(static site generators) 와 SSR(server side rendering) 을 사용하게 되면, **node** 모듈들을 사용할 수 있습니다.
 
-이번 포스팅은 **node:fs** 를 사용하는 코드를 테스트하는 방법에 대해 정리합니다.
+이번 포스팅은 **node:fs** 를 사용하는 코드의 유닛 테스트 방법에 대해 정리합니다.
 
 
 
@@ -770,7 +770,7 @@ describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
 이번 포스팅에서는 built-in modules 중 "fs" 를 테스트하는 방법에 대해 정리해 보았습니다.
 
 "fs" 가 아닌 다른 module 에 대한 테스트를 한다면, 결국은 Jest 공식문서에서 안내하는 mockup 방법도 사용해 보아야 할 것 같습니다.
-10:T1dfb,---
+10:T1e27,---
 id: 1
 title: LLMOps 와 친해지기 1 - 용어 정리
 description: 'AI 학습 모델인 Large Language Model 에 대한 정리입니다.'
@@ -811,9 +811,9 @@ modifiedHistories: []
 
 **딥러닝** 이 아닌 **머신러닝** 은 정형화된 데이터를 학습하며 사람의 개입이 많이 필요합니다.
 
-정형화된 데이터란 데이터 각가을 **labeling** 이나 **tagging** 작업을 한 학습 데이터를 말합니다.
+정형화된 데이터란 데이터 각각에 대하여 **labeling** 이나 **tagging** 작업을 한 학습 데이터를 말합니다.
 
-데이터가 많을수록 좋은 결과를 기대할 수 있기 때문에, 정형화된 데이터를 만드는 과정부터 어렵습니다.
+데이터가 많을수록 좋은 결과를 기대할 수 있기 때문에, 정형화된 데이터를 만드는 과정부터 많은 시간과 노력이 필요하게 됩니다.
 
 
 
@@ -827,7 +827,7 @@ modifiedHistories: []
 
 <br />
 
-머신러닝의 하위 분야이며, 머신러닝 처럼 벙형화된 데이터로 학습할 수 있으며, 추가로 비정형 데이터를 학습할 수도 있습니다.
+머신러닝의 하위 분야이며, 머신러닝 처럼 정형화된 데이터로 학습할 수 있으며, 추가로 비정형 데이터를 학습할 수도 있습니다.
 
 비정형 데이터 학습을 위해 사용되는 개념으로 **신경망** 이 있습니다.
 
@@ -1015,7 +1015,7 @@ LLM 과 LangChain 을 사용하여 AI 앱을 만들 수 있는 플렛폼이 있�
     * [FlowiseAI Github](https://github.com/FlowiseAI/Flowise)
     * 서버: `Express(Typescript)`
     * 프론트: `React(Javascript)`
-11:T1d73,---
+11:T1d77,---
 id: 1
 title: Nextjs 프로젝트의 유닛 테스트
 description: '유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.'
@@ -1074,7 +1074,7 @@ modifiedHistories: []
 
 하지만 기능이 언제나 단순 명료하게 구현될 수 없고, 더더욱 이 코드를 작성한 저의 코드 품질에 부족함이 많기 때문에 `console.log()` 노가다와 함께할 가능성이 보였습니다.
 
-그리고 가장 큰 문제는, 변경된 기능이 다른 부분에 영향을 미치는지, 버그를 찾기위한 반복된 수작업 테스트를 하게 되었습니다.
+**그리고 가장 큰 문제는, 변경된 기능이 다른 부분에 영향을 미치는지, 버그를 찾기위한 반복된 수작업 테스트를 하게 되었습니다.**
 
 기능을 추가하는 코드 베이스가 클 수록, 수작업 테스트는 상당한 시간을 소비하게 하였습니다.
 
