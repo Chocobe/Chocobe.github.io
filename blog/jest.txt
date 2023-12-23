@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["gE4rnSCnrhsOqogaQY5YS",[[["",{"children":["blog",{"children":[["category","jest","d"],{"children":["__PAGE__?{\"category\":\"jest\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["3ZiYLgIFog-a9ESVL_F2J",[[["",{"children":["blog",{"children":[["category","jest","d"],{"children":["__PAGE__?{\"category\":\"jest\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
 6:I[179,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
 7:I[6962,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
@@ -12,13 +12,13 @@ b:I[689,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks
 a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto\n                        max-[600px]:w-0","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","jest","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"jest\"}"},"styles":null}]}]]}]}]
 c:null
 e:I[2317,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","340","static/chunks/340-435c56927bca2087.js","254","static/chunks/app/blog/%5Bcategory%5D/page-a3dc3d010bc92c7f.js"],""]
-f:T162b,---
+f:T162a,---
 id: 1
 title: '"node:fs" 테스트 하기'
 description: 'node 모듈중 File System 기능, "fs" 를 테스트하는 방법에 대해 정리합니다.'
 thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
 
-featured: false
+featured: true
 tags: [
     'mock-fs',
     'fs',
@@ -217,4 +217,221 @@ describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
 이번 포스팅에서는 built-in modules 중 "fs" 를 테스트하는 방법에 대해 정리해 보았습니다.
 
 "fs" 가 아닌 다른 module 에 대한 테스트를 한다면, 결국은 Jest 공식문서에서 안내하는 mockup 방법도 사용해 보아야 할 것 같습니다.
-d:["$","$Le",null,{"featuredMarkdownFileDataList":[],"commonMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}]}]
+10:T15fe,---
+id: 2
+title: '"jest.fn()" 으로 함수 테스트하기'
+description: '컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 "jest.fn()" 사용방법에 대한 정리 입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'jest.fn',
+    'jest',
+    '@testing-library',
+    '유닛 테스트',
+]
+
+createdAt: '2023-12-23 14:45:00'
+modifiedHistories: []
+---
+
+# "jest.fn()" 으로 함수 테스트하기
+
+컴포넌트에는 props 를 사용하여 데이터와 함수를 넘겨주도록 만들 수 있습니다.
+
+이번 포스팅에서는 `jest.fn()` 을 사용하여 컴포넌트에 넘겨준 함수가 정상동작하는지 테스트하는 방법에 대해 정리합니다.
+
+
+
+<br />
+
+
+
+## 컴포넌트 props 에 넘겨주는 함수
+
+컴포넌트 props 에는 함수를 넘겨줄 수 있습니다.
+
+사용자 인터렉션을 처리하기 위한 함수가 될 수도 있고, 특정 동작에 대한 callback 으로 활용되도록 구현할 수 있습니다.
+
+이렇게 넘겨준 함수가 의도한 시점, 상황에 호출이 되는지 테스트하고자 합니다.
+
+
+
+<br />
+
+
+
+## 테스트 예시 컴포넌트
+
+이번 포스팅에서 테스트에 사용할 input 컴포넌트를 만들어보겠습니다.
+
+```typescript title="./ChocobeInput.tsx" showLineNumbers
+import {
+    useCallback,
+    memo,
+    ChangeEvent,
+} from 'react';
+
+type TChocobeButtonProps = {
+    value: string;
+    onChange: (value: string) => void;
+};
+
+function ChocobeInput(props: TChocobeInputProps) {
+    const {
+        value,
+        onChange,
+    } = props;
+
+    //
+    // callback
+    //
+    const onChangeInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        onChange(value);
+    }, [onChange]);
+
+    return (
+        <input
+            value={value}
+            onChange={onChangeInput} />
+    );
+}
+
+export default memo(ChocobeInput);
+```
+
+
+
+<br />
+
+
+
+## `jest.fn()` 으로 onChange mockup function 만들기
+
+* 참고: [[Jest 공식 문서] Using a mock function](https://jestjs.io/docs/mock-functions#using-a-mock-function)
+
+`Jest` 는 `fn()` 이라는 **함수 mockup 메소드** 를 제공하고 있습니다.
+
+위 예시 컴포넌트를 테스트한다면, `props.onChange()` 를 테스트하기 위해 `jest.fn()` 을 사용하게 됩니다.
+
+```typescript title="jest.fn() 으로 mockup function 생성하기" showLineNumbers {11, 16}
+// UI Components
+import ChocobeInput from './ChocobeInput';
+// jest
+import {
+    render,
+    screen,
+} from '@testing-library/react';
+
+describe('ChocobeInput 컴포넌트 테스트', () => {
+    it('ChocobeInput 에 값을 입력하면 onChange() 가 호출된다.', async () => {
+        const fn_onChange = jest.fn();
+
+        render(
+            <ChocobeInput
+                value=""
+                onChange={fn_onChange} />
+        );
+    });
+});
+```
+
+
+
+<br />
+
+## input 요소에 KeyboardEvent 발생시키기
+
+`fn_onChange()` 함수는 `<ChocobeInput />` 컴포넌트에 `KeyboardEvent` 가 발생하면 호출되는 구조 입니다.
+
+`userEvent` 를 사용하여 `KeyboardEvent` 나 `click` 이벤트 등을 발생시킬 수 있으며, `<ChocobeInput />` 컴포넌트의 경우에는 `KeyboardEvent` 가 발생하면 `onChange()` 가 호출됩니다.
+
+컴포넌트에 `KeyboardEvent` 를 발생시키려면 `userEvent.type()` 메소드를 활용하게 됩니다.
+
+```typescript title="userEvent.type() 으로 KeyboardEvent 발생시키기" showLineNumbers {24}
+// UI Components
+import ChocobeInput from './ChocobeInput';
+// jest
+import {
+    render,
+    screen,
+} from '@testing-library/react';
+import {
+    userEvent,
+} from '@testing-library/user-event';
+
+describe('ChocobeInput 컴포넌트 테스트', () => {
+    it('ChocobeInput 에 값을 입력하면 onChange() 가 호출된다.', async () => {
+        const fn_onChange = jest.fn();
+
+        render(
+            <ChocobeInput
+                value=""
+                onChange={fn_onChange} />
+        );
+
+        const $chocobeInput = screen.getByRole('textbox');
+
+        await userEvent.type($chocobeInput, 'Hello');
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## KeyboardEvent 에 의해 fn_onClick() 호출 여부 테스트하기
+
+위 예시 코드를 통해 `<ChocobeInput />` 컴포넌트에 `KeyboardEvent` 가 발생한 상태 입니다.
+
+`userEvent.type(요소, 입력값)` 으로 넘겨준 `입력값` 은 문자 1개당 1번의 KeyboardEvent 가 발생하게 되므로, 총 5번의 KeyboardEvent 가 발생한 상태 입니다.
+
+이를 테스트하면 다음과 같습니다.
+
+```typescript title="발생한 이벤트 테스트" showLineNumbers
+// UI Components
+import ChocobeInput from './ChocobeInput';
+// jest
+import {
+    render,
+    screen,
+} from '@testing-library/react';
+import {
+    userEvent,
+} from '@testing-library/user-event';
+
+describe('ChocobeInput 컴포넌트 테스트', () => {
+    it('ChocobeInput 에 값을 입력하면 onChange() 가 호출된다.', async () => {
+        const fn_onChange = jest.fn();
+
+        render(
+            <ChocobeInput
+                value=""
+                onChange={fn_onChange} />
+        );
+
+        const $chocobeInput = screen.getByRole('textbox');
+
+        await userEvent.type($chocobeInput, 'Hello');
+
+        expect(fn_onChange).toHaveBeenCalledTimes(5);
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+함수 테스트는 `jest.fn()` 뿐만 아니라 `jest.spyOn()` 으로도 가능합니다.
+
+다음 포스팅에서는 `jest.spyOn()` 으로 테스트하는 방법과 `jest.fn()` 과 차이점에 대해 정리하겠습니다.
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$10"}]}]

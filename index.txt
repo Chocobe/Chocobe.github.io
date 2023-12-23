@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["gE4rnSCnrhsOqogaQY5YS",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["3ZiYLgIFog-a9ESVL_F2J",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
 6:I[179,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
 7:I[6962,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
@@ -10,568 +10,13 @@
 4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
 a:null
 c:I[463,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-c1ab1dfb4d41db11.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","340","static/chunks/340-435c56927bca2087.js","931","static/chunks/app/page-4a887a6d0cfd36e2.js"],""]
-d:T2360,---
-id: 1
-title: Custom Hook 으로 분리하며 발생한 실수
-description: 'Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.'
-thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
-
-featured: true
-tags: [
-    'react',
-    'custom hook',
-]
-
-createdAt: '2023-12-19 22:50:00'
-modifiedHistories: []
----
-
-# Custom Hook 으로 분리하며 발생한 실수
-
-## 실수가 발생한 상황
-
-페이지가 mount 되면 API 를 호출하는 흐름은 빈번히 사용됩니다.
-
-그리고 API 응답을 받으면, 후처리를 하는 `useEffect` 를 사용할 수 있습니다.
-
-<br />
-
-이번 이슈에서는 Custom Hook 으로 나누기 전까지는 의도한 대로 API 응답과 Effect 가 1:1 로 실행되었습니다.
-
-```tsx title="MyPage.tsx" showLineNumbers {28-30, 32-34}
-import {
-    useCallback,
-    useEffect,
-} from 'react';
-import {
-    useAppSelector,
-} from '@/redux/hooks';
-
-function MyPage() {
-    const triggerState = useAppSelector(({ triggerState }) => triggerState);
-
-    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
-    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
-
-    const callApi_1 = useCallback(() => {
-        // API 호출 1
-    }, []);
-
-    const callApi_2 = useCallback(() => {
-        // API 호출 2
-    }, []);
-
-    useEffect(function handleTriggerState() {
-        callApi_1();
-        callApi_2();
-    }, [triggerState]);
-
-    useEffect(function onSuccessApi_1() {
-        // API 1 응답 후처리
-    }, [responseOfApi_1]);
-
-    useEffect(function onSuccessApi_2() {
-        // API 2 응답 후처리
-    }, [responseOfApi_2]);
-
-    return (
-        // ...
-    );
-}
-
-export default MyPage;
-```
-
-<br />
-
-이런 방식으로 **호출하는 API 가 늘어나자, 컴포넌트가 점점 복잡해졌습니다.**
-
-**또한 사용자 인터렉션에 의해 다시 호출해야 하는 API 도 있어서** Custom Hook 으로 분리하여 재사용하는 방향으로 생각하게 되었습니다.
-
-<br />
-
-리펙토링 결과, API 후처리를 담당하는 `useEffect` 가 번복 실행되는 현상이 나타났습니다.
-
-```tsx title="./hooks/useApi_1.ts" showLineNumbers {16-18}
-import {
-    useCallback,
-    useEffect,
-} from 'react';
-import {
-    useAppSelector
-} from '@/redux/hooks';
-
-const useApi_1 = () => {
-    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
-
-    const callApi_1 = useCallback(() => {
-        // API 호출 1
-    }, []);
-
-    useEffect(function onSuccessApi_1() {
-        // (번복 실행됨) API 1 응답 후처리
-    }, [responseOfApi_1]);
-
-    return {
-        callApi_1,
-    };
-};
-
-export default useApi_1;
-```
-
-```tsx title="./hooks/useApi_2.ts" showLineNumbers {16-18}
-import {
-    useCallback,
-    useEffect,
-} from 'react';
-import {
-    useAppSelector
-} from '@/redux/hooks';
-
-const useApi_2 = () => {
-    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
-
-    const callApi_2 = useCallback(() => {
-        // API 호출 2
-    }, []);
-
-    useEffect(function onSuccessApi_2() {
-        // (번복 실행됨) API 2 응답 후처리
-    }, [responseOfApi_2]);
-
-    return {
-        callApi_2,
-    };
-};
-
-export default useApi_2;
-```
-
-```tsx title="MyPage.tsx" showLineNumbers {10-11, 13-16}
-import {
-    useEffect,
-} from 'react';
-import useApi_1 from './hooks/useApi_1';
-import useApi_2 from './hooks/useApi_2';
-
-function MyPage() {
-    const triggerState = useAppSelector(({ triggerState }) => triggerState);
-
-    const { callApi_1 } = useApi_1();
-    const { callApi_2 } = useApi_2();
-
-    useEffect(function onSuccessApi_2() {
-        callApi_1();
-        callApi_2();
-    }, [triggerState]);
-
-    return (
-        // ...
-    );
-};
-
-export default MyPage;
-```
-
-
-
-<br />
-
-
-
-## useEffect 의 dependencies 는 무죄
-
-`useEffect` 의 `dependencies` 는 redux 에서 가져온 state 였습니다.
-
-(위의 예시 코드에서는 `triggerState` 로 표현하였습니다.)
-
-**`triggerState` 에 의도치 않은 mutate 가 발생하는 것인가** 라고 생각했지만, 이는 아니였습니다.
-
-
-
-<br />
-
-
-
-## Custom Hook 을 재사용한 만큼 번복되는 useEffect
-
-Custom Hook 으로 분리하는 단위를 **특정 API 호출 함수** 와 **해당 API 응답 후처리 Effect** 로 묶어서 구성하였습니다.
-
-그리고 필요한 곳에서 재사용을 하였습니다.
-
-<br />
-
-결과적으로 재사용한 횟수만큼 `useEffect` 가 번복 실행된 것입니다.
-
-Custom Hook 은 사용하는 곳에 scope 를 만드는 것이므로, 당연한 결과임에도 알아차리지 못하였습니다.
-
-
-
-<br />
-
-
-
-## API 호출함수와 Effect 를 분리한 Custom Hook 으로 이슈 해결
-
-원인을 찾은 후, API 의 후처리를 담당하는 `useEffect` 를 Custom Hook 에서 빼고, 기존의 `MyPage` 에 위치시켰습니다.
-
-그러자 번복되는 `useEffect` 이슈는 해결 되었습니다.
-
-
-```tsx title="./hooks/useApi_1.ts" showLineNumbers {15-17}
-import {
-    useCallback,
-} from 'react';
-import {
-    useAppSelector
-} from '@/redux/hooks';
-
-const useApi_1 = () => {
-    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
-
-    const callApi_1 = useCallback(() => {
-        // API 호출 1
-    }, []);
-
-    // useEffect(function onSuccessApi_1() {
-    //     // API 1 응답 후처리
-    // }, [responseOfApi_1]);
-
-    return {
-        callApi_1,
-    };
-};
-
-export default useApi_1;
-```
-
-```tsx title="./hooks/useApi_2.ts" showLineNumbers {15-17}
-import {
-    useCallback,
-} from 'react';
-import {
-    useAppSelector
-} from '@/redux/hooks';
-
-const useApi_2 = () => {
-    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
-
-    const callApi_2 = useCallback(() => {
-        // API 호출 2
-    }, []);
-
-    // useEffect(function onSuccessApi_2() {
-    //     // API 2 응답 후처리
-    // }, [responseOfApi_2]);
-
-    return {
-        callApi_2,
-    };
-};
-
-export default useApi_2;
-```
-
-```tsx title="MyPage.tsx" showLineNumbers {20-22, 24-26}
-import {
-    useEffect,
-} from 'react';
-import useApi_1 from './hooks/useApi_1';
-import useApi_2 from './hooks/useApi_2';
-
-function MyPage() {
-    const triggerState = useAppSelector(({ triggerState }) => triggerState);
-
-    const { callApi_1 } = useApi_1();
-    const { callApi_2 } = useApi_2();
-
-    useEffect(function onSuccessApi_2() {
-        callApi_1();
-        callApi_2();
-
-        // eslint-disable-next-line
-    }, [triggerState]);
-
-    useEffect(function onSuccessApi_1() {
-        // API 1 응답 후처리
-    }, [responseOfApi_1]);
-
-    useEffect(function onSuccessApi_2() {
-        // API 2 응답 후처리
-    }, [responseOfApi_2]);
-
-    return (
-        // ...
-    );
-};
-
-export default MyPage;
-```
-
-
-
-<br />
-
-
-
-## MyPage 에서 API 후처리를 담당하는 useEffect 분리
-
-위 코드처럼 리펙토링한 이후, 의도한 동작은 되었습니다.
-
-하지만, **MyPage.tsx 파일을 열어보기 전까지는 API 후처리를 어디서 하는지 파악하기가 어렵다고 느껴졌습니다.**
-
-<br />
-
-그래서 MyPage.tsx 의 **API 후처리 Effect 들을 Custom Hook 으로** 나눠보기로 하였습니다.
-
-```ts title="./hooks/useMyPageApiEffects.ts" showLineNumbers {9-11, 13-15}
-import {
-    useEffect,
-} from 'react';
-
-const useMyPageApiEffects = () => {
-    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
-    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
-
-    useEffect(function onSuccessApi_1() {
-        // API 1 응답 후처리
-    }, [responseOfApi_1]);
-
-    useEffect(function onSuccessApi_2() {
-        // API 2 응답 후처리
-    }, [responseOfApi_2]);
-}
-
-export default useMyPageApiEffects;
-```
-
-```tsx title="MyPage.tsx" showLineNumbers {13}
-import {
-    useEffect,
-} from 'react';
-import useApi_1 from './hooks/useApi_1';
-import useApi_2 from './hooks/useApi_2';
-import useMyPageApiEffects from './hooks/useMyPageApiEffects';
-
-function MyPage() {
-    const triggerState = useAppSelector(({ triggerState }) => triggerState);
-
-    const { callApi_1 } = useApi_1();
-    const { callApi_2 } = useApi_2();
-    useMyPagteApiEffects();
-
-    useEffect(function onSuccessApi_2() {
-        callApi_1();
-        callApi_2();
-    }, [triggerState]);
-
-    return (
-        // ...
-    );
-};
-
-export default MyPage;
-```
-
-
-
-<br />
-
-
-
-## 마치며
-
-여기까지 수정한 결과, MyPage.tsx 에서 API 에 대한 후처리 Effect 가 있다는 것을 파일 목록을 통해서도 파악할 수 있게 되었습니다.
-
-개인적으로는 위와 같은 구조의 Custom Hook 이 마음에 들었습니다.
-
-이렇게 분리한 Custom Hook 은 아래와 같은 파일 구조가 되었습니다.
-
-```bash
-└── MyPage
-    ├── MyPage.tsx
-    └── hooks
-        ├── useApi_1.ts
-        ├── useApi_2.ts
-        └── useMyPageApiEffects.ts
-``` 
-
-<br />
-
-사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-e:T1171,---
-id: 1
-title: 구조 분해 할당의 기본값 지정, null 은 사용 불가!
-description: '구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.'
-thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
-
-featured: false
-tags: [
-    'javascript',
-]
-
-createdAt: '2023-12-21 20:20:00'
-modifiedHistories: []
----
-
-# 구조 분해 할당의 기본값 지정, Null 은 사용 불가!
-
-plain object 를 사용하여, 데이터를 의미단위로 묶어서 사용합니다.
-
-의미를 가지는 key 와 쌍을 이루는 value 로 구성되며, Javascript built-in object 에도 많은 기능을 제공합니다.
-
-이번 포스팅에서는 이러한 plain object 의 기능들 중, **구조 분해 할당의 기본값 설정** 에 대해 정리합니다.
-
-
-
-<br />
-
-
-
-## 구조 분해 할당의 기본값
-
-구조 분해 할당은 plain object 의 하위 프로퍼티에 좀 더 효율적으로 참조하는 기능입니다.
-
-```javascript title="구조 분해 할당 예시" showLineNumbers {8-14}
-const obj = {
-    keyA: 'value a',
-    keyB: 'value b',
-    keyC: undefined,
-    keyD: null,
-};
-
-// 구조 분해 할당
-const {
-    keyA,
-    keyB,
-    keyC,
-    keyD,
-} = obj;
-```
-
-<br />
-
-위 예시처럼 value 가 `undefined` 인 경우도 있고, `null` 인 경우가 있었습니다.
-
-이러한 경우 **기본값을 지정하여 유효한 value 를 보장** 하도록 의도하였습니다.
-
-```javascript title="구조 분해 할당의 기본값 예시" showLineNumbers {8-14}
-const obj = {
-    keyA: 'value a',
-    keyB: 'value b',
-    keyC: undefined,
-    keyD: null,
-};
-
-// 구조 분해 할당 기본값 지정
-const {
-    keyA,
-    keyB,
-    keyC =. '빈 값',
-    keyD = '빈 값',
-};
-```
-
-<br />
-
-여기서 제가 실수한 부분이 있습니다.
-
-~~`value` 가 `Nullish (undefined 또는 null)` 일 경우, 기본값을 설정할 수 있다고 생각했습니다.~~
-
-하지만 `null` 에는 기본값 설정이 불가능 하고, **`value` 가 `undefined` 일 경우에만 기본값을 설정** 할 수 있었습니다.
-
-* [MDN - 구조 분해 할당](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#%EA%B8%B0%EB%B3%B8%EA%B0%92)
-
-<br />
-
-제가 실수한 부분이 일으킨 이슈는 아래의 코드와 같습니다.
-
-```javascript title="구조 분해 할당의 기본값 이슈" showLineNumbers {11-12, 15-17}
-const obj = {
-    keyA: 'value a',
-    keyB: 'value b',
-    keyC: undefined,
-    keyD: null,
-};
-
-const {
-    keyA,
-    keyB,
-    keyC = '값 없음',
-    keyD = '값 없음',
-} = obj;
-
-// 에러 발생
-// Error: Cannot read properties of null (reading 'toUpperCase')
-console.log('keyD.toUpperCase(): ', keyD.toUpperCase());
-```
-
-<br />
-
-`keyD` 에 기본값을 `string` 으로 지정하였지만, `null` 이므로 기본값 지정이 적용되지 않습니다.
-
-그러므로 `keyD.toUpperCase()` 를 호출할 경우, `null` 에 대한 메소드 호출이 되며 에러가 발생하게 됩니다.
-
-
-
-<br />
-
-
-
-## null 은 명시적으로 표현한 값이 없음!
-
-값이 없을을 나타내는 `undefined` 와 `null` 은 타입도 다르지만, 더 **중요한 것은 의미** 인 것 같습니다.
-
-변수나 프로퍼티에 할당한 값이 없는 경우 `undefined` 를 가지고, `null` 은 개발자가 의도를 가지고 값을 비운다는 의미입니다.
-
-즉, 의도를 가지고 비워둔 값에는 구조 분해 할당의 기본값이 적용되지 않는 것 입니다.
-
-<br />
-
-만약 `Nullish` 에 대한 기본값을 지정하고 싶을 경우는 **Nullish 병합 연산자** 를 사용합니다.
-
-```javascript title="Nullish 병합 연산자" showLineNumbers {11-12, 15-16}
-const obj = {
-    keyA: 'value a',
-    keyB: 'value b',
-    keyC: undefined,
-    keyD: null
-};
-
-const {
-    keyA,
-    keyB,
-    keyC: _keyC,
-    keyD: _keyD,
-};
-
-const keyC = _keyC ?? '값 없음';
-const keyD = _keyD ?? '값 없음';
-```
-
-
-
-<br />
-
-
-
-## 유감스러운 구조 분해 할당의 기본값
-
-`undefined` 뿐만 아니라, `Nullish` 에 대한 기본값을 설정하고 싶다면, 위 예시코드와 같이 코드 1줄씩 추가로 작성하게 됩니다.
-
-이 기능의 의미는 이해하지만, 작성할 코드가 늘어난다는 점에서는 아쉽습니다.
-
-<br />
-
-다른분들은 저와 같은 실수가 없기를 바라며, 이번 포스팅을 마무리 합니다.
-f:T162b,---
+d:T162a,---
 id: 1
 title: '"node:fs" 테스트 하기'
 description: 'node 모듈중 File System 기능, "fs" 를 테스트하는 방법에 대해 정리합니다.'
 thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
 
-featured: false
+featured: true
 tags: [
     'mock-fs',
     'fs',
@@ -770,6 +215,388 @@ describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
 이번 포스팅에서는 built-in modules 중 "fs" 를 테스트하는 방법에 대해 정리해 보았습니다.
 
 "fs" 가 아닌 다른 module 에 대한 테스트를 한다면, 결국은 Jest 공식문서에서 안내하는 mockup 방법도 사용해 보아야 할 것 같습니다.
+e:T1171,---
+id: 1
+title: 구조 분해 할당의 기본값 지정, null 은 사용 불가!
+description: '구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'javascript',
+]
+
+createdAt: '2023-12-21 20:20:00'
+modifiedHistories: []
+---
+
+# 구조 분해 할당의 기본값 지정, Null 은 사용 불가!
+
+plain object 를 사용하여, 데이터를 의미단위로 묶어서 사용합니다.
+
+의미를 가지는 key 와 쌍을 이루는 value 로 구성되며, Javascript built-in object 에도 많은 기능을 제공합니다.
+
+이번 포스팅에서는 이러한 plain object 의 기능들 중, **구조 분해 할당의 기본값 설정** 에 대해 정리합니다.
+
+
+
+<br />
+
+
+
+## 구조 분해 할당의 기본값
+
+구조 분해 할당은 plain object 의 하위 프로퍼티에 좀 더 효율적으로 참조하는 기능입니다.
+
+```javascript title="구조 분해 할당 예시" showLineNumbers {8-14}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+// 구조 분해 할당
+const {
+    keyA,
+    keyB,
+    keyC,
+    keyD,
+} = obj;
+```
+
+<br />
+
+위 예시처럼 value 가 `undefined` 인 경우도 있고, `null` 인 경우가 있었습니다.
+
+이러한 경우 **기본값을 지정하여 유효한 value 를 보장** 하도록 의도하였습니다.
+
+```javascript title="구조 분해 할당의 기본값 예시" showLineNumbers {8-14}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+// 구조 분해 할당 기본값 지정
+const {
+    keyA,
+    keyB,
+    keyC =. '빈 값',
+    keyD = '빈 값',
+};
+```
+
+<br />
+
+여기서 제가 실수한 부분이 있습니다.
+
+~~`value` 가 `Nullish (undefined 또는 null)` 일 경우, 기본값을 설정할 수 있다고 생각했습니다.~~
+
+하지만 `null` 에는 기본값 설정이 불가능 하고, **`value` 가 `undefined` 일 경우에만 기본값을 설정** 할 수 있었습니다.
+
+* [MDN - 구조 분해 할당](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#%EA%B8%B0%EB%B3%B8%EA%B0%92)
+
+<br />
+
+제가 실수한 부분이 일으킨 이슈는 아래의 코드와 같습니다.
+
+```javascript title="구조 분해 할당의 기본값 이슈" showLineNumbers {11-12, 15-17}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null,
+};
+
+const {
+    keyA,
+    keyB,
+    keyC = '값 없음',
+    keyD = '값 없음',
+} = obj;
+
+// 에러 발생
+// Error: Cannot read properties of null (reading 'toUpperCase')
+console.log('keyD.toUpperCase(): ', keyD.toUpperCase());
+```
+
+<br />
+
+`keyD` 에 기본값을 `string` 으로 지정하였지만, `null` 이므로 기본값 지정이 적용되지 않습니다.
+
+그러므로 `keyD.toUpperCase()` 를 호출할 경우, `null` 에 대한 메소드 호출이 되며 에러가 발생하게 됩니다.
+
+
+
+<br />
+
+
+
+## null 은 명시적으로 표현한 값이 없음!
+
+값이 없을을 나타내는 `undefined` 와 `null` 은 타입도 다르지만, 더 **중요한 것은 의미** 인 것 같습니다.
+
+변수나 프로퍼티에 할당한 값이 없는 경우 `undefined` 를 가지고, `null` 은 개발자가 의도를 가지고 값을 비운다는 의미입니다.
+
+즉, 의도를 가지고 비워둔 값에는 구조 분해 할당의 기본값이 적용되지 않는 것 입니다.
+
+<br />
+
+만약 `Nullish` 에 대한 기본값을 지정하고 싶을 경우는 **Nullish 병합 연산자** 를 사용합니다.
+
+```javascript title="Nullish 병합 연산자" showLineNumbers {11-12, 15-16}
+const obj = {
+    keyA: 'value a',
+    keyB: 'value b',
+    keyC: undefined,
+    keyD: null
+};
+
+const {
+    keyA,
+    keyB,
+    keyC: _keyC,
+    keyD: _keyD,
+};
+
+const keyC = _keyC ?? '값 없음';
+const keyD = _keyD ?? '값 없음';
+```
+
+
+
+<br />
+
+
+
+## 유감스러운 구조 분해 할당의 기본값
+
+`undefined` 뿐만 아니라, `Nullish` 에 대한 기본값을 설정하고 싶다면, 위 예시코드와 같이 코드 1줄씩 추가로 작성하게 됩니다.
+
+이 기능의 의미는 이해하지만, 작성할 코드가 늘어난다는 점에서는 아쉽습니다.
+
+<br />
+
+다른분들은 저와 같은 실수가 없기를 바라며, 이번 포스팅을 마무리 합니다.
+f:T15fe,---
+id: 2
+title: '"jest.fn()" 으로 함수 테스트하기'
+description: '컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 "jest.fn()" 사용방법에 대한 정리 입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'jest.fn',
+    'jest',
+    '@testing-library',
+    '유닛 테스트',
+]
+
+createdAt: '2023-12-23 14:45:00'
+modifiedHistories: []
+---
+
+# "jest.fn()" 으로 함수 테스트하기
+
+컴포넌트에는 props 를 사용하여 데이터와 함수를 넘겨주도록 만들 수 있습니다.
+
+이번 포스팅에서는 `jest.fn()` 을 사용하여 컴포넌트에 넘겨준 함수가 정상동작하는지 테스트하는 방법에 대해 정리합니다.
+
+
+
+<br />
+
+
+
+## 컴포넌트 props 에 넘겨주는 함수
+
+컴포넌트 props 에는 함수를 넘겨줄 수 있습니다.
+
+사용자 인터렉션을 처리하기 위한 함수가 될 수도 있고, 특정 동작에 대한 callback 으로 활용되도록 구현할 수 있습니다.
+
+이렇게 넘겨준 함수가 의도한 시점, 상황에 호출이 되는지 테스트하고자 합니다.
+
+
+
+<br />
+
+
+
+## 테스트 예시 컴포넌트
+
+이번 포스팅에서 테스트에 사용할 input 컴포넌트를 만들어보겠습니다.
+
+```typescript title="./ChocobeInput.tsx" showLineNumbers
+import {
+    useCallback,
+    memo,
+    ChangeEvent,
+} from 'react';
+
+type TChocobeButtonProps = {
+    value: string;
+    onChange: (value: string) => void;
+};
+
+function ChocobeInput(props: TChocobeInputProps) {
+    const {
+        value,
+        onChange,
+    } = props;
+
+    //
+    // callback
+    //
+    const onChangeInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        onChange(value);
+    }, [onChange]);
+
+    return (
+        <input
+            value={value}
+            onChange={onChangeInput} />
+    );
+}
+
+export default memo(ChocobeInput);
+```
+
+
+
+<br />
+
+
+
+## `jest.fn()` 으로 onChange mockup function 만들기
+
+* 참고: [[Jest 공식 문서] Using a mock function](https://jestjs.io/docs/mock-functions#using-a-mock-function)
+
+`Jest` 는 `fn()` 이라는 **함수 mockup 메소드** 를 제공하고 있습니다.
+
+위 예시 컴포넌트를 테스트한다면, `props.onChange()` 를 테스트하기 위해 `jest.fn()` 을 사용하게 됩니다.
+
+```typescript title="jest.fn() 으로 mockup function 생성하기" showLineNumbers {11, 16}
+// UI Components
+import ChocobeInput from './ChocobeInput';
+// jest
+import {
+    render,
+    screen,
+} from '@testing-library/react';
+
+describe('ChocobeInput 컴포넌트 테스트', () => {
+    it('ChocobeInput 에 값을 입력하면 onChange() 가 호출된다.', async () => {
+        const fn_onChange = jest.fn();
+
+        render(
+            <ChocobeInput
+                value=""
+                onChange={fn_onChange} />
+        );
+    });
+});
+```
+
+
+
+<br />
+
+## input 요소에 KeyboardEvent 발생시키기
+
+`fn_onChange()` 함수는 `<ChocobeInput />` 컴포넌트에 `KeyboardEvent` 가 발생하면 호출되는 구조 입니다.
+
+`userEvent` 를 사용하여 `KeyboardEvent` 나 `click` 이벤트 등을 발생시킬 수 있으며, `<ChocobeInput />` 컴포넌트의 경우에는 `KeyboardEvent` 가 발생하면 `onChange()` 가 호출됩니다.
+
+컴포넌트에 `KeyboardEvent` 를 발생시키려면 `userEvent.type()` 메소드를 활용하게 됩니다.
+
+```typescript title="userEvent.type() 으로 KeyboardEvent 발생시키기" showLineNumbers {24}
+// UI Components
+import ChocobeInput from './ChocobeInput';
+// jest
+import {
+    render,
+    screen,
+} from '@testing-library/react';
+import {
+    userEvent,
+} from '@testing-library/user-event';
+
+describe('ChocobeInput 컴포넌트 테스트', () => {
+    it('ChocobeInput 에 값을 입력하면 onChange() 가 호출된다.', async () => {
+        const fn_onChange = jest.fn();
+
+        render(
+            <ChocobeInput
+                value=""
+                onChange={fn_onChange} />
+        );
+
+        const $chocobeInput = screen.getByRole('textbox');
+
+        await userEvent.type($chocobeInput, 'Hello');
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## KeyboardEvent 에 의해 fn_onClick() 호출 여부 테스트하기
+
+위 예시 코드를 통해 `<ChocobeInput />` 컴포넌트에 `KeyboardEvent` 가 발생한 상태 입니다.
+
+`userEvent.type(요소, 입력값)` 으로 넘겨준 `입력값` 은 문자 1개당 1번의 KeyboardEvent 가 발생하게 되므로, 총 5번의 KeyboardEvent 가 발생한 상태 입니다.
+
+이를 테스트하면 다음과 같습니다.
+
+```typescript title="발생한 이벤트 테스트" showLineNumbers
+// UI Components
+import ChocobeInput from './ChocobeInput';
+// jest
+import {
+    render,
+    screen,
+} from '@testing-library/react';
+import {
+    userEvent,
+} from '@testing-library/user-event';
+
+describe('ChocobeInput 컴포넌트 테스트', () => {
+    it('ChocobeInput 에 값을 입력하면 onChange() 가 호출된다.', async () => {
+        const fn_onChange = jest.fn();
+
+        render(
+            <ChocobeInput
+                value=""
+                onChange={fn_onChange} />
+        );
+
+        const $chocobeInput = screen.getByRole('textbox');
+
+        await userEvent.type($chocobeInput, 'Hello');
+
+        expect(fn_onChange).toHaveBeenCalledTimes(5);
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+함수 테스트는 `jest.fn()` 뿐만 아니라 `jest.spyOn()` 으로도 가능합니다.
+
+다음 포스팅에서는 `jest.spyOn()` 으로 테스트하는 방법과 `jest.fn()` 과 차이점에 대해 정리하겠습니다.
 10:T1e27,---
 id: 1
 title: LLMOps 와 친해지기 1 - 용어 정리
@@ -1268,4 +1095,394 @@ describe('<Hello /> 컴포넌트 유닛 테스트', () => {
 ```bash title="jest 실행하기"
 yarn test
 ```
-b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$d"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$e"},{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$11"}]}]
+12:T2361,---
+id: 1
+title: Custom Hook 으로 분리하며 발생한 실수
+description: 'Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'react',
+    'custom hook',
+]
+
+createdAt: '2023-12-19 22:50:00'
+modifiedHistories: []
+---
+
+# Custom Hook 으로 분리하며 발생한 실수
+
+## 실수가 발생한 상황
+
+페이지가 mount 되면 API 를 호출하는 흐름은 빈번히 사용됩니다.
+
+그리고 API 응답을 받으면, 후처리를 하는 `useEffect` 를 사용할 수 있습니다.
+
+<br />
+
+이번 이슈에서는 Custom Hook 으로 나누기 전까지는 의도한 대로 API 응답과 Effect 가 1:1 로 실행되었습니다.
+
+```tsx title="MyPage.tsx" showLineNumbers {28-30, 32-34}
+import {
+    useCallback,
+    useEffect,
+} from 'react';
+import {
+    useAppSelector,
+} from '@/redux/hooks';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    const callApi_1 = useCallback(() => {
+        // API 호출 1
+    }, []);
+
+    const callApi_2 = useCallback(() => {
+        // API 호출 2
+    }, []);
+
+    useEffect(function handleTriggerState() {
+        callApi_1();
+        callApi_2();
+    }, [triggerState]);
+
+    useEffect(function onSuccessApi_1() {
+        // API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    useEffect(function onSuccessApi_2() {
+        // API 2 응답 후처리
+    }, [responseOfApi_2]);
+
+    return (
+        // ...
+    );
+}
+
+export default MyPage;
+```
+
+<br />
+
+이런 방식으로 **호출하는 API 가 늘어나자, 컴포넌트가 점점 복잡해졌습니다.**
+
+**또한 사용자 인터렉션에 의해 다시 호출해야 하는 API 도 있어서** Custom Hook 으로 분리하여 재사용하는 방향으로 생각하게 되었습니다.
+
+<br />
+
+리펙토링 결과, API 후처리를 담당하는 `useEffect` 가 번복 실행되는 현상이 나타났습니다.
+
+```tsx title="./hooks/useApi_1.ts" showLineNumbers {16-18}
+import {
+    useCallback,
+    useEffect,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_1 = () => {
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+
+    const callApi_1 = useCallback(() => {
+        // API 호출 1
+    }, []);
+
+    useEffect(function onSuccessApi_1() {
+        // (번복 실행됨) API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    return {
+        callApi_1,
+    };
+};
+
+export default useApi_1;
+```
+
+```tsx title="./hooks/useApi_2.ts" showLineNumbers {16-18}
+import {
+    useCallback,
+    useEffect,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_2 = () => {
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    const callApi_2 = useCallback(() => {
+        // API 호출 2
+    }, []);
+
+    useEffect(function onSuccessApi_2() {
+        // (번복 실행됨) API 2 응답 후처리
+    }, [responseOfApi_2]);
+
+    return {
+        callApi_2,
+    };
+};
+
+export default useApi_2;
+```
+
+```tsx title="MyPage.tsx" showLineNumbers {10-11, 13-16}
+import {
+    useEffect,
+} from 'react';
+import useApi_1 from './hooks/useApi_1';
+import useApi_2 from './hooks/useApi_2';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const { callApi_1 } = useApi_1();
+    const { callApi_2 } = useApi_2();
+
+    useEffect(function onSuccessApi_2() {
+        callApi_1();
+        callApi_2();
+    }, [triggerState]);
+
+    return (
+        // ...
+    );
+};
+
+export default MyPage;
+```
+
+
+
+<br />
+
+
+
+## useEffect 의 dependencies 는 무죄
+
+`useEffect` 의 `dependencies` 는 redux 에서 가져온 state 였습니다.
+
+(위의 예시 코드에서는 `triggerState` 로 표현하였습니다.)
+
+**`triggerState` 에 의도치 않은 mutate 가 발생하는 것인가** 라고 생각했지만, 이는 아니였습니다.
+
+
+
+<br />
+
+
+
+## Custom Hook 을 재사용한 만큼 번복되는 useEffect
+
+Custom Hook 으로 분리하는 단위를 **특정 API 호출 함수** 와 **해당 API 응답 후처리 Effect** 로 묶어서 구성하였습니다.
+
+그리고 필요한 곳에서 재사용을 하였습니다.
+
+<br />
+
+결과적으로 재사용한 횟수만큼 `useEffect` 가 번복 실행된 것입니다.
+
+Custom Hook 은 사용하는 곳에 scope 를 만드는 것이므로, 당연한 결과임에도 알아차리지 못하였습니다.
+
+
+
+<br />
+
+
+
+## API 호출함수와 Effect 를 분리한 Custom Hook 으로 이슈 해결
+
+원인을 찾은 후, API 의 후처리를 담당하는 `useEffect` 를 Custom Hook 에서 빼고, 기존의 `MyPage` 에 위치시켰습니다.
+
+그러자 번복되는 `useEffect` 이슈는 해결 되었습니다.
+
+
+```tsx title="./hooks/useApi_1.ts" showLineNumbers {15-17}
+import {
+    useCallback,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_1 = () => {
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+
+    const callApi_1 = useCallback(() => {
+        // API 호출 1
+    }, []);
+
+    // useEffect(function onSuccessApi_1() {
+    //     // API 1 응답 후처리
+    // }, [responseOfApi_1]);
+
+    return {
+        callApi_1,
+    };
+};
+
+export default useApi_1;
+```
+
+```tsx title="./hooks/useApi_2.ts" showLineNumbers {15-17}
+import {
+    useCallback,
+} from 'react';
+import {
+    useAppSelector
+} from '@/redux/hooks';
+
+const useApi_2 = () => {
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    const callApi_2 = useCallback(() => {
+        // API 호출 2
+    }, []);
+
+    // useEffect(function onSuccessApi_2() {
+    //     // API 2 응답 후처리
+    // }, [responseOfApi_2]);
+
+    return {
+        callApi_2,
+    };
+};
+
+export default useApi_2;
+```
+
+```tsx title="MyPage.tsx" showLineNumbers {20-22, 24-26}
+import {
+    useEffect,
+} from 'react';
+import useApi_1 from './hooks/useApi_1';
+import useApi_2 from './hooks/useApi_2';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const { callApi_1 } = useApi_1();
+    const { callApi_2 } = useApi_2();
+
+    useEffect(function onSuccessApi_2() {
+        callApi_1();
+        callApi_2();
+
+        // eslint-disable-next-line
+    }, [triggerState]);
+
+    useEffect(function onSuccessApi_1() {
+        // API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    useEffect(function onSuccessApi_2() {
+        // API 2 응답 후처리
+    }, [responseOfApi_2]);
+
+    return (
+        // ...
+    );
+};
+
+export default MyPage;
+```
+
+
+
+<br />
+
+
+
+## MyPage 에서 API 후처리를 담당하는 useEffect 분리
+
+위 코드처럼 리펙토링한 이후, 의도한 동작은 되었습니다.
+
+하지만, **MyPage.tsx 파일을 열어보기 전까지는 API 후처리를 어디서 하는지 파악하기가 어렵다고 느껴졌습니다.**
+
+<br />
+
+그래서 MyPage.tsx 의 **API 후처리 Effect 들을 Custom Hook 으로** 나눠보기로 하였습니다.
+
+```ts title="./hooks/useMyPageApiEffects.ts" showLineNumbers {9-11, 13-15}
+import {
+    useEffect,
+} from 'react';
+
+const useMyPageApiEffects = () => {
+    const responseOfApi_1 = useAppSelector(({ api_1 }) => api_1);
+    const responseOfApi_2 = useAppSelector(({ api_2 }) => api_2);
+
+    useEffect(function onSuccessApi_1() {
+        // API 1 응답 후처리
+    }, [responseOfApi_1]);
+
+    useEffect(function onSuccessApi_2() {
+        // API 2 응답 후처리
+    }, [responseOfApi_2]);
+}
+
+export default useMyPageApiEffects;
+```
+
+```tsx title="MyPage.tsx" showLineNumbers {13}
+import {
+    useEffect,
+} from 'react';
+import useApi_1 from './hooks/useApi_1';
+import useApi_2 from './hooks/useApi_2';
+import useMyPageApiEffects from './hooks/useMyPageApiEffects';
+
+function MyPage() {
+    const triggerState = useAppSelector(({ triggerState }) => triggerState);
+
+    const { callApi_1 } = useApi_1();
+    const { callApi_2 } = useApi_2();
+    useMyPagteApiEffects();
+
+    useEffect(function onSuccessApi_2() {
+        callApi_1();
+        callApi_2();
+    }, [triggerState]);
+
+    return (
+        // ...
+    );
+};
+
+export default MyPage;
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+여기까지 수정한 결과, MyPage.tsx 에서 API 에 대한 후처리 Effect 가 있다는 것을 파일 목록을 통해서도 파악할 수 있게 되었습니다.
+
+개인적으로는 위와 같은 구조의 Custom Hook 이 마음에 들었습니다.
+
+이렇게 분리한 Custom Hook 은 아래와 같은 파일 구조가 되었습니다.
+
+```bash
+└── MyPage
+    ├── MyPage.tsx
+    └── hooks
+        ├── useApi_1.ts
+        ├── useApi_2.ts
+        └── useMyPageApiEffects.ts
+``` 
+
+<br />
+
+사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
+b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$e"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"}]}]
