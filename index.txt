@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["c0qcwI6Jm5n5rgBikkAoi",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["CKByQV9bl5Xk3c84LEHP_",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
 6:I[179,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
 7:I[6962,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
@@ -597,7 +597,193 @@ describe('ChocobeInput 컴포넌트 테스트', () => {
 함수 테스트는 `jest.fn()` 뿐만 아니라 `jest.spyOn()` 으로도 가능합니다.
 
 다음 포스팅에서는 `jest.spyOn()` 으로 테스트하는 방법과 `jest.fn()` 과 차이점에 대해 정리하겠습니다.
-10:T1e27,---
+10:T14a2,---
+id: 3
+title: '"styled-components" 로 구현한 컴포넌트 테스트하기'
+description: '"styled-components" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'jest',
+    'styled-components',
+    '@testing-library',
+    '유닛 테스트',
+]
+
+createdAt: '2023-12-26 23:50:00'
+modifiedHistories: []
+---
+
+# styled-components 로 구현한 컴포넌트 테스트하기
+
+컴포넌트의 style 작성에는 여러가지 선택지가 있습니다.
+
+그 중 저는 **styled-components** 를 가장 선호합니다.
+
+이번 포스팅에서는 **styled-components** 를 사용한 컴포넌트를 테스트하기 위한 jest 환경을 설정해보겠습니다.
+
+
+
+<br />
+
+
+
+## 설정없이 jest 를 실행하면? throw Error!
+
+**styled-components** 는 `<ThemeProvider />` 하위에서 사용할 수 있습니다.
+
+만약 추가 설정없이 jest 를 실행하게 되면, `render()` 호출에서 에러가 발생합니다.
+
+```tsx title="에러 발생 예시" showLineNumbers
+import MyComponent from './MyComponent';
+import {
+    render,
+} from '@testing-library/react';
+
+describe('MyComponent 테스트', () => {
+    it('DOM 에 렌더링 된다.', () => {
+        // render() 호출 시, Error 발생
+        render(
+            <div data-testid="my-component">
+                <MyComponent />
+            </div>
+        );
+
+        const $myComponent = screen.getByTestId('my-component');
+
+        expect($myComponent).toBeInTheDocument();
+    });
+});
+```
+
+```bash title="에러 메시지"
+TypeError: Cannot read properties of undefined (reading 'MarkdownAnchor')
+```
+
+<br />
+
+아래와 같이 `render()` 호출부에 `<ThemeProvider />` 를 함께 넘겨주면 테스트가 정상적으로 실행되는 것을 확인할 수 있습니다.
+
+```tsx title="테스트 정상 동작" showLineNumbers
+import MyComponent from './MyComponent';
+import {
+    render,
+} from '@testing-library/react';
+
+describe('MyComponent 테스트', () => {
+    it('DOM 에 렌더링 된다.', () => {
+        // render() 성공
+        render(
+            <div data-testid="my-component">
+                <ThemeProvier theme={theme}>
+                    <MyComponent />
+                </ThemeProvier>
+            </div>
+        );
+
+        const $myComponent = screen.getByTestId('my-component');
+
+        // 테스트 통과
+        expect($myComponent).toBeInTheDocument();
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## util 또는 hook 으로 `<ThemeProvider />` 제공하기
+
+테스트 코드를 작성할 때, 각 테스트 케이스별로 중복되는 코드들이 생기게 됩니다.
+
+이러한 부분들을 공통 함수로 묶어내거나 추상화하지 않는 이유는, 테스트 코드를 읽어나가는 것으로 어떤 테스트를 수행하는지 파악할 수 있는 것이 더 테스트 코드의 가치를 높이기 때문입니다.
+
+<br />
+
+하지만 `<ThemeProvider />` 를 감싸는 코드는 **styled-components** 설정을 테스트하는 것이 아닌 이상, 특정 컴포넌트를 테스트하는데 의미를 두기 어렵습니다.
+
+그러므로 이 부분은 별도의 **util 함수** 또는 **custom hook** 으로 분리하여 사용해도 무방해 보입니다.
+
+<br />
+
+저는 **@testing-library** 에서 제공하는 `render()` 함수 처럼 `util 함수` 로 만드는 것이 좀 더 일관되는 패턴으로 생각하여 아래와 같이 작성해 보았습니다.
+
+```tsx title="@/utils/testing-library/renderTestComponent.tsx" showLineNumbers
+// react
+import { 
+    ReactElement,
+} from 'react';
+// jest
+import { 
+    render,
+} from '@testing-library/react';
+// styled-components
+import { 
+    ThemeProvider,
+} from 'styled-components';
+import theme from '@/styles/theme';
+
+const renderTestComponent = (element: ReactElement) => {
+    const { rerender } = render(
+        <ThemeProvider theme={theme('light')}>
+            {element}
+        </ThemeProvider>
+    );
+
+    return {
+        rerender,
+    };
+};
+
+export default renderTestComponent;
+```
+
+<br />
+
+이를 테스트 코드에 적용하면 다음과 같습니다.
+
+```tsx title="util 함수를 적용한 테스트 코드" showLineNumbers
+import MyComponent from './MyComponent';
+// import {
+//     render,
+// } from '@testing-library/react';
+import renderTestComponent from '@/utils/testing-library/renderTestComponent';
+
+describe('MyComponent 테스트', () => {
+    it('DOM 에 렌더링 된다.', () => {
+        // render() 성공
+        renderTestComponent(
+            <div data-testid="my-component">
+                <MyComponent />
+            </div>
+        );
+
+        const $myComponent = screen.getByTestId('my-component');
+
+        // 테스트 통과
+        expect($myComponent).toBeInTheDocument();
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+유닛 테스트를 하나씩 추가하며, coverage 가 높아져 가는 것이 하나의 재미요소가 되었습니다.
+
+`renderTestComponent()` 처럼 테스트 환경을 위한 기능을 만드는 과정은 성취감과 연결되었습니다.
+
+이 블로그 프로젝트는 개발 초기 시점인 만큼, 모든 컴포넌트를 테스트할 수 있도록 목표를 잡아야겠습니다!
+11:T1e27,---
 id: 1
 title: LLMOps 와 친해지기 1 - 용어 정리
 description: 'AI 학습 모델인 Large Language Model 에 대한 정리입니다.'
@@ -842,7 +1028,7 @@ LLM 과 LangChain 을 사용하여 AI 앱을 만들 수 있는 플렛폼이 있�
     * [FlowiseAI Github](https://github.com/FlowiseAI/Flowise)
     * 서버: `Express(Typescript)`
     * 프론트: `React(Javascript)`
-11:T1d77,---
+12:T1d77,---
 id: 1
 title: Nextjs 프로젝트의 유닛 테스트
 description: '유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.'
@@ -1095,7 +1281,7 @@ describe('<Hello /> 컴포넌트 유닛 테스트', () => {
 ```bash title="jest 실행하기"
 yarn test
 ```
-12:T2361,---
+13:T2361,---
 id: 1
 title: Custom Hook 으로 분리하며 발생한 실수
 description: 'Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.'
@@ -1485,4 +1671,4 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$e"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"}]}]
+b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$e"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$13"}]}]
