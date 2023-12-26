@@ -2,14 +2,10 @@
 import MarkdownAnchor from './MarkdownAnchor';
 // jest
 import { 
-    render,
     screen,
 } from '@testing-library/react';
-// styled-components
-import { 
-    ThemeProvider,
-} from 'styled-components';
-import theme from '@/styles/theme';
+// utils
+import renderTestComponent from '@/utils/testing-library/renderTestComponent';
 
 const renderMarkdownAnchor = (
     props: Parameters<typeof MarkdownAnchor>[0]
@@ -19,13 +15,11 @@ const renderMarkdownAnchor = (
         children,
     } = props;
 
-    render((
-        <ThemeProvider theme={theme('light')}>
-            <MarkdownAnchor href={href}>
-                {children}
-            </MarkdownAnchor>
-        </ThemeProvider>
-    ));
+    renderTestComponent(
+        <MarkdownAnchor href={href}>
+            {children}
+        </MarkdownAnchor>
+    );
 };
 
 describe('<MarkdownAnchor /> 테스트', () => {
