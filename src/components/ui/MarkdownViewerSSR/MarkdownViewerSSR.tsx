@@ -6,9 +6,10 @@ import remarkGfm from 'remark-gfm';
 import rehypePrettyCode from 'rehype-pretty-code';
 import moonlightTheme from '@/styles/codeBlockThemes/moonlight-2.json';
 // UI Components
-import MarkdownAnchor from '@/components/ui/MarkdownViewerSSR/markdownComponents/MarkdownAnchor';
-import MarkdownStrong from '@/components/ui/MarkdownViewerSSR/markdownComponents/MarkdownStrong';
-import MarkdownUL from '@/components/ui/MarkdownViewerSSR/markdownComponents/MarkdownUL';
+import MarkdownAnchor from './markdownComponents/MarkdownAnchor';
+import MarkdownStrong from './markdownComponents/MarkdownStrong';
+import MarkdownUL from './markdownComponents/MarkdownUL';
+import MarkdownOL from './markdownComponents/MarkdownOL';
 // styled-components
 import StyledMarkdownViewerRoot from './StyledMarkdownViewerRoot';
 
@@ -49,6 +50,7 @@ function MarkdownViewerSSR(props: TMarkdownViewerSSRProps) {
                     a: MarkdownAnchor,
                     strong: MarkdownStrong,
                     ul: MarkdownUL,
+                    ol: MarkdownOL,
                 }}
                 source={markdown} />
         </StyledMarkdownViewerRoot>
