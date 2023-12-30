@@ -2,8 +2,10 @@
 
 // react
 import {
+    useState,
     useCallback,
-    memo, 
+    memo,
+    useEffect, 
 } from 'react';
 // nextjs
 import Image from 'next/image';
@@ -245,6 +247,11 @@ function BlogPostCard(props: TBlogPostCardProps) {
     const router = useRouter();
 
     //
+    // state
+    //
+    const [createdAt, setCreatedAt] = useState('');
+
+    //
     // callback
     //
     const onClick = useCallback(() => {
@@ -254,6 +261,13 @@ function BlogPostCard(props: TBlogPostCardProps) {
 
         router.push(href);
     }, [variant, href, router]);
+
+    //
+    // effect
+    //
+    useEffect(() => {
+        setCreatedAt(dayjs(date).format('YYYY년 MM월 DD일'));
+    }, [date]);
 
     return (
         <StyledBlogPostCardRoot
@@ -283,7 +297,8 @@ function BlogPostCard(props: TBlogPostCardProps) {
                 </div>
 
                 <div className="date">
-                    작성일: {dayjs(date).format('YYYY년 MM월 DD일')}
+                    {/* 작성일: {dayjs(date).format('YYYY년 MM월 DD일')} */}
+                    작성일: {createdAt}
                 </div>
 
                 <div

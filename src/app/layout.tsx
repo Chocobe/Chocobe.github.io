@@ -3,6 +3,8 @@ import type {
     Metadata,
 } from 'next';
 import local from 'next/font/local';
+// dayjs
+import initDayjs from '@/lib/dayjs/initDayjs';
 // UI Components
 import RootLayoutSSR from '@/components/layouts/RootLayoutSSR/RootLayoutSSR';
 import '@/styles/tailwindGlobalStyle.css';
@@ -22,6 +24,8 @@ export default function RootLayout({
 }: {
     children: React.ReactNode
 }) {
+    initDayjs();
+
     return (
         <html lang="ko">
             <body className={PretendardFont.className}>
