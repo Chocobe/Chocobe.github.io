@@ -71,23 +71,16 @@ describe('fsUtils 테스트', () => {
             ]);
         });
 
-        // TODO: toThrow() 유닛 테스트 작성하기
-        // TODO: TODO: Jest Github issue 에서는 아직 고쳐지지 않은 것으로 보인다.
-        // it('미지원 type 사용 시, throw Error', async () => {
-        //     const run = async () => {
-        //         await readMarkdownDir('dir1' as any);
-        //     };
-            
-        //     // expect(run).toThrow('readMarkdownDir() 호출 시, type 은 "file" 또는 "dir" 만 가능합니다.');
-        //     // expect(run).toThrowError();
-        //     try {
-        //         // waitFor(() => readMarkdownDir('dir1' as any));
-        //         // await readMarkdownDir('dir1' as any);
-        //         expect(run).not.toThrow();
-        //     } catch(error) {
-        //         //
-        //     }
-        // });
+
+        it('미지원 type 사용 시, throw Error', async () => {
+            try {
+                await readMarkdownDir('invalid-type' as any);
+
+                fail('throw Error 가 발생해야 합니다.');
+            } catch(error: any) {
+                expect(error.message).toBe('readMarkdownDir() 호출 시, type 은 "file" 또는 "dir" 만 가능합니다.');
+            }
+        });
     });
 
     describe('readMarkdownFile() 테스트', () => {
