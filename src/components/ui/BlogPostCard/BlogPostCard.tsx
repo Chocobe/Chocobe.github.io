@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { 
     useRouter,
 } from 'next/navigation';
+// dayjs
+import dayjs from 'dayjs';
 // styled-components
 import styled from 'styled-components';
 // type
@@ -281,7 +283,7 @@ function BlogPostCard(props: TBlogPostCardProps) {
                 </div>
 
                 <div className="date">
-                    작성일: {date}
+                    작성일: {dayjs(date).format('YYYY년 MM월 DD일')}
                 </div>
 
                 <div
