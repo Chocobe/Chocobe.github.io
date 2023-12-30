@@ -1,0 +1,143 @@
+---
+id: 2
+title: AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정
+description: 'AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'javascript',
+    'PDF',
+    'PDF Metadata',
+    'AWS',
+    'S3',
+]
+
+createdAt: '2023-12-30 16:00:00'
+modifiedHistories: []
+---
+
+# 웹에서 PDF 뷰어를 제공하는 방법
+
+PDF 파일은 범용적으로 사용되는 문서 파일 입니다.
+
+PDF 뷰어를 제공하는 방법에는 여러가지가 있습니다.
+
+* `<iframe />`, `<object />`, `<embed />` 태그
+* PDF 뷰어 관련 라이드러리들
+
+
+
+<br />
+
+
+
+## `<object />` 를 사용한 PDF 뷰어 구현하기
+
+PDF 파일은 브라우저 내장 뷰어에서 다양한 기능을 제공합니다.
+
+구현 초기에는 `<iframe />` 이나 `<object />` 의 보안문제를 피하기 위해, PDF 라이브러리를 사용하고자 하였습니다.
+
+하지만 브라우저의 내장 PDF 뷰어의 강력한 기능들을 포기하거나 직접 구현해야 하는 문제가 있습니다.
+
+<br />
+
+이러한 이유로 `<object />` 태그를 사용하여 PDF 뷰어를 사용하기로 하였습니다.
+
+또한 `<iframe />` 보다는 `<object />` 태그가 PDF 에는 적합하다는 MDN 공식문서에 따르게 되었습니다.
+
+* 참고: [MDN 공식 문서](https://developer.mozilla.org/ko/docs/Learn/HTML/Multimedia_and_embedding/Other_embedding_technologies#embed_%EC%99%80_object_%EC%9A%94%EC%86%8C)
+
+
+
+<br />
+
+
+
+## `<object />` 를 사용하여 간단한 PDF 뷰어 만들기
+
+아래와 같이 `<object />` 태그를 사용하여 간단하게 PDF 뷰어 기능을 사용할 수 있습니다.
+
+```tsx title="PDF 뷰어 예시 코드" showLineNumbers
+type TMyPdfViewerProps = {
+    url: string;
+}
+
+function MyPdfViewer(props: TMyPdfViewerProps) {
+    const {
+        url,
+    } = props;
+
+    const data = `${url}#view=FitH`;
+
+    return (<>
+        <object 
+            data={data}
+            type='application/pdf' 
+            width='100%' 
+            height='100%' />
+    </>);
+}
+
+export default MyPdfViewer;
+```
+
+
+
+<br />
+
+
+
+## AWS S3 에 업로드한 PDF 파일이 다운로드되는 이슈
+
+AWS S3 는 널리 사용되는 클라우드 스토리지 입니다.
+
+PDF 파일을 S3 에 업로드한 후, `<MyPdfViewer />` 컴포넌트로 보여주고자 합니다.
+
+만약 단순히 S3 에 PDF 파일을 업로드 했다면, `<object />` 에 연동한 **PDF 파일이 렌더링 되지 않고 다운로드되는 현상**을 마주하게 됩니다.
+
+
+
+<br />
+
+
+
+## PDF 파일이 다운로드만 되는 이유
+
+AWS S3 에 파일을 업로드할 경우, 별도의 설정을 하지 않는다면 아래와 같은 **Metadata** 기본값으로 설정됩니다.
+
+* `Content-Type: binary/octet-stream`
+* `Content-Disposition: attachment`
+
+<br />
+
+위와 같은 파일을 브라우저에서 요청할 경우, 해당 파일은 첨부파일로 인식하고 다운로드하는 동작을 하게 됩니다.
+
+AWS S3 에 업로드한 파일이 **단순 첨부파일 응답 으로 처리되기 때문에** `<object />` 태그에 렌더링되는 것이 아닌 다운로드가 됩니다.
+
+<br />
+
+이를 PDF 뷰어로 동작하도록 하려면, **AWS S3 에 업로드한 PDF 파일의 Metadata 를 아래와 같이 수정** 해서 해결할 수 있습니다.
+
+* `Content-Type: application/pdf`
+* `Content-Disposition: inline`
+
+<br />
+
+위와 같이 Metadata 를 변경했다면, `<object />` 태그에서 요청한 PDF 파일은 다운로드되지 않고 브라우저 내장 PDF 뷰어로 렌더링됩니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+이번 이슈를 해결하기 위해, 최초 시도했던 방법은 AWS S3 에 PDF 파일을 별도로 요청한 후, 응답 결과인 PDF 파일 데이터를 `Blob` 으로 wrapping 하는 방식을 구현했습니다.
+
+하지만 이렇게 wrapping 한 Blob 은 파일내용에 따라 렌더링이 되지 않는 이슈가 발생하였습니다.
+
+Blob 으로 변환한 PDF 파일을 다운로드하여 확인하면 정상적으로 열리지만 `<object />` 태그에 렌더링되지 않는 경우가 있다보니, AWS S3 에 업로드한 파일의 Metadata 를 수정하는 방법을 사용하게 되었습니다.
+
+이번 이슈를 통해, 파일을 다루는 경우에는 Metadata 에 대한 확인 및 설정이 필요하다는 것을 배우게 되었습니다.

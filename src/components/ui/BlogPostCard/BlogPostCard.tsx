@@ -23,6 +23,7 @@ const StyledBlogPostCardRoot = styled.div`
     display: flex;
 
     border-radius: 8px;
+    box-shadow: ${({ theme }) => theme.designSystemColors.BlogPostCard.boxShadow};
     overflow: hidden;
 
     transition: all 0.18s ease;
@@ -138,7 +139,7 @@ const StyledBlogPostCardRoot = styled.div`
     }
 
     &:not([data-variant=${blogPostCardVariantMapper.FEATURED}]):hover {
-        box-shadow: ${({ theme }) => theme.designSystemColors.BlogPostCard.boxShadow};
+        box-shadow: ${({ theme }) => theme.designSystemColors.BlogPostCard.hover.boxShadow};
 
         cursor: pointer;
 
@@ -159,6 +160,7 @@ const StyledBlogPostCardRoot = styled.div`
         flex-flow: row-reverse;
 
         border-radius: 0;
+        box-shadow: none;
 
         > .thumbnailWrapper {
             border-radius: 8px;

@@ -72,7 +72,7 @@ class BlogMarkdownManager {
             return [
                 ...result,
                 ...newResult,
-            ];
+            ].reverse();
         }, [] as TBlogMarkdownParam[]);
     }
 

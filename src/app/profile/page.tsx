@@ -1,10 +1,22 @@
+'use client';
+
+// styled-components
+import styled from 'styled-components';
+
+const StyledProfilePageRoot = styled.div`
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
 function ProfilePage() {
     return (
-        <div>
-            <h1>
-                Profile Page
-            </h1>
-        </div>
+        <StyledProfilePageRoot>
+            (Profile Page) Coming soon
+        </StyledProfilePageRoot>
     );
 }
 
