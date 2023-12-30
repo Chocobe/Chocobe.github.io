@@ -1,15 +1,15 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["ooTrjCUJ5ecoA48rlWEca",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
-5:I[9248,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
-6:I[179,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
-7:I[6962,["981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","185","static/chunks/app/layout-b24be2c414f70734.js"],""]
+0:["QmDKU8MjfSV4LpjARjBTI",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
+6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
+7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 8:I[6954,[],""]
 9:I[7264,[],""]
 3:[null,["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__className_7bb6ba","children":["$","div",null,{"className":"w-full\n            h-full\n            overflow-y-scroll\n            overflow-x-auto","children":["$","$L5",null,{"children":[["$","$L6",null,{}],["$","$L7",null,{"style":{"minHeight":"calc(100% - 72px)"},"children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[],"childProp":{"current":["$La","$Lb",null],"segment":"__PAGE__"},"styles":null}]}]]}]}]}]}],null]
 4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
 a:null
-c:I[463,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-c1ab1dfb4d41db11.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","981","static/chunks/981-44ade260b057e1ad.js","396","static/chunks/396-f025c1449253d3af.js","340","static/chunks/340-435c56927bca2087.js","931","static/chunks/app/page-4a887a6d0cfd36e2.js"],""]
+c:I[463,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-c1ab1dfb4d41db11.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","931","static/chunks/app/page-c6a55a237216118c.js"],""]
 d:T162a,---
 id: 1
 title: '"node:fs" 테스트 하기'
@@ -215,7 +215,150 @@ describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
 이번 포스팅에서는 built-in modules 중 "fs" 를 테스트하는 방법에 대해 정리해 보았습니다.
 
 "fs" 가 아닌 다른 module 에 대한 테스트를 한다면, 결국은 Jest 공식문서에서 안내하는 mockup 방법도 사용해 보아야 할 것 같습니다.
-e:T1171,---
+e:T1174,---
+id: 2
+title: AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정
+description: 'AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'javascript',
+    'PDF',
+    'PDF Metadata',
+    'AWS',
+    'S3',
+]
+
+createdAt: '2023-12-30 16:00:00'
+modifiedHistories: []
+---
+
+# 웹에서 PDF 뷰어를 제공하는 방법
+
+PDF 파일은 범용적으로 사용되는 문서 파일 입니다.
+
+PDF 뷰어를 제공하는 방법에는 여러가지가 있습니다.
+
+* `<iframe />`, `<object />`, `<embed />` 태그
+* PDF 뷰어 관련 라이드러리들
+
+
+
+<br />
+
+
+
+## `<object />` 를 사용한 PDF 뷰어 구현하기
+
+PDF 파일은 브라우저 내장 뷰어에서 다양한 기능을 제공합니다.
+
+구현 초기에는 `<iframe />` 이나 `<object />` 의 보안문제를 피하기 위해, PDF 라이브러리를 사용하고자 하였습니다.
+
+하지만 브라우저의 내장 PDF 뷰어의 강력한 기능들을 포기하거나 직접 구현해야 하는 문제가 있습니다.
+
+<br />
+
+이러한 이유로 `<object />` 태그를 사용하여 PDF 뷰어를 사용하기로 하였습니다.
+
+또한 `<iframe />` 보다는 `<object />` 태그가 PDF 에는 적합하다는 MDN 공식문서에 따르게 되었습니다.
+
+* 참고: [MDN 공식 문서](https://developer.mozilla.org/ko/docs/Learn/HTML/Multimedia_and_embedding/Other_embedding_technologies#embed_%EC%99%80_object_%EC%9A%94%EC%86%8C)
+
+
+
+<br />
+
+
+
+## `<object />` 를 사용하여 간단한 PDF 뷰어 만들기
+
+아래와 같이 `<object />` 태그를 사용하여 간단하게 PDF 뷰어 기능을 사용할 수 있습니다.
+
+```tsx title="PDF 뷰어 예시 코드" showLineNumbers
+type TMyPdfViewerProps = {
+    url: string;
+}
+
+function MyPdfViewer(props: TMyPdfViewerProps) {
+    const {
+        url,
+    } = props;
+
+    const data = `${url}#view=FitH`;
+
+    return (<>
+        <object 
+            data={data}
+            type='application/pdf' 
+            width='100%' 
+            height='100%' />
+    </>);
+}
+
+export default MyPdfViewer;
+```
+
+
+
+<br />
+
+
+
+## AWS S3 에 업로드한 PDF 파일이 다운로드되는 이슈
+
+AWS S3 는 널리 사용되는 클라우드 스토리지 입니다.
+
+PDF 파일을 S3 에 업로드한 후, `<MyPdfViewer />` 컴포넌트로 보여주고자 합니다.
+
+만약 단순히 S3 에 PDF 파일을 업로드 했다면, `<object />` 에 연동한 **PDF 파일이 렌더링 되지 않고 다운로드되는 현상**을 마주하게 됩니다.
+
+
+
+<br />
+
+
+
+## PDF 파일이 다운로드만 되는 이유
+
+AWS S3 에 파일을 업로드할 경우, 별도의 설정을 하지 않는다면 아래와 같은 **Metadata** 기본값으로 설정됩니다.
+
+* `Content-Type: binary/octet-stream`
+* `Content-Disposition: attachment`
+
+<br />
+
+위와 같은 파일을 브라우저에서 요청할 경우, 해당 파일은 첨부파일로 인식하고 다운로드하는 동작을 하게 됩니다.
+
+AWS S3 에 업로드한 파일이 **단순 첨부파일 응답 으로 처리되기 때문에** `<object />` 태그에 렌더링되는 것이 아닌 다운로드가 됩니다.
+
+<br />
+
+이를 PDF 뷰어로 동작하도록 하려면, **AWS S3 에 업로드한 PDF 파일의 Metadata 를 아래와 같이 수정** 해서 해결할 수 있습니다.
+
+* `Content-Type: application/pdf`
+* `Content-Disposition: inline`
+
+<br />
+
+위와 같이 Metadata 를 변경했다면, `<object />` 태그에서 요청한 PDF 파일은 다운로드되지 않고 브라우저 내장 PDF 뷰어로 렌더링됩니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+이번 이슈를 해결하기 위해, 최초 시도했던 방법은 AWS S3 에 PDF 파일을 별도로 요청한 후, 응답 결과인 PDF 파일 데이터를 `Blob` 으로 wrapping 하는 방식을 구현했습니다.
+
+하지만 이렇게 wrapping 한 Blob 은 파일내용에 따라 렌더링이 되지 않는 이슈가 발생하였습니다.
+
+Blob 으로 변환한 PDF 파일을 다운로드하여 확인하면 정상적으로 열리지만 `<object />` 태그에 렌더링되지 않는 경우가 있다보니, AWS S3 에 업로드한 파일의 Metadata 를 수정하는 방법을 사용하게 되었습니다.
+
+이번 이슈를 통해, 파일을 다루는 경우에는 Metadata 에 대한 확인 및 설정이 필요하다는 것을 배우게 되었습니다.
+f:T1171,---
 id: 1
 title: 구조 분해 할당의 기본값 지정, null 은 사용 불가!
 description: '구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.'
@@ -380,7 +523,7 @@ const keyD = _keyD ?? '값 없음';
 <br />
 
 다른분들은 저와 같은 실수가 없기를 바라며, 이번 포스팅을 마무리 합니다.
-f:T15fe,---
+10:T15fe,---
 id: 2
 title: '"jest.fn()" 으로 함수 테스트하기'
 description: '컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 "jest.fn()" 사용방법에 대한 정리 입니다.'
@@ -597,7 +740,7 @@ describe('ChocobeInput 컴포넌트 테스트', () => {
 함수 테스트는 `jest.fn()` 뿐만 아니라 `jest.spyOn()` 으로도 가능합니다.
 
 다음 포스팅에서는 `jest.spyOn()` 으로 테스트하는 방법과 `jest.fn()` 과 차이점에 대해 정리하겠습니다.
-10:T14bb,---
+11:T14bb,---
 id: 3
 title: '"styled-components" 로 구현한 컴포넌트 테스트하기'
 description: '"styled-components" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.'
@@ -783,7 +926,7 @@ describe('MyComponent 테스트', () => {
 `renderTestComponent()` 처럼 테스트 환경을 위한 기능을 만드는 과정은 성취감과 연결되었습니다.
 
 이 블로그 프로젝트는 개발 초기 시점인 만큼, 모든 컴포넌트를 테스트할 수 있도록 목표를 잡아야겠습니다!
-11:T1e27,---
+12:T1e27,---
 id: 1
 title: LLMOps 와 친해지기 1 - 용어 정리
 description: 'AI 학습 모델인 Large Language Model 에 대한 정리입니다.'
@@ -1028,7 +1171,7 @@ LLM 과 LangChain 을 사용하여 AI 앱을 만들 수 있는 플렛폼이 있�
     * [FlowiseAI Github](https://github.com/FlowiseAI/Flowise)
     * 서버: `Express(Typescript)`
     * 프론트: `React(Javascript)`
-12:T1d77,---
+13:T1d77,---
 id: 1
 title: Nextjs 프로젝트의 유닛 테스트
 description: '유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.'
@@ -1281,7 +1424,7 @@ describe('<Hello /> 컴포넌트 유닛 테스트', () => {
 ```bash title="jest 실행하기"
 yarn test
 ```
-13:T2361,---
+14:T2361,---
 id: 1
 title: Custom Hook 으로 분리하며 발생한 실수
 description: 'Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.'
@@ -1671,4 +1814,4 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$e"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$13"}]}]
+b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-30-01","href":"/blog/javascript/2023-12-30-01","frontmatter":{"id":2,"title":"AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정","description":"AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript","PDF","PDF Metadata","AWS","S3"],"createdAt":"$D2023-12-30T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$e"},{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$14"}]}]
