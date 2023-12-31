@@ -13,9 +13,11 @@ const _StyledMarkdownViewerRoot = styled.div`
     /* 코드 블록 */
     pre {
         counter-reset: line;
-        
+
         border-radius: 8px;
-        
+
+        transition: all 0.18s ease-in-out;
+
         code {
             font-family: 'Roboto Mono', monospace !important;
             font-size: 16px;
@@ -85,9 +87,29 @@ const _StyledMarkdownViewerRoot = styled.div`
         border-top-right-radius: 8px;
         background-color: #3f3f47;
 
+        transition: all 0.18s ease-in-out;
+
         & + pre {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
+        }
+    }
+
+    /* 코드 블록 루트 */
+    [data-rehype-pretty-code-fragment] {
+        background-color: transparent;
+        transition: all 0.18s ease-in-out;
+
+        &:hover {
+            box-shadow: 3px 6px 12px 0 rgba(0, 0, 0, 0.5);
+
+            [data-rehype-pretty-code-title] {
+                border-radius: 0;
+
+                & + pre {
+                    border-radius: 0;
+                }
+            }
         }
     }
 
@@ -141,6 +163,23 @@ const _StyledMarkdownViewerRoot = styled.div`
                 border-bottom-color: #ff1493;
                 border-right-color: #ff1493;
             }
+        }
+    }
+
+    /* 
+     * <img /> 스타일 
+     *
+     * (MDXRemote.components.img 미지원)
+     */
+    img {
+        border: 1px solid #eee;
+        border-radius: 8px;
+
+        transition: all 0.18s ease-in-out;
+
+        &:hover {
+            border-radius: 0;
+            box-shadow: 3px 6px 12px 0 rgba(0, 0, 0, 0.5);
         }
     }
 `;
