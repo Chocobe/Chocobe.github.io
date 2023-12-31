@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["x9lJoCWejX28Xk_kdYZ3D",[[["",{"children":["blog",{"children":[["category","nextjs","d"],{"children":["__PAGE__?{\"category\":\"nextjs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["9FT34Vu8FIWYApr49erpm",[[["",{"children":["blog",{"children":[["category","nextjs","d"],{"children":["__PAGE__?{\"category\":\"nextjs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -10,6 +10,7 @@
 4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
 b:I[689,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-6de01ca04009bb96.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","75","static/chunks/app/blog/%5Bcategory%5D/layout-7ae3540a4673a57a.js"],""]
 a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto\n                        max-[600px]:w-0","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","nextjs","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"nextjs\"}"},"styles":null}]}]]}]}]
+c:null
 e:I[2317,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","254","static/chunks/app/blog/%5Bcategory%5D/page-864fbedea356ae73.js"],""]
 f:T1d77,---
 id: 1
@@ -265,4 +266,3 @@ describe('<Hello /> 컴포넌트 유닛 테스트', () => {
 yarn test
 ```
 d:["$","$Le",null,{"featuredMarkdownFileDataList":[],"commonMarkdownFileDataList":[{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}]}]
-c:null
