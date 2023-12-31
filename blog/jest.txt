@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["8AEXZ7ZJVDPTUCEFOKvDH",[[["",{"children":["blog",{"children":[["category","jest","d"],{"children":["__PAGE__?{\"category\":\"jest\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["vj1nvUmy_GEjG0DmztvOK",[[["",{"children":["blog",{"children":[["category","jest","d"],{"children":["__PAGE__?{\"category\":\"jest\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -8,7 +8,7 @@
 9:I[7264,[],""]
 3:[null,["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__className_7bb6ba","children":["$","div",null,{"className":"w-full\n            h-full\n            overflow-y-scroll\n            overflow-x-auto","children":["$","$L5",null,{"children":[["$","$L6",null,{}],["$","$L7",null,{"style":{"minHeight":"calc(100% - 72px)"},"children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[],"childProp":{"current":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":[null,"$La",null],"segment":["category","jest","d"]},"styles":null}],"segment":"blog"},"styles":null}]}]]}]}]}]}],null]
 4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
-b:I[689,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-c1ab1dfb4d41db11.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","75","static/chunks/app/blog/%5Bcategory%5D/layout-4524f40accabbd12.js"],""]
+b:I[689,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-6de01ca04009bb96.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","75","static/chunks/app/blog/%5Bcategory%5D/layout-7ae3540a4673a57a.js"],""]
 a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto\n                        max-[600px]:w-0","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","jest","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"jest\"}"},"styles":null}]}]]}]}]
 c:null
 e:I[2317,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","254","static/chunks/app/blog/%5Bcategory%5D/page-864fbedea356ae73.js"],""]
@@ -217,7 +217,193 @@ describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
 이번 포스팅에서는 built-in modules 중 "fs" 를 테스트하는 방법에 대해 정리해 보았습니다.
 
 "fs" 가 아닌 다른 module 에 대한 테스트를 한다면, 결국은 Jest 공식문서에서 안내하는 mockup 방법도 사용해 보아야 할 것 같습니다.
-10:T15fe,---
+10:T14bb,---
+id: 3
+title: '"styled-components" 로 구현한 컴포넌트 테스트하기'
+description: '"styled-components" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'jest',
+    'styled-components',
+    '@testing-library',
+    '유닛 테스트',
+]
+
+createdAt: '2023-12-26 23:50:00'
+modifiedHistories: []
+---
+
+# styled-components 로 구현한 컴포넌트 테스트하기
+
+컴포넌트의 style 작성에는 여러가지 선택지가 있습니다.
+
+그 중 저는 **styled-components** 를 가장 선호합니다.
+
+이번 포스팅에서는 **styled-components** 를 사용한 컴포넌트를 테스트하기 위한 jest 환경을 설정해보겠습니다.
+
+
+
+<br />
+
+
+
+## 설정없이 jest 를 실행하면? throw Error!
+
+**styled-components** 는 `<ThemeProvider />` 하위에서 사용할 수 있습니다.
+
+만약 추가 설정없이 jest 를 실행하게 되면, `render()` 호출에서 에러가 발생합니다.
+
+```tsx title="에러 발생 예시" showLineNumbers {10-12}
+import MyComponent from './MyComponent';
+import {
+    render,
+} from '@testing-library/react';
+
+describe('MyComponent 테스트', () => {
+    it('DOM 에 렌더링 된다.', () => {
+        // render() 호출 시, Error 발생
+        render(
+            <div data-testid="my-component">
+                <MyComponent />
+            </div>
+        );
+
+        const $myComponent = screen.getByTestId('my-component');
+
+        expect($myComponent).toBeInTheDocument();
+    });
+});
+```
+
+```bash title="에러 메시지"
+TypeError: Cannot read properties of undefined (reading 'MarkdownAnchor')
+```
+
+<br />
+
+아래와 같이 `render()` 호출부에 `<ThemeProvider />` 를 함께 넘겨주면 테스트가 정상적으로 실행되는 것을 확인할 수 있습니다.
+
+```tsx title="테스트 정상 동작" showLineNumbers {11, 13}
+import MyComponent from './MyComponent';
+import {
+    render,
+} from '@testing-library/react';
+
+describe('MyComponent 테스트', () => {
+    it('DOM 에 렌더링 된다.', () => {
+        // render() 성공
+        render(
+            <div data-testid="my-component">
+                <ThemeProvier theme={theme}>
+                    <MyComponent />
+                </ThemeProvier>
+            </div>
+        );
+
+        const $myComponent = screen.getByTestId('my-component');
+
+        // 테스트 통과
+        expect($myComponent).toBeInTheDocument();
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## util 또는 hook 으로 `<ThemeProvider />` 제공하기
+
+테스트 코드를 작성할 때, 각 테스트 케이스별로 중복되는 코드들이 생기게 됩니다.
+
+이러한 부분들을 공통 함수로 묶어내거나 추상화하지 않는 이유는, 테스트 코드를 읽어나가는 것으로 어떤 테스트를 수행하는지 파악할 수 있는 것이 더 테스트 코드의 가치를 높이기 때문입니다.
+
+<br />
+
+하지만 `<ThemeProvider />` 를 감싸는 코드는 **styled-components** 설정을 테스트하는 것이 아닌 이상, 특정 컴포넌트를 테스트하는데 의미를 두기 어렵습니다.
+
+그러므로 이 부분은 별도의 **util 함수** 또는 **custom hook** 으로 분리하여 사용해도 무방해 보입니다.
+
+<br />
+
+저는 **@testing-library** 에서 제공하는 `render()` 함수 처럼 `util 함수` 로 만드는 것이 좀 더 일관되는 패턴으로 생각하여 아래와 같이 작성해 보았습니다.
+
+```tsx title="@/utils/testing-library/renderTestComponent.tsx" showLineNumbers
+// react
+import { 
+    ReactElement,
+} from 'react';
+// jest
+import { 
+    render,
+} from '@testing-library/react';
+// styled-components
+import { 
+    ThemeProvider,
+} from 'styled-components';
+import theme from '@/styles/theme';
+
+const renderTestComponent = (element: ReactElement) => {
+    const { rerender } = render(
+        <ThemeProvider theme={theme('light')}>
+            {element}
+        </ThemeProvider>
+    );
+
+    return {
+        rerender,
+    };
+};
+
+export default renderTestComponent;
+```
+
+<br />
+
+이를 테스트 코드에 적용하면 다음과 같습니다.
+
+```tsx title="util 함수를 적용한 테스트 코드" showLineNumbers {5, 10}
+import MyComponent from './MyComponent';
+// import {
+//     render,
+// } from '@testing-library/react';
+import renderTestComponent from '@/utils/testing-library/renderTestComponent';
+
+describe('MyComponent 테스트', () => {
+    it('DOM 에 렌더링 된다.', () => {
+        // render() 성공
+        renderTestComponent(
+            <div data-testid="my-component">
+                <MyComponent />
+            </div>
+        );
+
+        const $myComponent = screen.getByTestId('my-component');
+
+        // 테스트 통과
+        expect($myComponent).toBeInTheDocument();
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+유닛 테스트를 하나씩 추가하며, coverage 가 높아져 가는 것이 하나의 재미요소가 되었습니다.
+
+`renderTestComponent()` 처럼 테스트 환경을 위한 기능을 만드는 과정은 성취감과 연결되었습니다.
+
+이 블로그 프로젝트는 개발 초기 시점인 만큼, 모든 컴포넌트를 테스트할 수 있도록 목표를 잡아야겠습니다!
+11:T15fe,---
 id: 2
 title: '"jest.fn()" 으로 함수 테스트하기'
 description: '컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 "jest.fn()" 사용방법에 대한 정리 입니다.'
@@ -434,190 +620,4 @@ describe('ChocobeInput 컴포넌트 테스트', () => {
 함수 테스트는 `jest.fn()` 뿐만 아니라 `jest.spyOn()` 으로도 가능합니다.
 
 다음 포스팅에서는 `jest.spyOn()` 으로 테스트하는 방법과 `jest.fn()` 과 차이점에 대해 정리하겠습니다.
-11:T14bb,---
-id: 3
-title: '"styled-components" 로 구현한 컴포넌트 테스트하기'
-description: '"styled-components" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.'
-thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
-
-featured: false
-tags: [
-    'jest',
-    'styled-components',
-    '@testing-library',
-    '유닛 테스트',
-]
-
-createdAt: '2023-12-26 23:50:00'
-modifiedHistories: []
----
-
-# styled-components 로 구현한 컴포넌트 테스트하기
-
-컴포넌트의 style 작성에는 여러가지 선택지가 있습니다.
-
-그 중 저는 **styled-components** 를 가장 선호합니다.
-
-이번 포스팅에서는 **styled-components** 를 사용한 컴포넌트를 테스트하기 위한 jest 환경을 설정해보겠습니다.
-
-
-
-<br />
-
-
-
-## 설정없이 jest 를 실행하면? throw Error!
-
-**styled-components** 는 `<ThemeProvider />` 하위에서 사용할 수 있습니다.
-
-만약 추가 설정없이 jest 를 실행하게 되면, `render()` 호출에서 에러가 발생합니다.
-
-```tsx title="에러 발생 예시" showLineNumbers {10-12}
-import MyComponent from './MyComponent';
-import {
-    render,
-} from '@testing-library/react';
-
-describe('MyComponent 테스트', () => {
-    it('DOM 에 렌더링 된다.', () => {
-        // render() 호출 시, Error 발생
-        render(
-            <div data-testid="my-component">
-                <MyComponent />
-            </div>
-        );
-
-        const $myComponent = screen.getByTestId('my-component');
-
-        expect($myComponent).toBeInTheDocument();
-    });
-});
-```
-
-```bash title="에러 메시지"
-TypeError: Cannot read properties of undefined (reading 'MarkdownAnchor')
-```
-
-<br />
-
-아래와 같이 `render()` 호출부에 `<ThemeProvider />` 를 함께 넘겨주면 테스트가 정상적으로 실행되는 것을 확인할 수 있습니다.
-
-```tsx title="테스트 정상 동작" showLineNumbers {11, 13}
-import MyComponent from './MyComponent';
-import {
-    render,
-} from '@testing-library/react';
-
-describe('MyComponent 테스트', () => {
-    it('DOM 에 렌더링 된다.', () => {
-        // render() 성공
-        render(
-            <div data-testid="my-component">
-                <ThemeProvier theme={theme}>
-                    <MyComponent />
-                </ThemeProvier>
-            </div>
-        );
-
-        const $myComponent = screen.getByTestId('my-component');
-
-        // 테스트 통과
-        expect($myComponent).toBeInTheDocument();
-    });
-});
-```
-
-
-
-<br />
-
-
-
-## util 또는 hook 으로 `<ThemeProvider />` 제공하기
-
-테스트 코드를 작성할 때, 각 테스트 케이스별로 중복되는 코드들이 생기게 됩니다.
-
-이러한 부분들을 공통 함수로 묶어내거나 추상화하지 않는 이유는, 테스트 코드를 읽어나가는 것으로 어떤 테스트를 수행하는지 파악할 수 있는 것이 더 테스트 코드의 가치를 높이기 때문입니다.
-
-<br />
-
-하지만 `<ThemeProvider />` 를 감싸는 코드는 **styled-components** 설정을 테스트하는 것이 아닌 이상, 특정 컴포넌트를 테스트하는데 의미를 두기 어렵습니다.
-
-그러므로 이 부분은 별도의 **util 함수** 또는 **custom hook** 으로 분리하여 사용해도 무방해 보입니다.
-
-<br />
-
-저는 **@testing-library** 에서 제공하는 `render()` 함수 처럼 `util 함수` 로 만드는 것이 좀 더 일관되는 패턴으로 생각하여 아래와 같이 작성해 보았습니다.
-
-```tsx title="@/utils/testing-library/renderTestComponent.tsx" showLineNumbers
-// react
-import { 
-    ReactElement,
-} from 'react';
-// jest
-import { 
-    render,
-} from '@testing-library/react';
-// styled-components
-import { 
-    ThemeProvider,
-} from 'styled-components';
-import theme from '@/styles/theme';
-
-const renderTestComponent = (element: ReactElement) => {
-    const { rerender } = render(
-        <ThemeProvider theme={theme('light')}>
-            {element}
-        </ThemeProvider>
-    );
-
-    return {
-        rerender,
-    };
-};
-
-export default renderTestComponent;
-```
-
-<br />
-
-이를 테스트 코드에 적용하면 다음과 같습니다.
-
-```tsx title="util 함수를 적용한 테스트 코드" showLineNumbers {5, 10}
-import MyComponent from './MyComponent';
-// import {
-//     render,
-// } from '@testing-library/react';
-import renderTestComponent from '@/utils/testing-library/renderTestComponent';
-
-describe('MyComponent 테스트', () => {
-    it('DOM 에 렌더링 된다.', () => {
-        // render() 성공
-        renderTestComponent(
-            <div data-testid="my-component">
-                <MyComponent />
-            </div>
-        );
-
-        const $myComponent = screen.getByTestId('my-component');
-
-        // 테스트 통과
-        expect($myComponent).toBeInTheDocument();
-    });
-});
-```
-
-
-
-<br />
-
-
-
-## 마치며
-
-유닛 테스트를 하나씩 추가하며, coverage 가 높아져 가는 것이 하나의 재미요소가 되었습니다.
-
-`renderTestComponent()` 처럼 테스트 환경을 위한 기능을 만드는 과정은 성취감과 연결되었습니다.
-
-이 블로그 프로젝트는 개발 초기 시점인 만큼, 모든 컴포넌트를 테스트할 수 있도록 목표를 잡아야겠습니다!
-d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$11"}]}]
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$11"}]}]

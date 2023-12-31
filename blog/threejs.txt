@@ -1,0 +1,918 @@
+1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
+0:["vj1nvUmy_GEjG0DmztvOK",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
+6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
+7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
+8:I[6954,[],""]
+9:I[7264,[],""]
+3:[null,["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__className_7bb6ba","children":["$","div",null,{"className":"w-full\n            h-full\n            overflow-y-scroll\n            overflow-x-auto","children":["$","$L5",null,{"children":[["$","$L6",null,{}],["$","$L7",null,{"style":{"minHeight":"calc(100% - 72px)"},"children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[],"childProp":{"current":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":[null,"$La",null],"segment":["category","threejs","d"]},"styles":null}],"segment":"blog"},"styles":null}]}]]}]}]}]}],null]
+4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
+b:I[689,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-6de01ca04009bb96.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","75","static/chunks/app/blog/%5Bcategory%5D/layout-7ae3540a4673a57a.js"],""]
+a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto\n                        max-[600px]:w-0","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","threejs","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"threejs\"}"},"styles":null}]}]]}]}]
+e:I[2317,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","254","static/chunks/app/blog/%5Bcategory%5D/page-864fbedea356ae73.js"],""]
+c:null
+f:T516e,---
+id: 1
+title: Three.js 설치 및 실행
+description: 'Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+]
+
+createdAt: '2023-12-31 22:47:00'
+modifiedHistories: []
+---
+
+# Three.js 설치 및 실행
+
+일반적인 웹페이지는 2D 기반으로 구현합니다.
+
+이러한 웹페이지는 서비스를 제공하거나 정보 공유를 목적으로 충분합니다.
+
+만약 이렇게 보편적으로 사용하는 2D 웹페이지에 3D 환경을 더한다면, 서비스나 제품의 브렌딩에 차별점을 줄 수 있을 것 같습니다.
+
+<br />
+
+Three.js 를 스터디하며, 이 블로그의 Profile 페이지를 구현하는 것을 첫번째 목표로 하여 포스팅을 해보려 합니다.
+
+
+
+<br />
+
+
+
+## Vite 프로젝트 생성하기
+
+Three.js 를 사용하기 위해, VanillaJS 환경의 프로젝트를 생성해 보겠습니다.
+
+Webpack 을 사용하여 프로젝트를 만들어도 되지만, 프로젝트 구성에 투자되는 리소스가 많아지므로, Vite 를 사용하여 프로젝트를 생성해보겠습니다.
+
+```bash title="Vite 프로젝트 생성"
+yarn create vite --template vanilla my-threejs
+
+cd my-threejs
+
+yarn install
+```
+
+
+
+<br />
+
+
+
+## Three.js 설치하기
+
+프로젝트를 생성한 후, Three.js 를 설치합니다.
+
+```bash title="Three.js 설치"
+yarn install three
+```
+
+
+
+<br />
+
+
+
+## Three.js 기본 구조 구성하기
+
+Three.js 는 **WebGL** 을 기반으로 동작합니다.
+
+이는 **HTML Canvas API** 를 사용하여 그리는 방식입니다.
+
+Three.js 로 화면을 그리기 위한 기본 과정을 살펴보면 다음과 같습니다.
+
+1. `<canvas />` 태그 생성
+2. **WebGLRenderer** 객체 생성
+3. 카메라 생성
+4. 조명 생성
+5. **Scene** 객체 생성
+6. 위에서 생성한 객체들을 조합하여 **WebGLRenderer** 에 적용
+7. `requestAnimationFrame()` 을 사용하여 `<canvas />` 렌더링
+
+<br />
+
+위 과정은 아래와 같이 함수를 생성하여 구현해 보겠습니다.
+
+1. `init()` 함수 만들기: 1번 ~ 6번 과정을 처리합니다.
+2. `render()` 함수 만들기: 7번 과정을 처리합니다.
+
+
+
+<br />
+
+
+
+## 1. `<canvas />` 태그 생성
+
+먼저 Three.js 를 렌더링할 `<canvas />` 태그를 생성하는 로직을 구현해 보겠습니다.
+
+```js title="main.js" showLineNumber
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## 2. **WebGLRenderer** 객체 생성
+
+**WebGLRenderer** 객체는 Three.js 의 코어 역할을 합니다.
+
+화면을 구성하는 **Scene** 과 `<canvas />` 에 실제 렌더링하기 위한 **Camera** 를 인자로 받고 렌더링을 담당합니다.
+
+```js title="main.js" showLineNumbers {2, 5-6, 15-18}
+import {
+    WebGLRenderer,
+} from 'three';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. WebGLRenderer 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+    });
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## 3. 카메라 생성
+
+Three.js 가 실제로 화면에 렌더링하는 것은 `Camera` 가 비추는 곳이 됩니다.
+
+따라서 Three.js 에 사용할 카메라 객체를 생성해 줍니다.
+
+```js title="main.js" showLineNumbers {3, 9-10, 24-25}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+} from 'three';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. `WebGLRenderer` 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+    });
+
+    // 3. 카메라 생성
+    camera = new PerspectiveCamera();
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## 4. 조명 생성
+
+이번에는 조명 객체인 **DirectionalLight** 객체를 생성해 보겠습니다.
+
+현실 세계에서도 빛이 있어야 물체를 볼 수 있듯이, Three.js 에서도 조명이 있어야 물체가 렌더링 됩니다.
+
+조명은 여러가지가 있는데, 이 중 햇빛처럼 직선의 무한한 빛을 나타내는 **DirectionalLight** 객체를 사용해 보겠습니다.
+
+```js title="main.js" showLineNumbers {4, 28-29}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    DirectionalLight,
+} from 'three';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. `WebGLRenderer` 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+    });
+
+    // 3. 카메라 생성
+    camera = new PerspectiveCamera();
+
+    // 4. 조명 생성
+    const light = new DirectionalLight();
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## 5. **Scene** 객체 생성
+
+무대는 `Scene` 객체로 만들 수 있습니다.
+
+`Scene` 객체는 `add()` 메서드를 사용하여 위에서 만들었던 조명과 물체(Mesh)들을 적용할 수 있습니다.
+
+<br />
+
+`Scene` 객체를 생성하고 카메라와 조명을 적용해 보겠습니다.
+
+```js title="main.js" showLineNumbers {5, 14-15, 35-37}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    DirectionalLight,
+    Scene,
+} from 'three';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. `WebGLRenderer` 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+    });
+
+    // 3. 카메라 생성
+    camera = new PerspectiveCamera();
+
+    // 4. 조명 생성
+    const light = new DirectionalLight();
+
+    // 5. `Scene` 객체 생성
+    scene = new Scene();
+    scene.add(light);
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## 6. 위에서 생성한 객체들을 조합하여 WebGLRenderer 에 적용
+
+이제 Three.js 를 실행하여 화면을 그릴 준비를 할 수 있게 되었습니다.
+
+**WebGLRenderer** 는 **Scene(무대)** 와 **카메라** 를 사용하여 화면을 그리는 역할을 하게 됩니다.
+
+```js title="main.js" showLineNumbers {39-40}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    DirectionalLight,
+    Scene,
+} from 'three';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. `WebGLRenderer` 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+    });
+
+    // 3. 카메라 생성
+    camera = new PerspectiveCamera();
+
+    // 4. 조명 생성
+    const light = new DirectionalLight();
+
+    // 5. `Scene` 객체 생성
+    scene = new Scene();
+    scene.add(light);
+
+    // 6. 위에서 생성한 객체들을 조합하여 WebGLRenderer 에 적용
+    renderer.render(scene, camera);
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## 7. `requestAnimationFrame()` 을 사용하여 `<canvas />` 렌더링
+
+위 과정을 통해 Three.js 를 실행할 준비가 완료 되었습니다.
+
+이번에는 `init()` 의 마지막에 호출할 `render()` 함수를 만들고, Three.js 를 실행하여 화면을 그리는 함수를 만들어 보겠습니다.
+
+추가할 `render()` 함수는 `requestAnimationFrame()` 을 사용하여 `render()` 함수를 재귀 호출하도록 하는데, 이는 브라우저에서 **60fps 로 실행하며 화면을 업데이트** 하게 됩니다.
+
+```js title="main.js" showLineNumbers {42-43, 46-50}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    DirectionalLight,
+    Scene,
+} from 'three';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. `WebGLRenderer` 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+    });
+
+    // 3. 카메라 생성
+    camera = new PerspectiveCamera();
+
+    // 4. 조명 생성
+    const light = new DirectionalLight();
+
+    // 5. `Scene` 객체 생성
+    scene = new Scene();
+    scene.add(light);
+
+    // 6. 위에서 생성한 객체들을 조합하여 WebGLRenderer 에 적용
+    renderer.render(scene, camera);
+
+    // 7. requestAnimationFrame() 을 사용하여 <canvas /> 렌더링
+    render();
+}
+
+function render() {
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## 추가: Schene 에 SphereMesh 추가하기
+
+지금까지 작성한 코드를 실행하면, 검은색 화면만 보이게 됩니다.
+
+이는 실제로 화면에 그릴 물체(Mesh) 가 없기 때문에 그릴 대상이 없는 현상입니다.
+
+<br />
+
+위에서 구성한 Three.js 가 잘 동작하는지 테스트를 위해 구형 물체(Sphere Mesh) 를 생성하고, 적용해 보겠습니다.
+
+```js title="main.js" showLineNumbers {7-9, 48-49, 61-67}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    DirectionalLight,
+    Scene,
+
+    SphereGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. `WebGLRenderer` 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+    });
+
+    // 3. 카메라 생성
+    camera = new PerspectiveCamera();
+    camera.position.set(0, 0, 10);
+
+    // 4. 조명 생성
+    const light = new DirectionalLight();
+    light.position.set(1, 1, 1);
+
+    // 5. `Scene` 객체 생성
+    scene = new Scene();
+    scene.add(light);
+
+    // 6. 위에서 생성한 객체들을 조합하여 WebGLRenderer 에 적용
+    renderer.render(scene, camera);
+
+    // 추가: Schene 에 SphereMesh 추가하기
+    createSphereMesh();
+
+    // 7. requestAnimationFrame() 을 사용하여 <canvas /> 렌더링
+    render();
+}
+
+function render() {
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+}
+
+function createSphereMesh() {
+    const sphere_geometry = new SphereGeometry();
+    const sphere_material = new MeshPhongMaterial();
+    const sphere_mesh = new Mesh(sphere_geometry, sphere_material);
+
+    scene.add(sphere_mesh);
+}
+
+init();
+```
+
+<br />
+
+`createSphereMesh()` 함수에서 3가지 객체를 생성하고 있습니다.
+
+이는 컴퓨터 그래픽스에서 3D 물체를 표현하기 위한 요소들 입니다.
+
+* Geometry: 색이 없는 모델링 객체
+* Material: 모델링 객체의 색상 또는 질감
+* Mesh: Geometry 와 Material 을 합친 결과 모델링 객체
+
+`sphere_mesh` 객체의 `add()` 메소드를 사용하여 **Geometry** 와 **Material** 을 합쳐서 하나의 **Mesh** 를 만들 수 있게 됩니다.
+
+<br />
+
+지금까지 작성한 코드를 실행하면 다음과 같은 결과물을 볼 수 있습니다.
+
+<img src="/markdownAssets/threejs/2023-12-31-01/2023-12-31-01-01.png" alt="Threejs 실행 결과" />
+
+
+
+<br />
+
+
+
+## 추가: `<canvas />` 를 전체화면으로 설정하기
+
+위 결과물을 확인하면, `<canvas />` 요소가 inline 으로 렌더링되고 있습니다.
+
+이는 **WebGLRenderer** 객체의 **size** 를 조정하여 전체화면으로 설정할 수 있습니다.
+
+그리고 `<canvas />` 의 기본 스타일인 `display: inline` 을 `display: block` 으로 변경해 주어야 합니다.
+
+먼저 `<canvas />` 요소에 `display: block` 스타일을 추가해 줍니다.
+
+```css title="style.css" showLineNumbers
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+canvas {
+    display: block;
+}
+```
+
+```js title="main.js" showLineNumbers {11, 33-36}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    DirectionalLight,
+    Scene,
+
+    SphereGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. `WebGLRenderer` 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+    });
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    // 3. 카메라 생성
+    camera = new PerspectiveCamera();
+    camera.position.set(0, 0, 10);
+
+    // 4. 조명 생성
+    const light = new DirectionalLight();
+    light.position.set(1, 1, 1);
+
+    // 5. `Scene` 객체 생성
+    scene = new Scene();
+    scene.add(light);
+
+    // 6. 위에서 생성한 객체들을 조합하여 WebGLRenderer 에 적용
+    renderer.render(scene, camera);
+
+    // 추가: Schene 에 SphereMesh 추가하기
+    createSphereMesh();
+
+    // 7. requestAnimationFrame() 을 사용하여 <canvas /> 렌더링
+    render();
+}
+
+function render() {
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+}
+
+function createSphereMesh() {
+    const sphere_geometry = new SphereGeometry();
+    const sphere_material = new MeshPhongMaterial();
+    const sphere_mesh = new Mesh(sphere_geometry, sphere_material);
+
+    scene.add(sphere_mesh);
+}
+
+init();
+```
+
+<br />
+
+이렇게 적용한 결과는 다음과 같습니다.
+
+<img src="/markdownAssets/threejs/2023-12-31-01/2023-12-31-01-02.png" alt="전체화면 적용" />
+
+
+
+<br />
+
+
+
+## 추가: 찌그러진 화면 보정하기
+
+Scene 에 추가한 모델링은 구(Sphere) 입니다.
+
+하지만 결과 화면에서 보여지는 구는 타원형으로 보여집니다.
+
+원인은 아래와 같습니다. 
+
+* **카메라의 종횡비(aspect radio)** 설정을 하지 않았으므로, 기본값인 **1** 로 설정됨
+* 브라우저의 종횡비가 1:1 이 아닌 상태에서 `<canvas />` 를 전체화면으로 늘리면서 발생하는 화면 늘어짐
+
+<br />
+
+이를 해결하기 위해 **카메라의 종횡비(aspect radio)** 를 설정해 주겠습니다.
+
+```js title="main.js" showLineNumbers {39-42}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    DirectionalLight,
+    Scene,
+
+    SphereGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. `WebGLRenderer` 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+    });
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    // 3. 카메라 생성
+    camera = new PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight
+    );
+    camera.position.set(0, 0, 10);
+
+    // 4. 조명 생성
+    const light = new DirectionalLight();
+    light.position.set(1, 1, 1);
+
+    // 5. `Scene` 객체 생성
+    scene = new Scene();
+    scene.add(light);
+
+    // 6. 위에서 생성한 객체들을 조합하여 WebGLRenderer 에 적용
+    renderer.render(scene, camera);
+
+    // 추가: Schene 에 SphereMesh 추가하기
+    createSphereMesh();
+
+    // 7. requestAnimationFrame() 을 사용하여 <canvas /> 렌더링
+    render();
+}
+
+function render() {
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+}
+
+function createSphereMesh() {
+    const sphere_geometry = new SphereGeometry();
+    const sphere_material = new MeshPhongMaterial();
+    const sphere_mesh = new Mesh(sphere_geometry, sphere_material);
+
+    scene.add(sphere_mesh);
+}
+
+init();
+```
+
+<br />
+
+`PerspectiveCamera` 생성자에 인자로 2가지를 넘겨주었습니다.
+
+인자 타입은 다음과 같습니다.
+
+```ts title="Perspective 생성자의 인자"
+class PerspectiveCamera {
+    constructor(
+        fov: number,
+        aspect: number
+    ) {
+        // ...
+    }
+}
+```
+
+**fov (Field of View)** 는 **카메라의 왜곡 정도값**을 말합니다.
+
+이는 **렌즈 배율** 과 **Sensor-size** 에 대한 연산값이며, **화각을 수치화** 한 것입니다.
+
+값이 클수록 멀리서 보는 느낌의 효과가 발생합니다.
+
+<br />
+
+두번째 인자인 **aspect** 는 **카메라 종횡비(aspect ratio)** 에 대한 설정입니다.
+
+화면의 **가로 / 세로** 비율을 나타내므로, `window.innerWidth / window.innerHeight` 로 값을 도출할 수 있습니다.
+
+<br />
+
+이렇게 설정한 결과물은 아래와 같습니다.
+
+<img src="/markdownAssets/threejs/2023-12-31-01/2023-12-31-01-03.png" alt="전체화면 적용" />
+
+
+
+<br />
+
+
+
+## 추가: **계단 효과** 보정하기
+
+모니터는 Pixel 에 RGB 를 발사하여 화면을 그립니다.
+
+이 Pixel 은 정사각형 모양이기 때문에 곡선을 렌더링하게 되면 마치 계단처럼 각진 곡선으로 표현됩니다.
+
+**WebGLRenderer** 객체를 생성하며 options 를 통해 계단 효과를 보정할 수 있습니다.
+
+<br />
+
+컴퓨터 그래픽스에서 계단 효과를 해소하는 기법을 간단하게 설명하면, 곡선이 아닌 부분을 흐림(blur) 처리하면서 마치 자연스러운 곡선으로 표현해 줍니다.
+
+이러한 기법을 **Anti-Aliasing** 이라고 합니다.
+
+```js title="main.js" showLineNumbers {32}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    DirectionalLight,
+    Scene,
+
+    SphereGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+function init() {
+    // 1. `<canvas />` 태그 생성
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    // 2. `WebGLRenderer` 객체 생성
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    // 3. 카메라 생성
+    camera = new PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight
+    );
+    camera.position.set(0, 0, 10);
+
+    // 4. 조명 생성
+    const light = new DirectionalLight();
+    light.position.set(1, 1, 1);
+
+    // 5. `Scene` 객체 생성
+    scene = new Scene();
+    scene.add(light);
+
+    // 6. 위에서 생성한 객체들을 조합하여 WebGLRenderer 에 적용
+    renderer.render(scene, camera);
+
+    // 추가: Schene 에 SphereMesh 추가하기
+    createSphereMesh();
+
+    // 7. requestAnimationFrame() 을 사용하여 <canvas /> 렌더링
+    render();
+}
+
+function render() {
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+}
+
+function createSphereMesh() {
+    const sphere_geometry = new SphereGeometry();
+    const sphere_material = new MeshPhongMaterial();
+    const sphere_mesh = new Mesh(sphere_geometry, sphere_material);
+
+    scene.add(sphere_mesh);
+}
+
+init();
+```
+
+
+
+## 마치며
+
+Three.js 를 실행하기 위한 최소 구성요소를 구현해 보았습니다.
+
+뭔가 복잡해 보이지만 현실 세계의 무대를 만드는 것과 유사한 개념으로 만들고 있습니다.
+
+* `WebGLRenderer`: 무대를 구성할 건물
+* `Scene`: 무대
+* `PerspectiveCamera`: 카메라
+* `DirectionalLight`: 조명
+* `Mesh`: 배경, 배우, 소품
+
+<br />
+
+Three.js 를 처음 시작하며 제가 느낀 어려움은 컴퓨터 그래픽스 개념과 카메라에 대한 이해같습니다.
+
+단순히 Three.js 사용법을 익히는 것으로 원하는 결과물을 얻기는 어려워 보였습니다.
+
+지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}]}]
