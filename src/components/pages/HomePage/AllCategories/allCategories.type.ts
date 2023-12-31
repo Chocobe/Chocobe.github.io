@@ -8,6 +8,7 @@ import {
     FaGraduationCap,
     TbBrandReact,
     SiJest,
+    TbBrandThreejs,
 } from '@icons';
 import { 
     IconType,
@@ -44,6 +45,12 @@ export const allBlogCategoryInfoList = [
         displayName: 'Jest',
         description: 'Jest 를 사용한 유닛 테스트 관련 정리입니다.',
         IconComponent: SiJest,
+    },
+    {
+        category: 'threejs',
+        displayName: 'Three.js',
+        description: '3D 웹페이지 개발을 위한 Three.js 스터디 포스팅 입니다.',
+        IconComponent: TbBrandThreejs,
     },
     // {
     //     category: 'rxjs',

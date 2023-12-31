@@ -5,6 +5,7 @@ export {
     TbBrandJavascript,
     TbBrandVue,
     TbBrandTypescript,
+    TbBrandThreejs,
     TbList,
 } from "react-icons/tb";
 
