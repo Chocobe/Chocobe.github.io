@@ -1,3 +1,7 @@
+// nextjs
+import { 
+    Metadata,
+} from 'next';
 // UI Component
 import BlogSlugPage from '@/components/pages/BlogSlugPage/BlogSlugPage';
 import MarkdownViewerSSR from '@/components/ui/MarkdownViewerSSR/MarkdownViewerSSR';
@@ -12,6 +16,34 @@ export const generateStaticParams = () => {
     return BlogMarkdownManager
         .instance
         .blogMarkdownParamList;
+};
+
+export const generateMetadata = async (
+    props: {
+        params: TBlogMarkdownParam;
+    }
+): Promise<Metadata> => {
+    const {
+        params,
+    } = props;
+
+    const markdownData = await BlogMarkdownManager.readMarkdownFileData(params);
+
+    if (!markdownData) {
+        return {};
+    }
+
+    const {
+        frontmatter: {
+            title,
+            description,
+        },
+    } = markdownData;
+
+    return {
+        title: `${title} | Chocobe Frontend`,
+        description,
+    };
 };
 
 type TBlogSlugPageProps = {
