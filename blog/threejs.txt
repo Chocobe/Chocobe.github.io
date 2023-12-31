@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["vj1nvUmy_GEjG0DmztvOK",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["x8WXeHo5fDX1rSI8ybi9A",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -10,9 +10,9 @@
 4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
 b:I[689,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-6de01ca04009bb96.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","75","static/chunks/app/blog/%5Bcategory%5D/layout-7ae3540a4673a57a.js"],""]
 a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto\n                        max-[600px]:w-0","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","threejs","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"threejs\"}"},"styles":null}]}]]}]}]
-e:I[2317,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","254","static/chunks/app/blog/%5Bcategory%5D/page-864fbedea356ae73.js"],""]
 c:null
-f:T516e,---
+e:I[2317,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","254","static/chunks/app/blog/%5Bcategory%5D/page-864fbedea356ae73.js"],""]
+f:T5077,---
 id: 1
 title: Three.js 설치 및 실행
 description: 'Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.'
@@ -136,7 +136,7 @@ init();
 
 **WebGLRenderer** 객체는 Three.js 의 코어 역할을 합니다.
 
-화면을 구성하는 **Scene** 과 `<canvas />` 에 실제 렌더링하기 위한 **Camera** 를 인자로 받고 렌더링을 담당합니다.
+위에서 생성한 `<canvas />` 를 인자로 넘겨주어 렌더링 대상을 지정해 줍니다.
 
 ```js title="main.js" showLineNumbers {2, 5-6, 15-18}
 import {
@@ -217,7 +217,7 @@ init();
 
 현실 세계에서도 빛이 있어야 물체를 볼 수 있듯이, Three.js 에서도 조명이 있어야 물체가 렌더링 됩니다.
 
-조명은 여러가지가 있는데, 이 중 햇빛처럼 직선의 무한한 빛을 나타내는 **DirectionalLight** 객체를 사용해 보겠습니다.
+조명은 여러가지가 있는데, 이 중 햇빛처럼 직선의 일정한 양의 빛을 나타내는 **DirectionalLight** 객체를 사용해 보겠습니다.
 
 ```js title="main.js" showLineNumbers {4, 28-29}
 import {
@@ -268,7 +268,7 @@ init();
 
 <br />
 
-`Scene` 객체를 생성하고 카메라와 조명을 적용해 보겠습니다.
+`Scene` 객체를 생성하고 조명을 적용해 보겠습니다.
 
 ```js title="main.js" showLineNumbers {5, 14-15, 35-37}
 import {
@@ -321,7 +321,7 @@ init();
 
 ## 6. 위에서 생성한 객체들을 조합하여 WebGLRenderer 에 적용
 
-이제 Three.js 를 실행하여 화면을 그릴 준비를 할 수 있게 되었습니다.
+이제 Three.js 를 실행하여 화면을 그릴 준비가 되었습니다.
 
 **WebGLRenderer** 는 **Scene(무대)** 와 **카메라** 를 사용하여 화면을 그리는 역할을 하게 됩니다.
 
@@ -379,9 +379,7 @@ init();
 
 ## 7. `requestAnimationFrame()` 을 사용하여 `<canvas />` 렌더링
 
-위 과정을 통해 Three.js 를 실행할 준비가 완료 되었습니다.
-
-이번에는 `init()` 의 마지막에 호출할 `render()` 함수를 만들고, Three.js 를 실행하여 화면을 그리는 함수를 만들어 보겠습니다.
+이번에는 `init()` 의 마지막에 호출할 `render()` 함수를 만들고, Three.js 를 실행하여 브라우저에서 결과를 확인해 보겠습니다.
 
 추가할 `render()` 함수는 `requestAnimationFrame()` 을 사용하여 `render()` 함수를 재귀 호출하도록 하는데, 이는 브라우저에서 **60fps 로 실행하며 화면을 업데이트** 하게 됩니다.
 
@@ -446,7 +444,7 @@ init();
 
 
 
-## 추가: Schene 에 SphereMesh 추가하기
+## 추가: Scene 에 SphereMesh 추가하기
 
 지금까지 작성한 코드를 실행하면, 검은색 화면만 보이게 됩니다.
 
@@ -558,9 +556,7 @@ init();
 
 이는 **WebGLRenderer** 객체의 **size** 를 조정하여 전체화면으로 설정할 수 있습니다.
 
-그리고 `<canvas />` 의 기본 스타일인 `display: inline` 을 `display: block` 으로 변경해 주어야 합니다.
-
-먼저 `<canvas />` 요소에 `display: block` 스타일을 추가해 줍니다.
+그리고 `<canvas />` 의 기본 스타일인 `display: inline` 을 `display: block` 으로 변경합니다.
 
 ```css title="style.css" showLineNumbers
 * {
@@ -676,7 +672,7 @@ Scene 에 추가한 모델링은 구(Sphere) 입니다.
 
 <br />
 
-이를 해결하기 위해 **카메라의 종횡비(aspect radio)** 를 설정해 주겠습니다.
+이를 해결하기 위해 **카메라의 종횡비(aspect radio)** 를 설정해줍니다.
 
 ```js title="main.js" showLineNumbers {39-42}
 import {
@@ -809,7 +805,7 @@ class PerspectiveCamera {
 
 <br />
 
-컴퓨터 그래픽스에서 계단 효과를 해소하는 기법을 간단하게 설명하면, 곡선이 아닌 부분을 흐림(blur) 처리하면서 마치 자연스러운 곡선으로 표현해 줍니다.
+컴퓨터 그래픽스에서 계단 효과를 해소하는 기법을 간단하게 설명하면, 곡선이 아닌 부분을 흐림(blur) 처리하여 마치 자연스러운 곡선처럼 표현해 줍니다.
 
 이러한 기법을 **Anti-Aliasing** 이라고 합니다.
 
@@ -910,9 +906,9 @@ Three.js 를 실행하기 위한 최소 구성요소를 구현해 보았습니�
 
 <br />
 
-Three.js 를 처음 시작하며 제가 느낀 어려움은 컴퓨터 그래픽스 개념과 카메라에 대한 이해같습니다.
+Three.js 를 처음 시작하며 제가 느낀 어려움으로는 컴퓨터 그래픽스 개념과 카메라에 대한 이해였습니다.
 
-단순히 Three.js 사용법을 익히는 것으로 원하는 결과물을 얻기는 어려워 보였습니다.
+단순히 Three.js 사용법을 익히는 것만으로 원하는 결과물을 얻기는 어려워 보입니다.
 
 지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
 d:["$","$Le",null,{"featuredMarkdownFileDataList":[],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}]}]
