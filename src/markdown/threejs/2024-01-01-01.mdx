@@ -1,0 +1,604 @@
+---
+id: 2
+title: 카메라 설정 (PerspectiveCamera)
+description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    'camera',
+]
+
+createdAt: '2024-01-01 23:50:00'
+modifiedHistories: []
+---
+
+# 카메라 설정 (PerspectiveCamera)
+
+Three.js 가 `<canvas />` 에 실제로 렌더링하는 부분은 `카메라 (PerspectiveCamera)` 가 비추는 영역입니다.
+
+이번 포스팅에서는 카메라 설정과 효과, 사용자 인터렉션 적용 방법에 대해 정리해 보겠습니다.
+
+이번 포스팅에서는 아래의 코드를 시작점으로 사용하겠습니다.
+
+```js title="샘플 코드" showLineNumbers
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Scene,
+    DirectionalLight,
+
+    BoxGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+
+    const light = createLight();
+    const boxMesh = createBoxMesh();
+
+    initCamera();
+    initScene(light, boxMesh);
+
+    render();
+
+    console.log('시작');
+}());
+
+function render() {
+    renderer.render(scene, camera);
+
+    window.requestAnimationFrame(render);
+}
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+/**
+ * @param { HTMLCanvasElement } $canvas 
+ */
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function createLight() {
+    const light = new DirectionalLight();
+    light.position.set(1, 2, 3);
+
+    return light;
+}
+
+function createBoxMesh() {
+    const boxGeometry = new BoxGeometry();
+    const boxMaterial = new MeshPhongMaterial();
+
+    return new Mesh(boxGeometry, boxMaterial);
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight
+    );
+
+    camera.position.set(0, 0, 5);
+}
+
+function initScene(...items) {
+    scene = new Scene();
+
+    items.forEach(item => {
+        scene.add(item);
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## PerspectiveCamera 생성자 params
+
+카메라 생성자 params 를 사용하여 초기 설정을 할 수 있습니다.
+
+```ts title="PerspectiveCamera 생성자 함수" showLineNumbers
+class PerspectiveCamera {
+    constructor(
+        fov?: number,
+        aspect?: number,
+        near?: number,
+        far?: number
+    );
+}
+```
+
+* fov (Field of View): 시야각 (화각)
+    * fov 설정값이 클수록 먼 거리에서 보는 느낌이 납니다.
+    * fov 설정값이 커질수록 **투시에 따른 왜곡현상** 이 도드라지게 나타납니다.
+* aspect: 카메라 종횡비 (aspect radio)
+    * 카메라의 가로, 세로 비율값 입니다.
+* near: (Near clipping)
+    * 카메라를 기준으로 가까운 물체(Mesh) 에 대한 렌더링 잘라내기 설정값 입니다.
+* far: (Far clipping)
+    * 카메라를 기준으로 먼 물체(Mesh) 에 대한 렌더링 잘라내기 설정값 입니다.
+
+<br />
+
+위 설정들은 PerspectiveCamera 생성자를 통해서도 설정할 수 있고, 객체를 생성한 후 설정을 변경할 수도 있습니다.
+
+만약 객체를 생성한 후 설정을 변경한다면, 카메라 메소드인 **updateProjectionMatrix()** 함수를 호출하여야 실제 렌더링에 반영됩니다.
+
+아래 코드는 PerspectiveCamera 객체를 생성한 후, 카메라 설정을 변경하고 있습니다.
+
+```js title="카메라 객체 설정값 변경하기" showLineNumbers {88, 89, 92}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Scene,
+    DirectionalLight,
+
+    BoxGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+
+    const light = createLight();
+    const boxMesh = createBoxMesh();
+
+    initCamera();
+    initScene(light, boxMesh);
+
+    render();
+
+    console.log('시작');
+}());
+
+function render() {
+    renderer.render(scene, camera);
+
+    window.requestAnimationFrame(render);
+}
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+/**
+ * @param { HTMLCanvasElement } $canvas 
+ */
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function createLight() {
+    const light = new DirectionalLight();
+    light.position.set(1, 2, 3);
+
+    return light;
+}
+
+function createBoxMesh() {
+    const boxGeometry = new BoxGeometry();
+    const boxMaterial = new MeshPhongMaterial();
+
+    return new Mesh(boxGeometry, boxMaterial);
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera(
+        // 45,
+        // window.innerWidth / window.innerHeight
+    );
+
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(0, 0, 3);
+
+    camera.updateProjectionMatrix();
+}
+
+function initScene(...items) {
+    scene = new Scene();
+
+    items.forEach(item => {
+        scene.add(item);
+    });
+}
+```
+
+<br />
+
+위 코드의 실행 결과로 BoxMesh 의 단면을 볼 수 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-01.png" alt="실행 결과" />
+
+
+
+<br />
+
+
+
+## 카메라의 주시 좌표값 변경하기
+
+현재는 BoxMesh 의 단면만을 비추고 있어서 마치 2D 인것 처럼 보입니다.
+
+카메라의 위치와 카메라의 주시 좌표값을 변경하면, 물체를 다각도에서 다양한 구도로 렌더링할 수 있습니다.
+
+<br />
+
+먼저 카메라의 위치를 (1, 1, 2) 로 변경해 보겠습니다.
+
+```js title="카메라 position 변경" showLineNumbers{82} {6}
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(1, 1, 2);
+
+    camera.updateProjectionMatrix();
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-02.png" alt="실행 결과" />
+
+<br />
+
+카메라의 position 만을 변경한 결과, BoxMesh 의 일부분만 렌더링되고 있습니다.
+
+이는 카메라의 주시 좌표값을 설정하지 않아서 카메라 위치에서 정면을 주시하고 있기 때문입니다.
+
+카메라 객체의 `lookAt()` 메소드를 사용하면, 카메라의 위치인 position 에서 특정 좌표를 주시하게 됩니다.
+
+BoxMesh 가 카메라의 중앙에 오도록 하기위해, BoxMesh 의 position 위치값인 (0, 0, 0) 으로 카메라 주시 좌표를 설정해 보겠습니다.
+
+```js title="카메라 position 변경" showLineNumbers{82} {8}
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(1, 1, 2);
+
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-03.png" alt="실행 결과" />
+
+
+
+<br />
+
+
+
+## 카메라 fov 와 position 설정에 따른 왜곡 현상
+
+fov(Field of View) 값이 커질수록 멀리서 보는 느낌으로 렌더링됩니다.
+
+이는 물체가 더 작게 보이는 결과를 볼 수 있습니다.
+
+<br />
+
+만약 fov 를 큰 값으로 설정하여 물체가 작게 보이도록 한 후, 카메라의 위치를 물체와 가깝게 설정하면 어떻게 될까요?
+
+이는 카메라의 **왜곡 현상** 에 의해 좀 더 렌즈의 굴곡이 커지게 됩니다.
+
+fov 와 position 의 관계를 표현해 보면 다음과 같습니다.
+
+* fov 작게 설정, position 멀리 설정
+    * 왜곡 현상이 적어집니다.
+* fov 크게 설정, position 가깝게 설정
+    * 왜곡 현상이 커집니다.
+
+<br />
+
+실제 왜곡 현상의 차이를 확인하기 위해 두가지 설정을 비교해 보겠습니다.
+
+* 첫번째 설정: **fov 작게, position 멀리** 설정
+* 두번째 설정: **fov 크게, position 가깝게** 설정
+
+```js title="fov 작게, position 멀리 설정" showLineNumbers{82} {5-6}
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.fov = 45;
+    camera.position.set(2, 2, 2);
+
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-04.png" alt="실행 결과" />
+
+<br /><br />
+
+```js title="fov 크게, position 가깝게 설정" showLineNumbers{82} {5-6}
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.fov = 90;
+    camera.position.set(1, 1, 1);
+
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-05.png" alt="실행 결과" />
+
+
+
+<br />
+
+
+
+## 추가: 마우스를 사용하여 카메라 제어하기
+
+Three.js 는 여러가지 Addons 를 제공합니다.
+
+이 중 **OrbitControls** 객체를 사용하면, 마우스를 사용하여 카메라를 제어하는 기능을 제공할 수 있습니다.
+
+<br />
+
+OrbitControls 는 **PerspectiveCamera 의 Addon** 개념으로 사용하게 되며, 카메라의 제어를 담당하게 됩니다.
+
+주의할 점은 PerspectiveCamera 의 `lookAt()` 메소드를 함께 사용하게 되면, 카메라 제어에 충돌이 발생하는 현상입니다.
+
+그러므로 OrbitControls 를 사용하려면, `lookAt()` 메소드는 꼭 제거해 주는 것이 좋습니다.
+
+<br />
+
+먼저 OrbitControls 의 생성자를 살펴보면 다음과 같습니다.
+
+```ts
+class OrbitControls {
+    constructor(
+        object: Camera, 
+        domElement?: HTMLElement
+    );
+}
+```
+
+* object: 제어할 카메라 객체
+* domElement: 마우스 이벤트를 발생시킬 HTMLElement
+
+<br />
+
+PerspectiveCamera 에 OrbitControls 를 적용하는 `initControls()` 함수를 추가해 보겠습니다.
+
+```js title="OrbitControls 로 카메라 제어하기" showLineNumbers {11-13, 25-26, 37, 45, 103-108}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Scene,
+    DirectionalLight,
+
+    BoxGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls'
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { OrbitControls } */
+let controls;
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+
+    const light = createLight();
+    const boxMesh = createBoxMesh();
+
+    initCamera();
+    initControls($canvas);
+    initScene(light, boxMesh);
+
+    render();
+}());
+
+function render() {
+    renderer.render(scene, camera);
+    controls.update();
+
+    window.requestAnimationFrame(render);
+}
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+/**
+ * @param { HTMLCanvasElement } $canvas 
+ */
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function createLight() {
+    const light = new DirectionalLight();
+    light.position.set(1, 2, 3);
+
+    return light;
+}
+
+function createBoxMesh() {
+    const boxGeometry = new BoxGeometry();
+    const boxMaterial = new MeshPhongMaterial();
+
+    return new Mesh(boxGeometry, boxMaterial);
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.fov = 45;
+    camera.position.set(2, 2, 2);
+
+    camera.fov = 90;
+    camera.position.set(1, 1, 1);
+
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+
+/**
+ * @param { HTMLElement } $targetElement 
+ */
+function initControls($targetElement) {
+    controls = new OrbitControls(camera, $targetElement);
+}
+
+function initScene(...items) {
+    scene = new Scene();
+
+    items.forEach(item => {
+        scene.add(item);
+    });
+}
+```
+
+<br />
+
+OrbitControls 를 카메라에 설치하게 되면 아래와 같은 마우스 인터렉션을 사용할 수 있습니다.
+
+* 마우스 좌클릭 - 드래그
+    * 카메라 주시 좌표를 회전 중심점으로 하여, **드래그 반대 방향으로 카메라를 회전** 시킵니다.
+    * 결과적으로 카메라가 고정된 상태에서 **바라보는 물체가 회전** 하게 됩니다.
+* 마우스 휠
+    * 확대, 축소 동작을 합니다.
+* 마우스 우클릭 - 드래그
+    * **드래그 반대 방향으로 카메라의 위치를 이동** 시킵니다.
+    * 결과적으로 카메라가 고정된 상태에서 **바라보는 물체가 이동** 하게 됩니다.
+
+<br />
+
+OrbitControls 객체의 설정을 사용하여, 특정 마우스 인터렉션의 사용 여부를 설정할 수 있습니다.
+
+이 설정 프로퍼티들은 `enable` 을 접두사로 사용하고 있습니다.
+
+* `enableRotate`: `false` 값을 대입하면, 회전기능을 막습니다.
+* `enableZoom`: `false` 값을 대입하면 확대, 축소 기능을 막습니다.
+* `enablePan`: `false` 값을 대입하면 이동 기능을 막습니다.
+
+<br />
+
+추가로 `enableDamping` 에 `true` 값을 대입하게 되면, 카메라의 모든 인터렉션에 감속도가 적용되어 **카메라의 부드러운 움직임이 연출** 됩니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+일전에 HTML Canvas API 를 스터디하면서, 도형에 대한 인터렉션이나 애니메이션을 구현해본 적이 있습니다.
+
+물체의 튕김이나 가속도, 감속도를 구현해 보려는 시도를 했었지만, 제가 구현한 결과물은 너무나 어색했습니다.
+
+Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드러운 3D 엔진에 그저 놀라울 뿐입니다.
+
+<br />
+
+하지만 실제 구현할 기획에 따라 엔진의 물리 효과를 커스터마이징을 할 수 있어야 자연스러운 결과물이 나올 것 같습니다.
+
+OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
+
+Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
