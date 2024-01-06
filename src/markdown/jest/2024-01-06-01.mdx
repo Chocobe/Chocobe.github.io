@@ -1,0 +1,201 @@
+---
+id: 4
+title: 'Nextjs 의 useRouter mock 정의하기'
+description: 'Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'jest',
+    '@testing-library',
+    'useRouter',
+    'next-router-mock',
+    '유닛 테스트',
+]
+
+createdAt: '2024-01-06 17:30:00'
+modifiedHistories: []
+---
+
+# Nextjs 의 useRouter mock 정의하기
+
+페이지 이동을 위한 컴포넌트는 웹페이지에서 빠질 수 없는 컴포넌트 입니다.
+
+Nextjs 프로젝트에서 페이지 이동은 Nextjs 의 `useRouter` hook 을 사용하여 구현합니다.
+
+이러한 컴포넌트는 내부에서 `useRouter` 를 사용하고 있기 때문에, Jest 의 `render()` 를 사용한 렌더링 시, 에러가 발생하게 됩니다.
+
+이번 포스팅에서는 `useRouter` 를 mocking 하여 테스트 하는 방법에 대해 정리하고자 합니다.
+
+
+
+<br />
+
+
+
+## 컴포넌트 렌더링 실패
+
+`useRouter` 를 사용하는 컴포넌트를 아무런 설정없이 Jest 의 `render()` 를 실행시키면, 렌더링 에러가 발생합니다.
+
+이는 테스트 환경에서 `useRouter()` 가 렌더링 되지 않으면서 발생하게 됩니다.
+
+이를 해결하기 위해, `next-router-mock` 라이브러리를 활용할 수 있습니다.
+
+```bash
+yarn add -D next-router-mock
+```
+
+
+
+<br />
+
+
+
+## `useRouter` 를 사용하는 테스트용 컴포넌트
+
+이번 포스트에서 테스트할 컴포넌트는 아래와 같습니다.
+
+`onClick()` 내부에서 `router.push()` 를 사용하여 페이지를 이동 시키는 동작을 합니다.
+
+```tsx title="MyAnchor.tsx" showLineNumbers
+import {
+    useCallback,
+    PropsWithChildren,
+} from 'react';
+import {
+    useRouter,
+} from 'next/navigation';
+
+type TMyAnchorProps = PropsWithChildren<{
+    className?: string;
+    href: string;
+}>;
+
+function MyAnchor(props: TMyAnchorProps) {
+    const {
+        className,
+        href,
+        children,
+    } = props;
+
+    const router = useRouter();
+
+    const onClick = useCallback(() => {
+        router.push(href);
+    }, [href]);
+
+    return (
+        <a 
+            className={className}
+            href={href}>
+            {children}
+        </a>
+    );
+}
+
+export default MyAnchor;
+```
+
+
+
+<br />
+
+
+
+## `jest.mock()` 을 사용하여 `useRouter()` mocking 하기
+
+`jest.mock()` 을 사용하면, 특정 모듈을 mocking 할 수 있습니다.
+
+이를 활용하여, `next/navigation` 모듈을 mocking 하여 `useRouter` 가 테스트 환경에서 렌더링될 수 있도록 합니다.
+
+```ts title="jest.mock() 으로 useRouter mocking 하기"
+jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
+```
+
+* `jest.mock()`: 특정 모듈을 mocking 합니다.
+    * 첫번째 인자: mocking 할 모듈명
+    * 두번째 인자: mocking 반환 함수
+* `jest.requireActual()`: 실제 모듈을 가져옵니다. (`import`, `require`)
+
+<br />
+
+위 코드를 사용하여 `useRouter` 를 mocking 하게 되면, 정상적으로 렌더링됨을 확인할 수 있습니다.
+
+아래는 테스트 예시 코드 입니다.
+
+```tsx title="MyAnchor 테스트" showLineNumbers {7, 9, 12-15, 48-50}
+import MyAnchor from './MyAnchor';
+import {
+    render,
+    screen,
+} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import mockRouter from 'next-router-mock';
+
+jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
+
+describe('<MyAnchor /> 테스트', () => {
+    beforeEach(() => {
+        // mockRouter 의 pathname 을 '/' 으로 초기화 합니다.
+        mockRouter.push('/');
+    });
+
+    it('DOM 에 렌더링 된다.', () => {
+        render(
+            <div data-testid="test-MyAnchor">
+                <MyAnchor href="/test-url">
+                    Test Page
+                </MyAnchor>
+            </div>
+        );
+
+        const $anchor = screen.getByTestId('test-MyAnchor');
+
+        expect($anchor).toBeInTheDocument();
+    });
+
+    it('click 시, href 경로로 페이지 이동한다.', async () => {
+        render(
+            <div data-testid="test-MyAnchor">
+                <MyAnchor 
+                    className="test-className"
+                    href="test-url">
+                    Test Page
+                </MyAnchor>
+            </div>
+        );
+
+        const $anchor = screen
+            .getByTestId('test-MyAnchor')
+            .querySelector('.test-className');
+
+        await userEvent.click($anchor);
+
+        expect(mockRouter).toMatchObject({
+            pathname: '/test-url',
+        });
+    });
+});
+```
+
+<br />
+
+그리고 `router` 가 클릭된 후, 페이지 이동이 되었는지 테스트하기 위해, `mockRouter` 를 활용할 수 있습니다.
+
+`mockRouter` 의 `pathname` 에 이동할 페이지의 url 이 반영되었다면, 실제로는 페이지 이동이 된 것으로 볼 수 있습니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+프레임워크는 개발에 필요한 다양한 기능을 제공합니다.
+
+이를 테스트하기 위해서는 프레임워크와 동일한 환경을 만들어주어야 함을 알게 되었습니다.
+
+단순 컴포넌트나 함수를 테스트할 때는 신경쓰지 않았던 **모듈 mocking** 이 필요하고, `jest.mock()` 을 사용하여 mocking 할 수 있었습니다.
+
+`next-router-mock` 라이브러리 처럼 오픈 소스 문화가 있기에 저도 웹 개발을 할 수 있음을 새삼 느끼게 됩니다. 🫠
