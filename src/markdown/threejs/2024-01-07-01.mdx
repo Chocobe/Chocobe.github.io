@@ -1,0 +1,298 @@
+---
+id: 4
+title: 평평한 바닥(땅) 만들기 (Plane Mesh)
+description: '바닥을 표현하기 위해 Plane Mesh 를 생성합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    'plane',
+]
+
+createdAt: '2024-01-07 23:20:00'
+modifiedHistories: []
+---
+
+# 평평한 바닥(땅) 만들기 (Plane Mesh)
+
+이번 포스팅에서는 바닥(땅) 을 만들어 보겠습니다.
+
+Three.js 에서는 바닥(땅) 을 **Plane Mesh** 로 만들 수 있습니다.
+
+다음 포스팅에서 다룰 그림자를 표현하려면, 바닥(땅) 이 있어야 하므로 별도의 포스팅으로 분리하게 되었습니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이번 포스팅에서 사용할 예시 코드는 다음과 같습니다.
+
+```js title="예시 코드" showLineNumbers {96}
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Mesh,
+    MeshStandardMaterial,
+    SphereGeometry,
+
+    Color,
+    HemisphereLight,
+    HemisphereLightHelper,
+    DirectionalLight,
+    DirectionalLightHelper,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 35;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(0, 0, 12);
+
+    camera.updateProjectionMatrix();
+}
+
+function initControls($canvas) {
+    controls = new OrbitControls(camera, $canvas);
+    controls.enableDamping = true;
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#fff');
+    const groundColor = new Color('#000');
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        0.75
+    );
+
+    const helper = new HemisphereLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+
+function initDirectionalLight() {
+    const color = new Color('#fff');
+    const light = new DirectionalLight(color);
+    light.position.set(2, 2, 2);
+
+    const helper = new DirectionalLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+
+function initSphereMesh() {
+    const geometry = new SphereGeometry();
+    const material = new MeshStandardMaterial();
+    const sphere = new Mesh(geometry, material);
+
+    scene.add(sphere);
+}
+
+// 여기에 Plane Mesh(바닥) 을 생성하는 함수를 구현할 예정입니다.
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+}
+
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls.update();
+}
+
+(function init() {
+    const $canvas = initCanvas();
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initHemisphereLight();
+    initDirectionalLight();
+
+    initSphereMesh();
+
+    render();
+}());
+```
+
+
+
+<br />
+
+
+
+## Plane Mesh 생성 함수 만들기
+
+Plane Mesh 는 **PlaneGeometry** class 를 사용하여 생성할 수 있습니다.
+
+```js title="PlaneGeometry class import 하기" showLineNumbers {9}
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Mesh,
+    MeshStandardMaterial,
+    SphereGeometry,
+    PlaneGeometry,
+
+    Color,
+    HemisphereLight,
+    HemisphereLightHelper,
+    DirectionalLight,
+    DirectionalLightHelper,
+} from 'three';
+```
+
+```js title="initPlaneMesh() 함수 구현하기" showLineNumbers{97}
+function initPlaneMesh() {
+    const geometry = new PlaneGeometry();
+    const material = new MeshStandardMaterial();
+    const plane = new Mesh(geometry, material);
+    plane.position.set(0, -1, 0);
+
+    scene.add(plane);
+}
+```
+
+```js title="initPlaneMesh 함수 호출하기" showLineNumbers{120} {12}
+(function init() {
+    const $canvas = initCanvas();
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initHemisphereLight();
+    initDirectionalLight();
+
+    initSphereMesh();
+    initPlaneMesh();
+
+    render();
+}());
+```
+
+<img src="/markdownAssets/threejs/2024-01-07-01/2024-01-07-01-01.png" alt="PlaneMesh" />
+
+
+
+<br />
+
+
+
+## Plane Mesh 회전 및 크기 변경하기
+
+위 코드를 실행하면, Sphere 하부에 사각형 물체가 렌더링됩니다.
+
+**width**, **height**, **rotation** 을 변경하여 바닥(땅) 처럼 보이도록 설정해 보겠습니다.
+
+```js title="initPlaneMesh() 함수 구현하기" showLineNumbers{97} {2, 6-10}
+function initPlaneMesh() {
+    const geometry = new PlaneGeometry(5, 5);
+    const material = new MeshStandardMaterial();
+    const plane = new Mesh(geometry, material);
+    plane.position.set(0, -1, 0);
+    plane.rotation.set(
+        Math.PI * -0.5, 
+        0, 
+        0
+    );
+
+    scene.add(plane);
+}
+```
+
+<br />
+
+PlaneGeometry class 는 생성자에 **width** 와 **height** 를 넘겨주어 크기를 설정할 수 있습니다.
+
+```js title="width, height 설정" showLineNumbers{98}
+const geometry = new PlaneGeometry(5, 5);
+```
+
+<br />
+
+그리고 Plane Mesh 인스턴스의 `rotation.set()` 메소드를 사용하여 회전시킬 수 있습니다.
+
+회전시킬 값은 **Radian** 으로 넘겨주어야 하므로, **Math.PI** 를 사용합니다.
+
+```js title="회전 시키기" showLineNumbers{102} {2}
+plane.rotation.set(
+    Math.PI * -0.5, 
+    0, 
+    0
+);
+```
+
+위 코드에서 X축 회전으로 `Math.PI * -0.5` 를 주었는데, 이는 아래와 같은 Plane Mesh 의 특성으로 고려한 것입니다.
+
+* Plane Mesh 는 한쪽면만 렌더링되는 단면 물체 입니다.
+* 렌더링되지 않는 반대쪽 면에는 그림자가 드리우지 않습니다.
+
+<br />
+
+이렇게 실행한 결과는 다음과 같습니다.
+
+<img src="/markdownAssets/threejs/2024-01-07-01/2024-01-07-01-02.png" alt="PlaneMesh 설정" />
+
+<br />
+
+카메라를 회전시켜서 Plane Mesh 의 반대쪽 면을 보면, 렌더링되지 않은 결과를 볼 수 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-07-01/2024-01-07-01-03.png" alt="PlaneMesh 반대면" />
+
+
+
+## 마치며
+
+Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
+
+다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
