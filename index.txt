@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["0DDUfwTgb4nEdsXD6F1Wc",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["wDuWL0psubaLEaPs4XGSE",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -2940,8 +2940,6 @@ modifiedHistories: []
 
 이 덕분에 개발자가 원하는 조명과 원하는 물체의 그림자를 직접 지정하여 표현할 수 있습니다.
 
-[Three.js 공식 문서 - WebGLRenderer.shadowMap](https://threejs.org/docs/index.html?q=webglRenderer#api/en/renderers/WebGLRenderer.shadowMap)
-
 
 
 <br />
@@ -3292,6 +3290,8 @@ function initRenderer($canvas) {
 <br />
 
 위 코드에서 사용한 `VSMShadowMap` 이외에도 다른 종류의 shadowMap 을 사용할 수도 있습니다. (이번 포스팅에서는 `VSMShadowMap` 을 사용합니다.)
+
+[Three.js 공식 문서 - WebGLRenderer.shadowMap](https://threejs.org/docs/index.html?q=webglRenderer#api/en/renderers/WebGLRenderer.shadowMap)
 
 * BasicShadowMap
 * PCFShadowMap (default)
