@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["pg5_IPzZnEl_96PSRBe9A",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["0DDUfwTgb4nEdsXD6F1Wc",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -2914,10 +2914,438 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-17:T1a79,---
+17:T2862,---
+id: 5
+title: 그림자 표현하기
+description: '그림자 설정방법과 특징에 대해 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    'shadow',
+]
+
+createdAt: '2024-01-07 23:50:00'
+modifiedHistories: []
+---
+
+# 그림자 표현하기
+
+그림자를 표현하기 위해서는 물체와 조명의 각도, 그림자의 크기, 형태 등의 상호작용 연산이 필요합니다.
+
+그래서 Three.js 의 그림자 설정의 기본값은 모두 미사용으로 설정되어 있습니다.
+
+이 덕분에 개발자가 원하는 조명과 원하는 물체의 그림자를 직접 지정하여 표현할 수 있습니다.
+
+[Three.js 공식 문서 - WebGLRenderer.shadowMap](https://threejs.org/docs/index.html?q=webglRenderer#api/en/renderers/WebGLRenderer.shadowMap)
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이전 포스팅에서 바닥(땅) 을 만들었던 코드에 그림자 설정을 추가해 보겠습니다.
+
+```js title="예시 코드" showLineNumbers
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Mesh,
+    MeshStandardMaterial,
+    SphereGeometry,
+    PlaneGeometry,
+
+    Color,
+    HemisphereLight,
+    HemisphereLightHelper,
+    DirectionalLight,
+    DirectionalLightHelper,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 35;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(0, 0, 12);
+
+    camera.updateProjectionMatrix();
+}
+
+function initControls($canvas) {
+    controls = new OrbitControls(camera, $canvas);
+    controls.enableDamping = true;
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#fff');
+    const groundColor = new Color('#000');
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        0.75
+    );
+
+    const helper = new HemisphereLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+
+function initDirectionalLight() {
+    const color = new Color('#fff');
+    const light = new DirectionalLight(color);
+    light.position.set(2, 2, 2);
+
+    const helper = new DirectionalLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+
+function initSphereMesh() {
+    const geometry = new SphereGeometry();
+    const material = new MeshStandardMaterial();
+    const sphere = new Mesh(geometry, material);
+
+    scene.add(sphere);
+}
+
+function initPlaneMesh() {
+    const geometry = new PlaneGeometry(10, 10);
+    const material = new MeshStandardMaterial();
+    const plane = new Mesh(geometry, material);
+    plane.position.set(0, -1, 0);
+    plane.rotation.set(
+        Math.PI * -0.5,
+        0,
+        0
+    );
+
+    scene.add(plane);
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+}
+
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls.update();
+}
+
+(function init() {
+    const $canvas = initCanvas();
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initHemisphereLight();
+    initDirectionalLight();
+
+    initSphereMesh();
+    initPlaneMesh();
+
+    render();
+}());
+```
+
+
+
+<br />
+
+
+
+## 그림자 종류
+
+Three.js 에서 제공하는 그림자는 크게 2가지로 볼 수 있습니다.
+
+* Hard Shadow: 선명하며 거친 그림자를 표현합니다.
+* Soft Shadow: 부드러운 그림자를 표현합니다.
+
+<br />
+
+Soft Shadow 는 그림자에 Blur 를 적용하여 부드럽게 표현합니다.
+
+주의할 점은 Blur 값을 크게 설정할수록 부드럽게 표현하지만, 사용자 PC 의 연산량이 커진다는 것 입니다.
+
+<br />
+
+Three.js 의 그림자 설정은 다음과 같은 과정으로 만들 수 있습니다.
+
+1. Hard Shadow 설정하기
+2. Soft Shadow 설정 추가하기
+
+
+
+<br />
+
+
+
+## 그림자 설정이 필요한 인스턴스들
+
+그림자를 표현하려면 몇가지 설정을 함께 해주어야 합니다.
+
+아래는 그림자 설정이 필요한 인스턴스들 입니다.
+
+* WebGLRenderer 인스턴스
+* Light 인스턴스
+* Mesh 인스턴스
+
+
+
+<br />
+
+
+
+## WebGLRenderer 에 shadow 설정하기
+
+WebGLRenderer 는 **ShadowMap** 이라는 메커니즘을 제공합니다.
+
+지금은 컴퓨터 그래픽스에서 그림자를 표현하는 여러 알고리즘 중 한가지 라는 것 정도로 정리하고자 합니다.
+
+* WebGLRenderer shadowMap 은 그림자를 이미지로 생성한 후, 그림자를 씌우는 방식으로 동작합니다.
+
+<br />
+
+아래 코드는 WebGLRenderer 가 그림자를 표현하도록 설정합니다.
+
+```js title="WebGLRenderer 그림자 사용 설정" showLineNumbers{111} {7}
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.shadowMap.enabled = true;
+}
+```
+
+
+
+<br />
+
+
+
+## Light 와 Mesh 의 그림자 설정 (Hard Shadow)
+
+Light 와 Mesh 의 그림자 설정 속성은 동일한 인터페이스를 가집니다.
+
+그림자 설정 속성은 크게 두가지가 있습니다.
+
+* 그림자를 만들어내는 설정: `castShadow`
+* 다른 Mesh 의 그림자를 받는 설정: `receiveShadow`
+
+<br />
+
+Light 가 비추는 빛은 다른 Mesh 에 의해 그림자를 생성하게 됩니다.
+
+그러므로 Light 의 **castShadow** 를 `true` 로 설정해줍니다.
+
+```js title="DirectionalLight shadow 설정" showLineNumbers{78} {5}
+function initDirectionalLight() {
+    const color = new Color('#fff');
+    const light = new DirectionalLight(color);
+    light.position.set(2, 2, 2);
+    light.castShadow = true;
+
+    const helper = new DirectionalLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+```
+
+<br />
+
+빛에 의해 그림자를 만들어내는 Mesh 역시 그림자를 생성하므로, **caseShadow** 를 `true` 로 설정해줍니다.
+
+```js title="Sphere Mesh shadow 설정" showLineNumbers{90} {5}
+function initSphereMesh() {
+    const geometry = new SphereGeometry();
+    const material = new MeshStandardMaterial();
+    const sphere = new Mesh(geometry, material);
+    sphere.castShadow = true;
+
+    scene.add(sphere);
+}
+```
+
+<br />
+
+바닥(땅) 을 표현한 Plane Mesh 는 다른 Mesh 의 그림자를 받게 되므로, **receiveShadow** 를 `true` 로 설정해줍니다.
+
+```js title="Plane Mesh shadow 설정" showLineNumbers{99} {12}
+function initPlaneMesh() {
+    const geometry = new PlaneGeometry(10, 10);
+    const material = new MeshStandardMaterial();
+    const plane = new Mesh(geometry, material);
+    plane.position.set(0, -1, 0);
+    plane.rotation.set(
+        Math.PI * -0.5,
+        0,
+        0
+    );
+
+    plane.receiveShadow = true;
+
+    scene.add(plane);
+}
+```
+
+<br />
+
+<img src="/markdownAssets/threejs/2024-01-07-02/2024-01-07-02-01.png" alt="Hard Shadow" />
+
+<br />
+
+지금까지 설정하여 만들어낸 그림자는 **Hard Shadow** 입니다.
+
+Blur 처리를 하지 않기 때문에 선명한 그림자가 그려지고, 곡선에서 픽셀이 보이는 특징이 있습니다.
+
+
+
+<br />
+
+
+
+## Soft Shadow 설정 추가하기
+
+Hard Shadow 설정을 한 후, WebGLRenderer 의 `shadowMap.type` 을 `VSMShadowMap` 으로 설정하므로써 Soft Shadow 로 표현됩니다.
+
+```js title="VSMShadowMap import 하기" showLineNumbers {16}
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Mesh,
+    MeshStandardMaterial,
+    SphereGeometry,
+    PlaneGeometry,
+
+    Color,
+    HemisphereLight,
+    HemisphereLightHelper,
+    DirectionalLight,
+    DirectionalLightHelper,
+    VSMShadowMap,
+} from 'three';
+```
+
+```js title="Soft Shadow" showLineNumbers{116} {8}
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = VSMShadowMap;
+}
+```
+
+<br />
+
+위 코드에서 사용한 `VSMShadowMap` 이외에도 다른 종류의 shadowMap 을 사용할 수도 있습니다. (이번 포스팅에서는 `VSMShadowMap` 을 사용합니다.)
+
+* BasicShadowMap
+* PCFShadowMap (default)
+* PCFSoftShadowMap
+* VSMShadowMap
+
+<br />
+
+위 설정을 추가한 후, 결과를 확인하면 Hard Shadow 와 다른점이 없어 보입니다.
+
+이는 그림자를 생성하는 Light 의 **Blur 정도** 와 **번지는 영역의 Radius** 를 변경하면서 부드러움이 달라지는 것을 확인할 수 있습니다.
+
+```js title="DirectionalLight 의 Blur 와 Radius 설정" showLineNumbers{79} {6-7}
+function initDirectionalLight() {
+    const color = new Color('#fff');
+    const light = new DirectionalLight(color);
+    light.position.set(2, 2, 2);
+    light.castShadow = true;
+    light.shadow.blurSamples = 30;
+    light.shadow.radius = 12;
+
+    const helper = new DirectionalLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-07-02/2024-01-07-02-02.png" alt="Soft Shadow" />
+
+<br />
+
+Light 의 shadow 설정 시, 주의할 사항은 다음과 같습니다.
+
+* `shadow.blurSamples`: 값이 커질수록 부드러운 그림자를 표현하지만, 필요 성능이 높아집니다.
+* `shadow.radius`: 값이 너무 작으면 화면이 깨지는 현상이 있으므로, **10 이상** 설정을 권장합니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+그림자는 조명과 물제의 상호연산을 사용하기 때문에 연산량이 많이 필요하다고 합니다.
+
+그래서 그림자를 최소한으로 사용할 수 있도록 여러가지 설정을 분리시켜놓은 느낌이 들었습니다.
+
+Three.js 를 활용할 때, 그림자 설정이 성능 최적화 대상이라는 것을 알게 되었습니다.
+18:T1a79,---
 id: 4
 title: 평평한 바닥(땅) 만들기 (Plane Mesh)
-description: '바닦을 표현하기 위해 Plane Mesh 를 생성합니다.'
+description: '바닥을 표현하기 위해 Plane Mesh 를 생성합니다.'
 thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
 
 featured: false
@@ -2938,7 +3366,7 @@ modifiedHistories: []
 
 Three.js 에서는 바닥(땅) 을 **Plane Mesh** 로 만들 수 있습니다.
 
-다음 포스팅에서 다룰 그림자를 표현하려면, 바닦(땅) 이 있어야 하므로 별도의 포스팅으로 분리하게 되었습니다.
+다음 포스팅에서 다룰 그림자를 표현하려면, 바닥(땅) 이 있어야 하므로 별도의 포스팅으로 분리하게 되었습니다.
 
 
 
@@ -3212,7 +3640,7 @@ plane.rotation.set(
 Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
 
 다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
-18:T2eef,---
+19:T2eef,---
 id: 3
 title: 조명 종류와 설정
 description: '조명 종류와 설정 방법에 대해 정리합니다.'
@@ -3786,7 +4214,7 @@ HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보�
 <br />
 
 Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
-19:T3ac1,---
+1a:T3ac1,---
 id: 2
 title: 카메라 설정 (PerspectiveCamera)
 description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
@@ -4390,4 +4818,4 @@ Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드
 OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
 
 Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
-b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$e"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"javascript","slug":"2023-12-30-01","href":"/blog/javascript/2023-12-30-01","frontmatter":{"id":2,"title":"AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정","description":"AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript","PDF","PDF Metadata","AWS","S3"],"createdAt":"$D2023-12-30T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2024-01-06-01","href":"/blog/jest/2024-01-06-01","frontmatter":{"id":4,"title":"Nextjs 의 useRouter mock 정의하기","description":"Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","@testing-library","useRouter","next-router-mock","유닛 테스트"],"createdAt":"$D2024-01-06T17:30:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"nextjs","slug":"2024-01-01-01","href":"/blog/nextjs/2024-01-01-01","frontmatter":{"id":2,"title":".DS_Store not found 에러","description":"Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs",".DS_Store"],"createdAt":"$D2024-01-01T15:20:00.000Z","modifiedHistories":[]},"markdownFile":"---\nid: 2\ntitle: .DS_Store not found 에러\ndescription: 'Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.'\nthumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg\n\nfeatured: false\ntags: [\n    'nextjs',\n    '.DS_Store',\n]\n\ncreatedAt: '2024-01-01 15:20:00'\nmodifiedHistories: []\n---\n\n# .DS_Store not found 에러\n\nNextjs 프로젝트에 이미지 파일을 추가하고 삭제한 후, 빌드 에러가 발생하였습니다.\n\n> Error: ENOENT: no such file or directory, open '/.../.DS_Store\n\n\n\n<br />\n\n\n\n## 에러 원인 파악\n\n.DS_Store 는 맥북의 폴더 관련 메타데이터 파일이며, Finder 로 폴더에 접근하게 되면 자동으로 생성됩니다.\n\n문제는 Nextjs 프로젝트를 개발 환경으로 실행하거나 빌드할 때, .DS_Store 파일이 추가되면, 빌드 에러가 발생합니다.\n\n\n\n\n<br />\n\n\n\n## 해결 방법\n\n* 참고: [Stack Overflow](https://github.com/vercel/next.js/discussions/15573#discussioncomment-2415012)\n\n<br />\n\nNextjs 프로젝트 하위에 존재하는 .DS_Store 파일을 모두 삭제하는 것으로 해결할 수 있었습니다.\n\n모든 폴더를 직접 열어보면서 지우는 방법도 있겠지만, 터미널을 사용하여 삭제 명령으로 처리할 수 있습니다.\n\n```bash title=\"프로젝트 내의 모든 .DS_Store 파일 삭제\"\nrm **/.DS_Store\n```\n\n<br />\n\n삭제 명령이 실행 완료되면, Nextjs 프로젝트가 정상적으로 빌드되는 것을 확인할 수 있습니다.\n"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닦을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$19"}]}]
+b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$e"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"javascript","slug":"2023-12-30-01","href":"/blog/javascript/2023-12-30-01","frontmatter":{"id":2,"title":"AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정","description":"AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript","PDF","PDF Metadata","AWS","S3"],"createdAt":"$D2023-12-30T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2024-01-06-01","href":"/blog/jest/2024-01-06-01","frontmatter":{"id":4,"title":"Nextjs 의 useRouter mock 정의하기","description":"Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","@testing-library","useRouter","next-router-mock","유닛 테스트"],"createdAt":"$D2024-01-06T17:30:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"nextjs","slug":"2024-01-01-01","href":"/blog/nextjs/2024-01-01-01","frontmatter":{"id":2,"title":".DS_Store not found 에러","description":"Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs",".DS_Store"],"createdAt":"$D2024-01-01T15:20:00.000Z","modifiedHistories":[]},"markdownFile":"---\nid: 2\ntitle: .DS_Store not found 에러\ndescription: 'Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.'\nthumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg\n\nfeatured: false\ntags: [\n    'nextjs',\n    '.DS_Store',\n]\n\ncreatedAt: '2024-01-01 15:20:00'\nmodifiedHistories: []\n---\n\n# .DS_Store not found 에러\n\nNextjs 프로젝트에 이미지 파일을 추가하고 삭제한 후, 빌드 에러가 발생하였습니다.\n\n> Error: ENOENT: no such file or directory, open '/.../.DS_Store\n\n\n\n<br />\n\n\n\n## 에러 원인 파악\n\n.DS_Store 는 맥북의 폴더 관련 메타데이터 파일이며, Finder 로 폴더에 접근하게 되면 자동으로 생성됩니다.\n\n문제는 Nextjs 프로젝트를 개발 환경으로 실행하거나 빌드할 때, .DS_Store 파일이 추가되면, 빌드 에러가 발생합니다.\n\n\n\n\n<br />\n\n\n\n## 해결 방법\n\n* 참고: [Stack Overflow](https://github.com/vercel/next.js/discussions/15573#discussioncomment-2415012)\n\n<br />\n\nNextjs 프로젝트 하위에 존재하는 .DS_Store 파일을 모두 삭제하는 것으로 해결할 수 있었습니다.\n\n모든 폴더를 직접 열어보면서 지우는 방법도 있겠지만, 터미널을 사용하여 삭제 명령으로 처리할 수 있습니다.\n\n```bash title=\"프로젝트 내의 모든 .DS_Store 파일 삭제\"\nrm **/.DS_Store\n```\n\n<br />\n\n삭제 명령이 실행 완료되면, Nextjs 프로젝트가 정상적으로 빌드되는 것을 확인할 수 있습니다.\n"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1a"}]}]
