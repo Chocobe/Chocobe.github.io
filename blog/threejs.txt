@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["1ezipxZJK3LmoyJGZ1I7B",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["pg5_IPzZnEl_96PSRBe9A",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -12,1191 +12,13 @@ b:I[689,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks
 a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto\n                        max-[600px]:w-0","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","threejs","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"threejs\"}"},"styles":null}]}]]}]}]
 c:null
 e:I[2317,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","254","static/chunks/app/blog/%5Bcategory%5D/page-864fbedea356ae73.js"],""]
-f:T2eef,---
-id: 3
-title: 조명 종류와 설정
-description: '조명 종류와 설정 방법에 대해 정리합니다.'
-thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
-
-featured: false
-tags: [
-    'threejs',
-    'javascript',
-    '3d',
-    'light',
-]
-
-createdAt: '2024-01-06 23:00:00'
-modifiedHistories: []
----
-
-# 조명 종류와 설정
-
-Three.js 는 조명이 없으면 검은 화면만 보이게 됩니다.
-
-이번 포스팅에서는 조명의 종류와 특징, 설정 방법에 대해 정리하고자 합니다.
-
-
-
-<br />
-
-
-
-## 조명 종류
-
-조명의 종류는 다음과 같습니다.
-
-* DirectionalLight
-* PointLight
-* AmbientLight
-* HemisphereLight
-
-그리고 개발환경에서 조명의 광원 위치를 파악하기 쉽게 도와주는 **Helper class** 가 있습니다.
-
-자세한 사항은 각 조명과 함께 정리하겠습니다.
-
-
-
-<br />
-
-
-
-## 예시 코드
-
-이번 포스팅에서 사용할 예시 코드는 다음과 같습니다.
-
-```js title="예시 코드" showLineNumbers {94}
-import {
-    WebGLRenderer,
-    Scene,
-    PerspectiveCamera,
-
-    SphereGeometry,
-    MeshStandardMaterial,
-    Mesh,
-
-    Color,
-
-    DirectionalLight,
-    DirectionalLightHelper,
-} from 'three';
-import './style.css';
-import {
-    OrbitControls,
-} from 'three/examples/jsm/controls/OrbitControls';
-
-/** @type { WebGLRenderer } */
-let renderer;
-
-/** @type { Scene } */
-let scene;
-
-/** @type { PerspectiveCamera } */
-let camera;
-
-/** @type { OrbitControls } */
-let controls;
-
-function initCanvas() {
-    const $canvas = document.createElement('canvas');
-    $canvas.width = window.innerWidth;
-    $canvas.height = window.innerHeight;
-
-    const $app = document.querySelector('#app');
-    $app.appendChild($canvas);
-
-    return $canvas;
-}
-
-function initRenderer($canvas) {
-    renderer = new WebGLRenderer({
-        canvas: $canvas,
-        antialias: true,
-    });
-}
-
-function initScene() {
-    scene = new Scene();
-}
-
-function initCamera() {
-    camera = new PerspectiveCamera();
-    camera.fov = 35;
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.position.set(0, 0, 10);
-
-    camera.updateProjectionMatrix();
-}
-
-function initControls($canvas) {
-    controls = new OrbitControls(camera, $canvas);
-    controls.enableDamping = true;
-}
-
-function createSphere() {
-    const geometry = new SphereGeometry();
-    const material = new MeshStandardMaterial();
-    const sphere = new Mesh(geometry, material);
-
-    return sphere;
-}
-
-function render() {
-    requestAnimationFrame(render);
-
-    renderer.render(scene, camera);
-    controls.update();
-}
-
-function init() {
-    const $canvas = initCanvas();
-
-    initRenderer($canvas);
-    initScene();
-    initCamera();
-    initControls($canvas);
-
-    const sphere = createSphere();
-    scene.add(sphere);
-
-    // 여기에서 `조명 설정` 함수를 호출하며 실습할 예정입니다.
-
-    render();
-}
-
-init();
-```
-
-
-
-<br />
-
-
-
-## DirectionalLight
-
-DirectionalLight 는 **광원** 에서 **특정 지점(lookAt(좌표))** 로 비추는 **단방향 조명** 입니다.
-
-물체에 비추는 빛의 양은 광원과의 거리와 무관한 빛의 세기(intensity) 설정값이 적용됩니다.
-
-<br />
-
-```js title="DirectionalLight import 하기" showLineNumbers
-import {
-    DirectionalLight,
-} from 'three';
-```
-
-```js title="DirectionalLight" showLineNumbers{83} {9, 14-18}
-function init() {
-    initRenderer(initCanvas());
-    initCamera();
-    initScene();
-
-    const sphere = createSphere();
-    scene.add(sphere);
-
-    initDirectionalLight();
-
-    render();
-}
-
-function initDirectionalLight() {
-    const light = new DirectionalLight();
-    light.position.set(1, 1, 1);
-    scene.add(light);
-}
-
-init();
-```
-
-<br />
-
-DirectionalLight 생성자에 인자로 **Color 객체** 를 넘겨주어 빛의 색상을 변경할 수 있습니다.
-
-**Color** 는 Three.js 에서 제공하는 class 이며, Three.js 의 색상관련 설정은 **Color 인스턴스** 를 받습니다.
-
-```js title="Color import 하기" showLineNumbers
-import {
-    Color,
-} from 'three';
-```
-
-```js title="DirectionalLight 색상 설정하기" showLineNumbers{83} {15}
-function init() {
-    initRenderer(initCanvas());
-    initCamera();
-    initScene();
-
-    const sphere = createSphere();
-    scene.add(sphere);
-
-    initDirectionalLight();
-
-    render();
-}
-
-function initDirectionalLight() {
-    const color = new Color('#f0f400');
-    const light = new DirectionalLight(color);
-    light.position.set(1, 1, 1);
-
-    scene.add(light);
-}
-
-init();
-```
-
-<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-01.png" alt="DirectionalLight" />
-
-
-
-<br />
-
-
-
-### DirectionalLightHelper
-
-DirectionalLight 의 광원을 표기해주는 기능을 사용해 보겠습니다.
-
-DirectionalLightHelper 인스턴스를 생성한 후, `scene.add()` 를 사용하여 등록해 줍니다.
-
-```js title="DirectionalLightHelper import 하기" showLineNumbers {3}
-import {
-    DirectionalLight,
-    DirectionalLightHelper,
-} from 'three';
-```
-
-```js title="DirectionalLight 색상 설정하기" showLineNumbers{83} {20-21}
-function init() {
-    initRenderer(initCanvas());
-    initCamera();
-    initScene();
-
-    const sphere = createSphere();
-    scene.add(sphere);
-
-    initDirectionalLight();
-
-    render();
-}
-
-function initDirectionalLight() {
-    const color = new Color('#f0f400');
-    const light = new DirectionalLight(color);
-    light.position.set(1, 1, 1);
-    scene.add(light);
-
-    const helper = new DirectionalLightHelper(light);
-    scene.add(helper);
-}
-
-init();
-```
-
-<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-02.png" alt="DirectionalLightHelper" />
-
-
-
-<br />
-
-
-
-## 빛의 세기(intensity) 설정하기
-
-조명은 빛의 세기(intensity) 가 있습니다.
-
-Three.js 의 모든 조명에도 빛의 세기(intensity) 를 설정할 수 있습니다.
-
-빛의 세기 값은 **0 ~ 1** 값으로 설정합니다.
-
-아래 코드는 DirectionalLight 에 빛의 세기(intensity) 를 0.75 로 설정하고 있습니다.
-
-```js title="DirectionalLight 색상 설정하기" showLineNumbers{83} {18}
-function init() {
-    initRenderer(initCanvas());
-    initCamera();
-    initScene();
-
-    const sphere = createSphere();
-    scene.add(sphere);
-
-    initDirectionalLight();
-
-    render();
-}
-
-function initDirectionalLight() {
-    const color = new Color('#f0f400');
-    const light = new DirectionalLight(
-        color, 
-        0.75
-    );
-    light.position.set(1, 1, 1);
-    scene.add(light);
-
-    const helper = new DirectionalLightHelper(light);
-    scene.add(helper);
-}
-
-init();
-```
-
-
-
-<br />
-
-
-
-## PointLight
-
-전등처럼 한 점에서 빛을 방사하는 조명 입니다.
-
-사용방법은 다음과 같습니다.
-
-```js title="PointLight import 하기" showLineNumbers
-import {
-    PointLight,
-    PointLightHelper,
-} from 'three';
-```
-
-```js title="PointLight 색상 설정하기" showLineNumbers{83} {9, 14-25}
-function init() {
-    initRenderer(initCanvas());
-    initCamera();
-    initScene();
-
-    const sphere = createSphere();
-    scene.add(sphere);
-
-    initPointLight();
-
-    render();
-}
-
-function initPointLight() {
-    const color = new Color('#f0f400');
-    const light = new PointLight(
-        color,
-        0.75 // 빛의 세기(intensity)
-    );
-    light.position.set(1, 1, 1);
-    scene.add(light);
-
-    const helper = new PointLightHelper(light);
-    scene.add(helper);
-}
-
-init();
-```
-
-<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-03.png" alt="PointLight" />
-
-
-
-<br />
-
-
-
-## AmbientLight
-
-Ambient 는 `주변` 이라는 뜻을 가지고 있습니다.
-
-AmbientLight 는 특정한 광원이 없고, 모든 영역에 동일하게 비추는 조명입니다.
-
-즉 `(x, y, z)` 에 관계없이 동일한 빛을 비춥니다.
-
-<br />
-
-AmbientLight 가 적용된 결과를 확인하기 위해, PointLight 와 함께 사용해 보겠습니다.
-
-```js title="PointLight import 하기" showLineNumbers {5}
-import {
-    PointLight,
-    PointLightHelper,
-
-    AmbientLight,
-} from 'three';
-```
-
-```js title="PointLight 색상 설정하기" showLineNumbers{83} {10, 28-35}
-function init() {
-    initRenderer(initCanvas());
-    initCamera();
-    initScene();
-
-    const sphere = createSphere();
-    scene.add(sphere);
-
-    initPointLight();
-    initAmbientLight();
-
-    render();
-}
-
-function initPointLight() {
-    const color = new Color('#f0f400');
-    const light = new PointLight(
-        color,
-        0.75 // 빛의 세기(intensity)
-    );
-    light.position.set(1, 1, 1);
-    scene.add(light);
-
-    const helper = new PointLightHelper(light);
-    scene.add(helper);
-}
-
-function initAmbientLight() {
-    const color = new Color('#fff');
-    const light = new AmbientLight(
-        color,
-        0.25, // 빛의 세기(intensity)
-    );
-    scene.add(light);
-}
-
-init();
-```
-
-<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-04.png" alt="AmbientLight" />
-
-<br />
-
-그리고 AmbientLight 는 모든 영역에 비추는 조명이므로, **Helper class 가 없다는 특징** 이 있습니다.
-
-
-
-<br />
-
-
-
-## HemisphereLight
-
-HemisphereLight 는 위쪽(skyColor) 와 아래쪽(groundColor) 를 인자로 받고, 그라데이션으로 비추는 조명입니다.
-
-일반적으로 기본 조명으로 사용하는데, 이는 Three.js 특성 때문입니다.
-
-* 조명이 없으면, 물체(Mesh) 는 보이지 않는 검은 화면만 렌더링 됩니다.
-* 다른 조명에 의해 생기는 그림자를 좀 더 자연스럽고 부드럽게 만들어줍니다.
-
-<br />
-
-아래 코드는 HemisphereLight 와 DirectionalLight 를 조합한 예시 입니다.
-
-```js title="PointLight import 하기" showLineNumbers {5-6}
-import {
-    DirectionalLight,
-    DirectionalLightHelper,
-
-    HemisphereLight,
-    HemisphereLightHelper,
-} from 'three';
-```
-
-```js title="PointLight 색상 설정하기" showLineNumbers{83} {10, 28-40}
-function init() {
-    initRenderer(initCanvas());
-    initCamera();
-    initScene();
-
-    const sphere = createSphere();
-    scene.add(sphere);
-
-    initDirectionalLight();
-    initHemisphereLight();
-
-    render();
-}
-
-function initDirectionalLight() {
-    const color = new Color('#fff');
-    const light = new DirectionalLight(
-        color,
-        0.75 // 빛의 세기(intensity)
-    );
-    light.position.set(1, 1, 1);
-    scene.add(light);
-
-    const helper = new PointLightHelper(light);
-    scene.add(helper);
-}
-
-function initHemisphereLight() {
-    const skyColor = new Color('#fff');
-    const groundColor = new Color('#000');
-    const light = new HemisphereLight(
-        skyColor,
-        groundColor,
-        0.25, // 빛의 세기(intensity)
-    );
-    scene.add(light);
-
-    const helper = new HemisphereLightHelper(light);
-    scene.add(helper);
-}
-
-init();
-```
-
-<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-05.png" alt="Hemisphere" />
-
-
-
-<br />
-
-
-
-## 마치며
-
-일반적으로 DirectionalLight 와 HemisphereLight 를 조합하여 기본 조명을 구성합니다.
-
-각 설정은 다음과 같습니다.
-
-```js title="일반적인 조명 설정" showLineNumbers
-function initDirectionalLight() {
-    const color = new Color('#fff');
-    const light = new DirectionalLight(
-        color,
-        0.75 // HemispherLight 보다 0.5 강하게 설정합니다.
-    );
-    scene.add(light);
-}
-
-function initHemisphereLight() {
-    const skyColor = new Color('#fff');
-    const groundColor = new Color('#000');
-    const light = new HemisphereLight(
-        skyColor,
-        groundColor,
-        0.25 // DirectionalLight 보다 0.5 약하게 설정합니다.
-    );
-    scene.add(light);
-}
-```
-
-<br />
-
-HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보이지 않도록 해주며, 좀 더 자연스러운 조명을 연출할 수 있습니다.
-
-그리고 PointLight 는 특정 물체를 강조하거나 효과를 주기위해 주로 사용합니다.
-
-<br />
-
-Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
-10:T3ac1,---
-id: 2
-title: 카메라 설정 (PerspectiveCamera)
-description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
-thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
-
-featured: false
-tags: [
-    'threejs',
-    'javascript',
-    '3d',
-    'camera',
-]
-
-createdAt: '2024-01-01 23:50:00'
-modifiedHistories: []
----
-
-# 카메라 설정 (PerspectiveCamera)
-
-Three.js 가 `<canvas />` 에 실제로 렌더링하는 부분은 `카메라 (PerspectiveCamera)` 가 비추는 영역입니다.
-
-이번 포스팅에서는 카메라 설정과 효과, 사용자 인터렉션 적용 방법에 대해 정리해 보겠습니다.
-
-이번 포스팅에서는 아래의 코드를 시작점으로 사용하겠습니다.
-
-```js title="샘플 코드" showLineNumbers
-import {
-    WebGLRenderer,
-    PerspectiveCamera,
-    Scene,
-    DirectionalLight,
-
-    BoxGeometry,
-    MeshPhongMaterial,
-    Mesh,
-} from 'three';
-import './style.css';
-
-/** @type { WebGLRenderer } */
-let renderer;
-
-/** @type { PerspectiveCamera } */
-let camera;
-
-/** @type { Scene } */
-let scene;
-
-(function init() {
-    const $canvas = initCanvas();
-
-    initRenderer($canvas);
-
-    const light = createLight();
-    const boxMesh = createBoxMesh();
-
-    initCamera();
-    initScene(light, boxMesh);
-
-    render();
-
-    console.log('시작');
-}());
-
-function render() {
-    renderer.render(scene, camera);
-
-    window.requestAnimationFrame(render);
-}
-
-function initCanvas() {
-    const $canvas = document.createElement('canvas');
-
-    const $app = document.querySelector('#app');
-    $app.appendChild($canvas);
-
-    return $canvas;
-}
-
-/**
- * @param { HTMLCanvasElement } $canvas 
- */
-function initRenderer($canvas) {
-    renderer = new WebGLRenderer({
-        canvas: $canvas,
-        antialias: true,
-    });
-
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
-}
-
-function createLight() {
-    const light = new DirectionalLight();
-    light.position.set(1, 2, 3);
-
-    return light;
-}
-
-function createBoxMesh() {
-    const boxGeometry = new BoxGeometry();
-    const boxMaterial = new MeshPhongMaterial();
-
-    return new Mesh(boxGeometry, boxMaterial);
-}
-
-function initCamera() {
-    camera = new PerspectiveCamera(
-        45,
-        window.innerWidth / window.innerHeight
-    );
-
-    camera.position.set(0, 0, 5);
-}
-
-function initScene(...items) {
-    scene = new Scene();
-
-    items.forEach(item => {
-        scene.add(item);
-    });
-}
-```
-
-
-
-<br />
-
-
-
-## PerspectiveCamera 생성자 params
-
-카메라 생성자 params 를 사용하여 초기 설정을 할 수 있습니다.
-
-```ts title="PerspectiveCamera 생성자 함수" showLineNumbers
-class PerspectiveCamera {
-    constructor(
-        fov?: number,
-        aspect?: number,
-        near?: number,
-        far?: number
-    );
-}
-```
-
-* fov (Field of View): 시야각 (화각)
-    * fov 설정값이 클수록 먼 거리에서 보는 느낌이 납니다.
-    * fov 설정값이 커질수록 **투시에 따른 왜곡현상** 이 도드라지게 나타납니다.
-* aspect: 카메라 종횡비 (aspect radio)
-    * 카메라의 가로, 세로 비율값 입니다.
-* near: (Near clipping)
-    * 카메라를 기준으로 가까운 물체(Mesh) 에 대한 렌더링 잘라내기 설정값 입니다.
-* far: (Far clipping)
-    * 카메라를 기준으로 먼 물체(Mesh) 에 대한 렌더링 잘라내기 설정값 입니다.
-
-<br />
-
-위 설정들은 PerspectiveCamera 생성자를 통해서도 설정할 수 있고, 객체를 생성한 후 설정을 변경할 수도 있습니다.
-
-만약 객체를 생성한 후 설정을 변경한다면, 카메라 메소드인 **updateProjectionMatrix()** 함수를 호출하여야 실제 렌더링에 반영됩니다.
-
-아래 코드는 PerspectiveCamera 객체를 생성한 후, 카메라 설정을 변경하고 있습니다.
-
-```js title="카메라 객체 설정값 변경하기" showLineNumbers {88, 89, 92}
-import {
-    WebGLRenderer,
-    PerspectiveCamera,
-    Scene,
-    DirectionalLight,
-
-    BoxGeometry,
-    MeshPhongMaterial,
-    Mesh,
-} from 'three';
-import './style.css';
-
-/** @type { WebGLRenderer } */
-let renderer;
-
-/** @type { PerspectiveCamera } */
-let camera;
-
-/** @type { Scene } */
-let scene;
-
-(function init() {
-    const $canvas = initCanvas();
-
-    initRenderer($canvas);
-
-    const light = createLight();
-    const boxMesh = createBoxMesh();
-
-    initCamera();
-    initScene(light, boxMesh);
-
-    render();
-
-    console.log('시작');
-}());
-
-function render() {
-    renderer.render(scene, camera);
-
-    window.requestAnimationFrame(render);
-}
-
-function initCanvas() {
-    const $canvas = document.createElement('canvas');
-
-    const $app = document.querySelector('#app');
-    $app.appendChild($canvas);
-
-    return $canvas;
-}
-
-/**
- * @param { HTMLCanvasElement } $canvas 
- */
-function initRenderer($canvas) {
-    renderer = new WebGLRenderer({
-        canvas: $canvas,
-        antialias: true,
-    });
-
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
-}
-
-function createLight() {
-    const light = new DirectionalLight();
-    light.position.set(1, 2, 3);
-
-    return light;
-}
-
-function createBoxMesh() {
-    const boxGeometry = new BoxGeometry();
-    const boxMaterial = new MeshPhongMaterial();
-
-    return new Mesh(boxGeometry, boxMaterial);
-}
-
-function initCamera() {
-    camera = new PerspectiveCamera(
-        // 45,
-        // window.innerWidth / window.innerHeight
-    );
-
-    camera.fov = 45;
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.position.set(0, 0, 3);
-
-    camera.updateProjectionMatrix();
-}
-
-function initScene(...items) {
-    scene = new Scene();
-
-    items.forEach(item => {
-        scene.add(item);
-    });
-}
-```
-
-<br />
-
-위 코드의 실행 결과로 BoxMesh 의 단면을 볼 수 있습니다.
-
-<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-01.png" alt="실행 결과" />
-
-
-
-<br />
-
-
-
-## 카메라의 주시 좌표값 변경하기
-
-현재는 BoxMesh 의 단면만을 비추고 있어서 마치 2D 인것 처럼 보입니다.
-
-카메라의 위치와 카메라의 주시 좌표값을 변경하면, 물체를 다각도에서 다양한 구도로 렌더링할 수 있습니다.
-
-<br />
-
-먼저 카메라의 위치를 (1, 1, 2) 로 변경해 보겠습니다.
-
-```js title="카메라 position 변경" showLineNumbers{82} {6}
-function initCamera() {
-    camera = new PerspectiveCamera();
-
-    camera.fov = 45;
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.position.set(1, 1, 2);
-
-    camera.updateProjectionMatrix();
-}
-```
-
-<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-02.png" alt="실행 결과" />
-
-<br />
-
-카메라의 position 만을 변경한 결과, BoxMesh 의 일부분만 렌더링되고 있습니다.
-
-이는 카메라의 주시 좌표값을 설정하지 않아서 카메라 위치에서 정면을 주시하고 있기 때문입니다.
-
-카메라 객체의 `lookAt()` 메소드를 사용하면, 카메라의 위치인 position 에서 특정 좌표를 주시하게 됩니다.
-
-BoxMesh 가 카메라의 중앙에 오도록 하기위해, BoxMesh 의 position 위치값인 (0, 0, 0) 으로 카메라 주시 좌표를 설정해 보겠습니다.
-
-```js title="카메라 position 변경" showLineNumbers{82} {8}
-function initCamera() {
-    camera = new PerspectiveCamera();
-
-    camera.fov = 45;
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.position.set(1, 1, 2);
-
-    camera.lookAt(0, 0, 0);
-
-    camera.updateProjectionMatrix();
-}
-```
-
-<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-03.png" alt="실행 결과" />
-
-
-
-<br />
-
-
-
-## 카메라 fov 와 position 설정에 따른 왜곡 현상
-
-fov(Field of View) 값이 커질수록 멀리서 보는 느낌으로 렌더링됩니다.
-
-이는 물체가 더 작게 보이는 결과를 볼 수 있습니다.
-
-<br />
-
-만약 fov 를 큰 값으로 설정하여 물체가 작게 보이도록 한 후, 카메라의 위치를 물체와 가깝게 설정하면 어떻게 될까요?
-
-이는 카메라의 **왜곡 현상** 에 의해 좀 더 렌즈의 굴곡이 커지게 됩니다.
-
-fov 와 position 의 관계를 표현해 보면 다음과 같습니다.
-
-* fov 작게 설정, position 멀리 설정
-    * 왜곡 현상이 적어집니다.
-* fov 크게 설정, position 가깝게 설정
-    * 왜곡 현상이 커집니다.
-
-<br />
-
-실제 왜곡 현상의 차이를 확인하기 위해 두가지 설정을 비교해 보겠습니다.
-
-* 첫번째 설정: **fov 작게, position 멀리** 설정
-* 두번째 설정: **fov 크게, position 가깝게** 설정
-
-```js title="fov 작게, position 멀리 설정" showLineNumbers{82} {5-6}
-function initCamera() {
-    camera = new PerspectiveCamera();
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.fov = 45;
-    camera.position.set(2, 2, 2);
-
-    camera.lookAt(0, 0, 0);
-
-    camera.updateProjectionMatrix();
-}
-```
-
-<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-04.png" alt="실행 결과" />
-
-<br /><br />
-
-```js title="fov 크게, position 가깝게 설정" showLineNumbers{82} {5-6}
-function initCamera() {
-    camera = new PerspectiveCamera();
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.fov = 90;
-    camera.position.set(1, 1, 1);
-
-    camera.lookAt(0, 0, 0);
-
-    camera.updateProjectionMatrix();
-}
-```
-
-<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-05.png" alt="실행 결과" />
-
-
-
-<br />
-
-
-
-## 추가: 마우스를 사용하여 카메라 제어하기
-
-Three.js 는 여러가지 Addons 를 제공합니다.
-
-이 중 **OrbitControls** 객체를 사용하면, 마우스를 사용하여 카메라를 제어하는 기능을 제공할 수 있습니다.
-
-<br />
-
-OrbitControls 는 **PerspectiveCamera 의 Addon** 개념으로 사용하게 되며, 카메라의 제어를 담당하게 됩니다.
-
-주의할 점은 PerspectiveCamera 의 `lookAt()` 메소드를 함께 사용하게 되면, 카메라 제어에 충돌이 발생하는 현상입니다.
-
-그러므로 OrbitControls 를 사용하려면, `lookAt()` 메소드는 꼭 제거해 주는 것이 좋습니다.
-
-<br />
-
-먼저 OrbitControls 의 생성자를 살펴보면 다음과 같습니다.
-
-```ts
-class OrbitControls {
-    constructor(
-        object: Camera, 
-        domElement?: HTMLElement
-    );
-}
-```
-
-* object: 제어할 카메라 객체
-* domElement: 마우스 이벤트를 발생시킬 HTMLElement
-
-<br />
-
-PerspectiveCamera 에 OrbitControls 를 적용하는 `initControls()` 함수를 추가해 보겠습니다.
-
-```js title="OrbitControls 로 카메라 제어하기" showLineNumbers {11-13, 25-26, 37, 45, 103-108}
-import {
-    WebGLRenderer,
-    PerspectiveCamera,
-    Scene,
-    DirectionalLight,
-
-    BoxGeometry,
-    MeshPhongMaterial,
-    Mesh,
-} from 'three';
-import {
-    OrbitControls,
-} from 'three/examples/jsm/controls/OrbitControls'
-import './style.css';
-
-/** @type { WebGLRenderer } */
-let renderer;
-
-/** @type { PerspectiveCamera } */
-let camera;
-
-/** @type { Scene } */
-let scene;
-
-/** @type { OrbitControls } */
-let controls;
-
-(function init() {
-    const $canvas = initCanvas();
-
-    initRenderer($canvas);
-
-    const light = createLight();
-    const boxMesh = createBoxMesh();
-
-    initCamera();
-    initControls($canvas);
-    initScene(light, boxMesh);
-
-    render();
-}());
-
-function render() {
-    renderer.render(scene, camera);
-    controls.update();
-
-    window.requestAnimationFrame(render);
-}
-
-function initCanvas() {
-    const $canvas = document.createElement('canvas');
-
-    const $app = document.querySelector('#app');
-    $app.appendChild($canvas);
-
-    return $canvas;
-}
-
-/**
- * @param { HTMLCanvasElement } $canvas 
- */
-function initRenderer($canvas) {
-    renderer = new WebGLRenderer({
-        canvas: $canvas,
-        antialias: true,
-    });
-
-    renderer.setSize(
-        window.innerWidth,
-        window.innerHeight
-    );
-}
-
-function createLight() {
-    const light = new DirectionalLight();
-    light.position.set(1, 2, 3);
-
-    return light;
-}
-
-function createBoxMesh() {
-    const boxGeometry = new BoxGeometry();
-    const boxMaterial = new MeshPhongMaterial();
-
-    return new Mesh(boxGeometry, boxMaterial);
-}
-
-function initCamera() {
-    camera = new PerspectiveCamera();
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.fov = 45;
-    camera.position.set(2, 2, 2);
-
-    camera.fov = 90;
-    camera.position.set(1, 1, 1);
-
-    camera.lookAt(0, 0, 0);
-
-    camera.updateProjectionMatrix();
-}
-
-/**
- * @param { HTMLElement } $targetElement 
- */
-function initControls($targetElement) {
-    controls = new OrbitControls(camera, $targetElement);
-}
-
-function initScene(...items) {
-    scene = new Scene();
-
-    items.forEach(item => {
-        scene.add(item);
-    });
-}
-```
-
-<br />
-
-OrbitControls 를 카메라에 설치하게 되면 아래와 같은 마우스 인터렉션을 사용할 수 있습니다.
-
-* 마우스 좌클릭 - 드래그
-    * 카메라 주시 좌표를 회전 중심점으로 하여, **드래그 반대 방향으로 카메라를 회전** 시킵니다.
-    * 결과적으로 카메라가 고정된 상태에서 **바라보는 물체가 회전** 하게 됩니다.
-* 마우스 휠
-    * 확대, 축소 동작을 합니다.
-* 마우스 우클릭 - 드래그
-    * **드래그 반대 방향으로 카메라의 위치를 이동** 시킵니다.
-    * 결과적으로 카메라가 고정된 상태에서 **바라보는 물체가 이동** 하게 됩니다.
-
-<br />
-
-OrbitControls 객체의 설정을 사용하여, 특정 마우스 인터렉션의 사용 여부를 설정할 수 있습니다.
-
-이 설정 프로퍼티들은 `enable` 을 접두사로 사용하고 있습니다.
-
-* `enableRotate`: `false` 값을 대입하면, 회전기능을 막습니다.
-* `enableZoom`: `false` 값을 대입하면 확대, 축소 기능을 막습니다.
-* `enablePan`: `false` 값을 대입하면 이동 기능을 막습니다.
-
-<br />
-
-추가로 `enableDamping` 에 `true` 값을 대입하게 되면, 카메라의 모든 인터렉션에 감속도가 적용되어 **카메라의 부드러운 움직임이 연출** 됩니다.
-
-
-
-<br />
-
-
-
-## 마치며
-
-일전에 HTML Canvas API 를 스터디하면서, 도형에 대한 인터렉션이나 애니메이션을 구현해본 적이 있습니다.
-
-물체의 튕김이나 가속도, 감속도를 구현해 보려는 시도를 했었지만, 제가 구현한 결과물은 너무나 어색했습니다.
-
-Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드러운 3D 엔진에 그저 놀라울 뿐입니다.
-
-<br />
-
-하지만 실제 구현할 기획에 따라 엔진의 물리 효과를 커스터마이징을 할 수 있어야 자연스러운 결과물이 나올 것 같습니다.
-
-OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
-
-Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
-11:T5077,---
+f:T5076,---
 id: 1
 title: Three.js 설치 및 실행
 description: 'Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.'
 thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
 
-featured: false
+featured: true
 tags: [
     'threejs',
     'javascript',
@@ -2089,4 +911,1480 @@ Three.js 를 처음 시작하며 제가 느낀 어려움으로는 컴퓨터 그�
 단순히 Three.js 사용법을 익히는 것만으로 원하는 결과물을 얻기는 어려워 보입니다.
 
 지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
-d:["$","$Le",null,{"featuredMarkdownFileDataList":[],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$11"}]}]
+10:T1a79,---
+id: 4
+title: 평평한 바닥(땅) 만들기 (Plane Mesh)
+description: '바닦을 표현하기 위해 Plane Mesh 를 생성합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    'plane',
+]
+
+createdAt: '2024-01-07 23:20:00'
+modifiedHistories: []
+---
+
+# 평평한 바닥(땅) 만들기 (Plane Mesh)
+
+이번 포스팅에서는 바닥(땅) 을 만들어 보겠습니다.
+
+Three.js 에서는 바닥(땅) 을 **Plane Mesh** 로 만들 수 있습니다.
+
+다음 포스팅에서 다룰 그림자를 표현하려면, 바닦(땅) 이 있어야 하므로 별도의 포스팅으로 분리하게 되었습니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이번 포스팅에서 사용할 예시 코드는 다음과 같습니다.
+
+```js title="예시 코드" showLineNumbers {96}
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Mesh,
+    MeshStandardMaterial,
+    SphereGeometry,
+
+    Color,
+    HemisphereLight,
+    HemisphereLightHelper,
+    DirectionalLight,
+    DirectionalLightHelper,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 35;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(0, 0, 12);
+
+    camera.updateProjectionMatrix();
+}
+
+function initControls($canvas) {
+    controls = new OrbitControls(camera, $canvas);
+    controls.enableDamping = true;
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#fff');
+    const groundColor = new Color('#000');
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        0.75
+    );
+
+    const helper = new HemisphereLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+
+function initDirectionalLight() {
+    const color = new Color('#fff');
+    const light = new DirectionalLight(color);
+    light.position.set(2, 2, 2);
+
+    const helper = new DirectionalLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+
+function initSphereMesh() {
+    const geometry = new SphereGeometry();
+    const material = new MeshStandardMaterial();
+    const sphere = new Mesh(geometry, material);
+
+    scene.add(sphere);
+}
+
+// 여기에 Plane Mesh(바닥) 을 생성하는 함수를 구현할 예정입니다.
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+}
+
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls.update();
+}
+
+(function init() {
+    const $canvas = initCanvas();
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initHemisphereLight();
+    initDirectionalLight();
+
+    initSphereMesh();
+
+    render();
+}());
+```
+
+
+
+<br />
+
+
+
+## Plane Mesh 생성 함수 만들기
+
+Plane Mesh 는 **PlaneGeometry** class 를 사용하여 생성할 수 있습니다.
+
+```js title="PlaneGeometry class import 하기" showLineNumbers {9}
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Mesh,
+    MeshStandardMaterial,
+    SphereGeometry,
+    PlaneGeometry,
+
+    Color,
+    HemisphereLight,
+    HemisphereLightHelper,
+    DirectionalLight,
+    DirectionalLightHelper,
+} from 'three';
+```
+
+```js title="initPlaneMesh() 함수 구현하기" showLineNumbers{97}
+function initPlaneMesh() {
+    const geometry = new PlaneGeometry();
+    const material = new MeshStandardMaterial();
+    const plane = new Mesh(geometry, material);
+    plane.position.set(0, -1, 0);
+
+    scene.add(plane);
+}
+```
+
+```js title="initPlaneMesh 함수 호출하기" showLineNumbers{120} {12}
+(function init() {
+    const $canvas = initCanvas();
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initHemisphereLight();
+    initDirectionalLight();
+
+    initSphereMesh();
+    initPlaneMesh();
+
+    render();
+}());
+```
+
+<img src="/markdownAssets/threejs/2024-01-07-01/2024-01-07-01-01.png" alt="PlaneMesh" />
+
+
+
+<br />
+
+
+
+## Plane Mesh 회전 및 크기 변경하기
+
+위 코드를 실행하면, Sphere 하부에 사각형 물체가 렌더링됩니다.
+
+**width**, **height**, **rotation** 을 변경하여 바닥(땅) 처럼 보이도록 설정해 보겠습니다.
+
+```js title="initPlaneMesh() 함수 구현하기" showLineNumbers{97} {2, 6-10}
+function initPlaneMesh() {
+    const geometry = new PlaneGeometry(5, 5);
+    const material = new MeshStandardMaterial();
+    const plane = new Mesh(geometry, material);
+    plane.position.set(0, -1, 0);
+    plane.rotation.set(
+        Math.PI * -0.5, 
+        0, 
+        0
+    );
+
+    scene.add(plane);
+}
+```
+
+<br />
+
+PlaneGeometry class 는 생성자에 **width** 와 **height** 를 넘겨주어 크기를 설정할 수 있습니다.
+
+```js title="width, height 설정" showLineNumbers{98}
+const geometry = new PlaneGeometry(5, 5);
+```
+
+<br />
+
+그리고 Plane Mesh 인스턴스의 `rotation.set()` 메소드를 사용하여 회전시킬 수 있습니다.
+
+회전시킬 값은 **Radian** 으로 넘겨주어야 하므로, **Math.PI** 를 사용합니다.
+
+```js title="회전 시키기" showLineNumbers{102} {2}
+plane.rotation.set(
+    Math.PI * -0.5, 
+    0, 
+    0
+);
+```
+
+위 코드에서 X축 회전으로 `Math.PI * -0.5` 를 주었는데, 이는 아래와 같은 Plane Mesh 의 특성으로 고려한 것입니다.
+
+* Plane Mesh 는 한쪽면만 렌더링되는 단면 물체 입니다.
+* 렌더링되지 않는 반대쪽 면에는 그림자가 드리우지 않습니다.
+
+<br />
+
+이렇게 실행한 결과는 다음과 같습니다.
+
+<img src="/markdownAssets/threejs/2024-01-07-01/2024-01-07-01-02.png" alt="PlaneMesh 설정" />
+
+<br />
+
+카메라를 회전시켜서 Plane Mesh 의 반대쪽 면을 보면, 렌더링되지 않은 결과를 볼 수 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-07-01/2024-01-07-01-03.png" alt="PlaneMesh 반대면" />
+
+
+
+## 마치며
+
+Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
+
+다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
+11:T2eef,---
+id: 3
+title: 조명 종류와 설정
+description: '조명 종류와 설정 방법에 대해 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    'light',
+]
+
+createdAt: '2024-01-06 23:00:00'
+modifiedHistories: []
+---
+
+# 조명 종류와 설정
+
+Three.js 는 조명이 없으면 검은 화면만 보이게 됩니다.
+
+이번 포스팅에서는 조명의 종류와 특징, 설정 방법에 대해 정리하고자 합니다.
+
+
+
+<br />
+
+
+
+## 조명 종류
+
+조명의 종류는 다음과 같습니다.
+
+* DirectionalLight
+* PointLight
+* AmbientLight
+* HemisphereLight
+
+그리고 개발환경에서 조명의 광원 위치를 파악하기 쉽게 도와주는 **Helper class** 가 있습니다.
+
+자세한 사항은 각 조명과 함께 정리하겠습니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이번 포스팅에서 사용할 예시 코드는 다음과 같습니다.
+
+```js title="예시 코드" showLineNumbers {94}
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    SphereGeometry,
+    MeshStandardMaterial,
+    Mesh,
+
+    Color,
+
+    DirectionalLight,
+    DirectionalLightHelper,
+} from 'three';
+import './style.css';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 35;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(0, 0, 10);
+
+    camera.updateProjectionMatrix();
+}
+
+function initControls($canvas) {
+    controls = new OrbitControls(camera, $canvas);
+    controls.enableDamping = true;
+}
+
+function createSphere() {
+    const geometry = new SphereGeometry();
+    const material = new MeshStandardMaterial();
+    const sphere = new Mesh(geometry, material);
+
+    return sphere;
+}
+
+function render() {
+    requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls.update();
+}
+
+function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    const sphere = createSphere();
+    scene.add(sphere);
+
+    // 여기에서 `조명 설정` 함수를 호출하며 실습할 예정입니다.
+
+    render();
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## DirectionalLight
+
+DirectionalLight 는 **광원** 에서 **특정 지점(lookAt(좌표))** 로 비추는 **단방향 조명** 입니다.
+
+물체에 비추는 빛의 양은 광원과의 거리와 무관한 빛의 세기(intensity) 설정값이 적용됩니다.
+
+<br />
+
+```js title="DirectionalLight import 하기" showLineNumbers
+import {
+    DirectionalLight,
+} from 'three';
+```
+
+```js title="DirectionalLight" showLineNumbers{83} {9, 14-18}
+function init() {
+    initRenderer(initCanvas());
+    initCamera();
+    initScene();
+
+    const sphere = createSphere();
+    scene.add(sphere);
+
+    initDirectionalLight();
+
+    render();
+}
+
+function initDirectionalLight() {
+    const light = new DirectionalLight();
+    light.position.set(1, 1, 1);
+    scene.add(light);
+}
+
+init();
+```
+
+<br />
+
+DirectionalLight 생성자에 인자로 **Color 객체** 를 넘겨주어 빛의 색상을 변경할 수 있습니다.
+
+**Color** 는 Three.js 에서 제공하는 class 이며, Three.js 의 색상관련 설정은 **Color 인스턴스** 를 받습니다.
+
+```js title="Color import 하기" showLineNumbers
+import {
+    Color,
+} from 'three';
+```
+
+```js title="DirectionalLight 색상 설정하기" showLineNumbers{83} {15}
+function init() {
+    initRenderer(initCanvas());
+    initCamera();
+    initScene();
+
+    const sphere = createSphere();
+    scene.add(sphere);
+
+    initDirectionalLight();
+
+    render();
+}
+
+function initDirectionalLight() {
+    const color = new Color('#f0f400');
+    const light = new DirectionalLight(color);
+    light.position.set(1, 1, 1);
+
+    scene.add(light);
+}
+
+init();
+```
+
+<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-01.png" alt="DirectionalLight" />
+
+
+
+<br />
+
+
+
+### DirectionalLightHelper
+
+DirectionalLight 의 광원을 표기해주는 기능을 사용해 보겠습니다.
+
+DirectionalLightHelper 인스턴스를 생성한 후, `scene.add()` 를 사용하여 등록해 줍니다.
+
+```js title="DirectionalLightHelper import 하기" showLineNumbers {3}
+import {
+    DirectionalLight,
+    DirectionalLightHelper,
+} from 'three';
+```
+
+```js title="DirectionalLight 색상 설정하기" showLineNumbers{83} {20-21}
+function init() {
+    initRenderer(initCanvas());
+    initCamera();
+    initScene();
+
+    const sphere = createSphere();
+    scene.add(sphere);
+
+    initDirectionalLight();
+
+    render();
+}
+
+function initDirectionalLight() {
+    const color = new Color('#f0f400');
+    const light = new DirectionalLight(color);
+    light.position.set(1, 1, 1);
+    scene.add(light);
+
+    const helper = new DirectionalLightHelper(light);
+    scene.add(helper);
+}
+
+init();
+```
+
+<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-02.png" alt="DirectionalLightHelper" />
+
+
+
+<br />
+
+
+
+## 빛의 세기(intensity) 설정하기
+
+조명은 빛의 세기(intensity) 가 있습니다.
+
+Three.js 의 모든 조명에도 빛의 세기(intensity) 를 설정할 수 있습니다.
+
+빛의 세기 값은 **0 ~ 1** 값으로 설정합니다.
+
+아래 코드는 DirectionalLight 에 빛의 세기(intensity) 를 0.75 로 설정하고 있습니다.
+
+```js title="DirectionalLight 색상 설정하기" showLineNumbers{83} {18}
+function init() {
+    initRenderer(initCanvas());
+    initCamera();
+    initScene();
+
+    const sphere = createSphere();
+    scene.add(sphere);
+
+    initDirectionalLight();
+
+    render();
+}
+
+function initDirectionalLight() {
+    const color = new Color('#f0f400');
+    const light = new DirectionalLight(
+        color, 
+        0.75
+    );
+    light.position.set(1, 1, 1);
+    scene.add(light);
+
+    const helper = new DirectionalLightHelper(light);
+    scene.add(helper);
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## PointLight
+
+전등처럼 한 점에서 빛을 방사하는 조명 입니다.
+
+사용방법은 다음과 같습니다.
+
+```js title="PointLight import 하기" showLineNumbers
+import {
+    PointLight,
+    PointLightHelper,
+} from 'three';
+```
+
+```js title="PointLight 색상 설정하기" showLineNumbers{83} {9, 14-25}
+function init() {
+    initRenderer(initCanvas());
+    initCamera();
+    initScene();
+
+    const sphere = createSphere();
+    scene.add(sphere);
+
+    initPointLight();
+
+    render();
+}
+
+function initPointLight() {
+    const color = new Color('#f0f400');
+    const light = new PointLight(
+        color,
+        0.75 // 빛의 세기(intensity)
+    );
+    light.position.set(1, 1, 1);
+    scene.add(light);
+
+    const helper = new PointLightHelper(light);
+    scene.add(helper);
+}
+
+init();
+```
+
+<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-03.png" alt="PointLight" />
+
+
+
+<br />
+
+
+
+## AmbientLight
+
+Ambient 는 `주변` 이라는 뜻을 가지고 있습니다.
+
+AmbientLight 는 특정한 광원이 없고, 모든 영역에 동일하게 비추는 조명입니다.
+
+즉 `(x, y, z)` 에 관계없이 동일한 빛을 비춥니다.
+
+<br />
+
+AmbientLight 가 적용된 결과를 확인하기 위해, PointLight 와 함께 사용해 보겠습니다.
+
+```js title="PointLight import 하기" showLineNumbers {5}
+import {
+    PointLight,
+    PointLightHelper,
+
+    AmbientLight,
+} from 'three';
+```
+
+```js title="PointLight 색상 설정하기" showLineNumbers{83} {10, 28-35}
+function init() {
+    initRenderer(initCanvas());
+    initCamera();
+    initScene();
+
+    const sphere = createSphere();
+    scene.add(sphere);
+
+    initPointLight();
+    initAmbientLight();
+
+    render();
+}
+
+function initPointLight() {
+    const color = new Color('#f0f400');
+    const light = new PointLight(
+        color,
+        0.75 // 빛의 세기(intensity)
+    );
+    light.position.set(1, 1, 1);
+    scene.add(light);
+
+    const helper = new PointLightHelper(light);
+    scene.add(helper);
+}
+
+function initAmbientLight() {
+    const color = new Color('#fff');
+    const light = new AmbientLight(
+        color,
+        0.25, // 빛의 세기(intensity)
+    );
+    scene.add(light);
+}
+
+init();
+```
+
+<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-04.png" alt="AmbientLight" />
+
+<br />
+
+그리고 AmbientLight 는 모든 영역에 비추는 조명이므로, **Helper class 가 없다는 특징** 이 있습니다.
+
+
+
+<br />
+
+
+
+## HemisphereLight
+
+HemisphereLight 는 위쪽(skyColor) 와 아래쪽(groundColor) 를 인자로 받고, 그라데이션으로 비추는 조명입니다.
+
+일반적으로 기본 조명으로 사용하는데, 이는 Three.js 특성 때문입니다.
+
+* 조명이 없으면, 물체(Mesh) 는 보이지 않는 검은 화면만 렌더링 됩니다.
+* 다른 조명에 의해 생기는 그림자를 좀 더 자연스럽고 부드럽게 만들어줍니다.
+
+<br />
+
+아래 코드는 HemisphereLight 와 DirectionalLight 를 조합한 예시 입니다.
+
+```js title="PointLight import 하기" showLineNumbers {5-6}
+import {
+    DirectionalLight,
+    DirectionalLightHelper,
+
+    HemisphereLight,
+    HemisphereLightHelper,
+} from 'three';
+```
+
+```js title="PointLight 색상 설정하기" showLineNumbers{83} {10, 28-40}
+function init() {
+    initRenderer(initCanvas());
+    initCamera();
+    initScene();
+
+    const sphere = createSphere();
+    scene.add(sphere);
+
+    initDirectionalLight();
+    initHemisphereLight();
+
+    render();
+}
+
+function initDirectionalLight() {
+    const color = new Color('#fff');
+    const light = new DirectionalLight(
+        color,
+        0.75 // 빛의 세기(intensity)
+    );
+    light.position.set(1, 1, 1);
+    scene.add(light);
+
+    const helper = new PointLightHelper(light);
+    scene.add(helper);
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#fff');
+    const groundColor = new Color('#000');
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        0.25, // 빛의 세기(intensity)
+    );
+    scene.add(light);
+
+    const helper = new HemisphereLightHelper(light);
+    scene.add(helper);
+}
+
+init();
+```
+
+<img src="/markdownAssets/threejs/2024-01-06-01/2024-01-06-01-05.png" alt="Hemisphere" />
+
+
+
+<br />
+
+
+
+## 마치며
+
+일반적으로 DirectionalLight 와 HemisphereLight 를 조합하여 기본 조명을 구성합니다.
+
+각 설정은 다음과 같습니다.
+
+```js title="일반적인 조명 설정" showLineNumbers
+function initDirectionalLight() {
+    const color = new Color('#fff');
+    const light = new DirectionalLight(
+        color,
+        0.75 // HemispherLight 보다 0.5 강하게 설정합니다.
+    );
+    scene.add(light);
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#fff');
+    const groundColor = new Color('#000');
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        0.25 // DirectionalLight 보다 0.5 약하게 설정합니다.
+    );
+    scene.add(light);
+}
+```
+
+<br />
+
+HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보이지 않도록 해주며, 좀 더 자연스러운 조명을 연출할 수 있습니다.
+
+그리고 PointLight 는 특정 물체를 강조하거나 효과를 주기위해 주로 사용합니다.
+
+<br />
+
+Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
+12:T3ac1,---
+id: 2
+title: 카메라 설정 (PerspectiveCamera)
+description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    'camera',
+]
+
+createdAt: '2024-01-01 23:50:00'
+modifiedHistories: []
+---
+
+# 카메라 설정 (PerspectiveCamera)
+
+Three.js 가 `<canvas />` 에 실제로 렌더링하는 부분은 `카메라 (PerspectiveCamera)` 가 비추는 영역입니다.
+
+이번 포스팅에서는 카메라 설정과 효과, 사용자 인터렉션 적용 방법에 대해 정리해 보겠습니다.
+
+이번 포스팅에서는 아래의 코드를 시작점으로 사용하겠습니다.
+
+```js title="샘플 코드" showLineNumbers
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Scene,
+    DirectionalLight,
+
+    BoxGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+
+    const light = createLight();
+    const boxMesh = createBoxMesh();
+
+    initCamera();
+    initScene(light, boxMesh);
+
+    render();
+
+    console.log('시작');
+}());
+
+function render() {
+    renderer.render(scene, camera);
+
+    window.requestAnimationFrame(render);
+}
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+/**
+ * @param { HTMLCanvasElement } $canvas 
+ */
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function createLight() {
+    const light = new DirectionalLight();
+    light.position.set(1, 2, 3);
+
+    return light;
+}
+
+function createBoxMesh() {
+    const boxGeometry = new BoxGeometry();
+    const boxMaterial = new MeshPhongMaterial();
+
+    return new Mesh(boxGeometry, boxMaterial);
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera(
+        45,
+        window.innerWidth / window.innerHeight
+    );
+
+    camera.position.set(0, 0, 5);
+}
+
+function initScene(...items) {
+    scene = new Scene();
+
+    items.forEach(item => {
+        scene.add(item);
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## PerspectiveCamera 생성자 params
+
+카메라 생성자 params 를 사용하여 초기 설정을 할 수 있습니다.
+
+```ts title="PerspectiveCamera 생성자 함수" showLineNumbers
+class PerspectiveCamera {
+    constructor(
+        fov?: number,
+        aspect?: number,
+        near?: number,
+        far?: number
+    );
+}
+```
+
+* fov (Field of View): 시야각 (화각)
+    * fov 설정값이 클수록 먼 거리에서 보는 느낌이 납니다.
+    * fov 설정값이 커질수록 **투시에 따른 왜곡현상** 이 도드라지게 나타납니다.
+* aspect: 카메라 종횡비 (aspect radio)
+    * 카메라의 가로, 세로 비율값 입니다.
+* near: (Near clipping)
+    * 카메라를 기준으로 가까운 물체(Mesh) 에 대한 렌더링 잘라내기 설정값 입니다.
+* far: (Far clipping)
+    * 카메라를 기준으로 먼 물체(Mesh) 에 대한 렌더링 잘라내기 설정값 입니다.
+
+<br />
+
+위 설정들은 PerspectiveCamera 생성자를 통해서도 설정할 수 있고, 객체를 생성한 후 설정을 변경할 수도 있습니다.
+
+만약 객체를 생성한 후 설정을 변경한다면, 카메라 메소드인 **updateProjectionMatrix()** 함수를 호출하여야 실제 렌더링에 반영됩니다.
+
+아래 코드는 PerspectiveCamera 객체를 생성한 후, 카메라 설정을 변경하고 있습니다.
+
+```js title="카메라 객체 설정값 변경하기" showLineNumbers {88, 89, 92}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Scene,
+    DirectionalLight,
+
+    BoxGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+
+    const light = createLight();
+    const boxMesh = createBoxMesh();
+
+    initCamera();
+    initScene(light, boxMesh);
+
+    render();
+
+    console.log('시작');
+}());
+
+function render() {
+    renderer.render(scene, camera);
+
+    window.requestAnimationFrame(render);
+}
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+/**
+ * @param { HTMLCanvasElement } $canvas 
+ */
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function createLight() {
+    const light = new DirectionalLight();
+    light.position.set(1, 2, 3);
+
+    return light;
+}
+
+function createBoxMesh() {
+    const boxGeometry = new BoxGeometry();
+    const boxMaterial = new MeshPhongMaterial();
+
+    return new Mesh(boxGeometry, boxMaterial);
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera(
+        // 45,
+        // window.innerWidth / window.innerHeight
+    );
+
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(0, 0, 3);
+
+    camera.updateProjectionMatrix();
+}
+
+function initScene(...items) {
+    scene = new Scene();
+
+    items.forEach(item => {
+        scene.add(item);
+    });
+}
+```
+
+<br />
+
+위 코드의 실행 결과로 BoxMesh 의 단면을 볼 수 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-01.png" alt="실행 결과" />
+
+
+
+<br />
+
+
+
+## 카메라의 주시 좌표값 변경하기
+
+현재는 BoxMesh 의 단면만을 비추고 있어서 마치 2D 인것 처럼 보입니다.
+
+카메라의 위치와 카메라의 주시 좌표값을 변경하면, 물체를 다각도에서 다양한 구도로 렌더링할 수 있습니다.
+
+<br />
+
+먼저 카메라의 위치를 (1, 1, 2) 로 변경해 보겠습니다.
+
+```js title="카메라 position 변경" showLineNumbers{82} {6}
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(1, 1, 2);
+
+    camera.updateProjectionMatrix();
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-02.png" alt="실행 결과" />
+
+<br />
+
+카메라의 position 만을 변경한 결과, BoxMesh 의 일부분만 렌더링되고 있습니다.
+
+이는 카메라의 주시 좌표값을 설정하지 않아서 카메라 위치에서 정면을 주시하고 있기 때문입니다.
+
+카메라 객체의 `lookAt()` 메소드를 사용하면, 카메라의 위치인 position 에서 특정 좌표를 주시하게 됩니다.
+
+BoxMesh 가 카메라의 중앙에 오도록 하기위해, BoxMesh 의 position 위치값인 (0, 0, 0) 으로 카메라 주시 좌표를 설정해 보겠습니다.
+
+```js title="카메라 position 변경" showLineNumbers{82} {8}
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(1, 1, 2);
+
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-03.png" alt="실행 결과" />
+
+
+
+<br />
+
+
+
+## 카메라 fov 와 position 설정에 따른 왜곡 현상
+
+fov(Field of View) 값이 커질수록 멀리서 보는 느낌으로 렌더링됩니다.
+
+이는 물체가 더 작게 보이는 결과를 볼 수 있습니다.
+
+<br />
+
+만약 fov 를 큰 값으로 설정하여 물체가 작게 보이도록 한 후, 카메라의 위치를 물체와 가깝게 설정하면 어떻게 될까요?
+
+이는 카메라의 **왜곡 현상** 에 의해 좀 더 렌즈의 굴곡이 커지게 됩니다.
+
+fov 와 position 의 관계를 표현해 보면 다음과 같습니다.
+
+* fov 작게 설정, position 멀리 설정
+    * 왜곡 현상이 적어집니다.
+* fov 크게 설정, position 가깝게 설정
+    * 왜곡 현상이 커집니다.
+
+<br />
+
+실제 왜곡 현상의 차이를 확인하기 위해 두가지 설정을 비교해 보겠습니다.
+
+* 첫번째 설정: **fov 작게, position 멀리** 설정
+* 두번째 설정: **fov 크게, position 가깝게** 설정
+
+```js title="fov 작게, position 멀리 설정" showLineNumbers{82} {5-6}
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.fov = 45;
+    camera.position.set(2, 2, 2);
+
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-04.png" alt="실행 결과" />
+
+<br /><br />
+
+```js title="fov 크게, position 가깝게 설정" showLineNumbers{82} {5-6}
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.fov = 90;
+    camera.position.set(1, 1, 1);
+
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-01-01/2024-01-01-01-05.png" alt="실행 결과" />
+
+
+
+<br />
+
+
+
+## 추가: 마우스를 사용하여 카메라 제어하기
+
+Three.js 는 여러가지 Addons 를 제공합니다.
+
+이 중 **OrbitControls** 객체를 사용하면, 마우스를 사용하여 카메라를 제어하는 기능을 제공할 수 있습니다.
+
+<br />
+
+OrbitControls 는 **PerspectiveCamera 의 Addon** 개념으로 사용하게 되며, 카메라의 제어를 담당하게 됩니다.
+
+주의할 점은 PerspectiveCamera 의 `lookAt()` 메소드를 함께 사용하게 되면, 카메라 제어에 충돌이 발생하는 현상입니다.
+
+그러므로 OrbitControls 를 사용하려면, `lookAt()` 메소드는 꼭 제거해 주는 것이 좋습니다.
+
+<br />
+
+먼저 OrbitControls 의 생성자를 살펴보면 다음과 같습니다.
+
+```ts
+class OrbitControls {
+    constructor(
+        object: Camera, 
+        domElement?: HTMLElement
+    );
+}
+```
+
+* object: 제어할 카메라 객체
+* domElement: 마우스 이벤트를 발생시킬 HTMLElement
+
+<br />
+
+PerspectiveCamera 에 OrbitControls 를 적용하는 `initControls()` 함수를 추가해 보겠습니다.
+
+```js title="OrbitControls 로 카메라 제어하기" showLineNumbers {11-13, 25-26, 37, 45, 103-108}
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Scene,
+    DirectionalLight,
+
+    BoxGeometry,
+    MeshPhongMaterial,
+    Mesh,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls'
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { OrbitControls } */
+let controls;
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+
+    const light = createLight();
+    const boxMesh = createBoxMesh();
+
+    initCamera();
+    initControls($canvas);
+    initScene(light, boxMesh);
+
+    render();
+}());
+
+function render() {
+    renderer.render(scene, camera);
+    controls.update();
+
+    window.requestAnimationFrame(render);
+}
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+/**
+ * @param { HTMLCanvasElement } $canvas 
+ */
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function createLight() {
+    const light = new DirectionalLight();
+    light.position.set(1, 2, 3);
+
+    return light;
+}
+
+function createBoxMesh() {
+    const boxGeometry = new BoxGeometry();
+    const boxMaterial = new MeshPhongMaterial();
+
+    return new Mesh(boxGeometry, boxMaterial);
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.fov = 45;
+    camera.position.set(2, 2, 2);
+
+    camera.fov = 90;
+    camera.position.set(1, 1, 1);
+
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+
+/**
+ * @param { HTMLElement } $targetElement 
+ */
+function initControls($targetElement) {
+    controls = new OrbitControls(camera, $targetElement);
+}
+
+function initScene(...items) {
+    scene = new Scene();
+
+    items.forEach(item => {
+        scene.add(item);
+    });
+}
+```
+
+<br />
+
+OrbitControls 를 카메라에 설치하게 되면 아래와 같은 마우스 인터렉션을 사용할 수 있습니다.
+
+* 마우스 좌클릭 - 드래그
+    * 카메라 주시 좌표를 회전 중심점으로 하여, **드래그 반대 방향으로 카메라를 회전** 시킵니다.
+    * 결과적으로 카메라가 고정된 상태에서 **바라보는 물체가 회전** 하게 됩니다.
+* 마우스 휠
+    * 확대, 축소 동작을 합니다.
+* 마우스 우클릭 - 드래그
+    * **드래그 반대 방향으로 카메라의 위치를 이동** 시킵니다.
+    * 결과적으로 카메라가 고정된 상태에서 **바라보는 물체가 이동** 하게 됩니다.
+
+<br />
+
+OrbitControls 객체의 설정을 사용하여, 특정 마우스 인터렉션의 사용 여부를 설정할 수 있습니다.
+
+이 설정 프로퍼티들은 `enable` 을 접두사로 사용하고 있습니다.
+
+* `enableRotate`: `false` 값을 대입하면, 회전기능을 막습니다.
+* `enableZoom`: `false` 값을 대입하면 확대, 축소 기능을 막습니다.
+* `enablePan`: `false` 값을 대입하면 이동 기능을 막습니다.
+
+<br />
+
+추가로 `enableDamping` 에 `true` 값을 대입하게 되면, 카메라의 모든 인터렉션에 감속도가 적용되어 **카메라의 부드러운 움직임이 연출** 됩니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+일전에 HTML Canvas API 를 스터디하면서, 도형에 대한 인터렉션이나 애니메이션을 구현해본 적이 있습니다.
+
+물체의 튕김이나 가속도, 감속도를 구현해 보려는 시도를 했었지만, 제가 구현한 결과물은 너무나 어색했습니다.
+
+Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드러운 3D 엔진에 그저 놀라울 뿐입니다.
+
+<br />
+
+하지만 실제 구현할 기획에 따라 엔진의 물리 효과를 커스터마이징을 할 수 있어야 자연스러운 결과물이 나올 것 같습니다.
+
+OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
+
+Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닦을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"}]}]
