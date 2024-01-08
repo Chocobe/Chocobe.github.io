@@ -1,0 +1,509 @@
+---
+id: 6
+title: 배경화면 및 환경조명 설정하기
+description: '360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    'hdr',
+    'background',
+    '3D 배경화면',
+    '환경조명',
+]
+
+createdAt: '2024-01-08 23:50:00'
+modifiedHistories: []
+---
+
+# 배경화면 및 환경조명 설정하기
+
+지금까지는 배경이 없는 환경에서 물체를 렌더링하였습니다.
+
+3D 환경에서 배경화면을 설정하기 위해 360도 이미지 파일인 **.hdr (Hign Dynamic Range)** 파일을 설정해 보고자 합니다.
+
+<br />
+
+추가로 배경화면이 물체에 반사되는 환경조명까지 설정해 보겠습니다.
+
+환경조명을 설정하게 되면, 배경이 스틸에 반사되는 효과를 연출할 수 있습니다.
+
+이를 위해 **Material** 설정 방법에 대해서도 정리합니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이번 포스팅에서 사용할 예시 코드는 다음과 같습니다.
+
+```js title="예시 코드" showLineNumbers
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+
+    DirectionalLight,
+    DirectionalLightHelper,
+    HemisphereLight,
+    HemisphereLightHelper,
+
+    Mesh,
+    MeshStandardMaterial,
+
+    SphereGeometry,
+    PlaneGeometry,
+
+    VSMShadowMap,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = VSMShadowMap;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 75;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(-3, 3, 5);
+
+    camera.updateProjectionMatrix();
+}
+
+function initControls($canvas) {
+    controls = new OrbitControls(camera, $canvas);
+    controls.enableDamping = true;
+}
+
+//
+// light
+//
+function initDirectionalLight() {
+    const color = new Color('#fff');
+
+    const light = new DirectionalLight(
+        color,
+        0.75
+    );
+    light.position.set(1, 1, 1);
+    light.castShadow = true;
+    light.shadow.blurSamples = 30;
+    light.shadow.radius = 12;
+
+    const helper = new DirectionalLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#fff');
+    const groundColor = new Color('#000');
+
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        0.25
+    );
+
+    const helper = new HemisphereLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+
+//
+// mesh
+//
+function initSphereMesh() {
+    const geometry = new SphereGeometry();
+    const material = new MeshStandardMaterial();
+    const sphere = new Mesh(geometry, material);
+    sphere.castShadow = true;
+
+    scene.add(sphere);
+}
+
+function initPlaneMesh() {
+    const geometry = new PlaneGeometry(10, 10);
+    const material = new MeshStandardMaterial();
+    const plane = new Mesh(geometry, material);
+    plane.position.set(0, -1, 0);
+    plane.rotation.set(Math.PI / -2, 0, 0);
+    plane.receiveShadow = true;
+
+    scene.add(plane);
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    controls.update();
+    renderer.render(scene, camera);
+}
+
+(function init() {
+    const $canvas = initCanvas();
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initDirectionalLight();
+    initHemisphereLight();
+
+    initSphereMesh();
+    initPlaneMesh();
+
+    render();
+
+    console.log('init()');
+}());
+```
+
+
+
+<br />
+
+
+
+## **.hdr** 파일이란?
+
+Three.js 는 3D 환경입니다.
+
+배경화면을 설정하려면 일반적인 2D 이미지를 사용해서는 연출할 수 없습니다.
+
+**.hdr (High Dynamic Range)** 확장자를 가진 파일은 360도 이미지 파일이며, 이 파일을 사용하여 3D 환경에 배경화면을 설정할 수 있습니다.
+
+<br />
+
+360도 배경화면은 아래의 플렛폼에서 오픈소스로 다운로드할 수 있습니다.
+
+* [polyhaven.com](https://polyhaven.com/hdris)
+
+
+
+<br />
+
+
+
+## 용어 정리
+
+이번 포스팅에서 사용하게될 컴퓨터 그래픽스 용어에 대해 간단하게 정리하고 가겠습니다.
+
+### Vertex
+
+3D 공간에서 가장 작은 단위인 **점** 을 말합니다.
+
+### Edge
+
+2개의 Vertex 를 연결하여 생성된 **선** 을 말합니다.
+
+### Polygon
+
+복수의 Edge 를 연결하여 만들어진 **면** 을 말합니다.
+
+가장 작은 Polygon 은 3개의 Edge 로 만들 수 있는 삼각형 입니다.
+
+### Mesh
+
+복수의 Polygon 으로 만들 수 있는 다각형으로, 지금까지 사용해보았던 Sphere, Box, Plane 등을 말합니다.
+
+### Texture
+
+[참고: 나무위키](https://namu.wiki/w/%ED%85%8D%EC%8A%A4%EC%B2%98)
+
+3D 물체의 표면에 2D 이미지를 입혀서 렌더링 하는 방식을 말합니다.
+
+Mesh 를 구성하는 Polygon 이 많을수록 성능을 많이 사용하게 되는데, 이를 해소하기 위해 Mesh 의 표면에 2D 이미지를 입히는 방식의 렌더링 요소 입니다.
+
+### emissive
+
+emission 은 **(빛)방사** 라는 뜻을 가집니다.
+
+컴퓨터 그래픽스에서 **emissive** 라는 용어를 사용하는데, 이는 Mesh 가 광원이 되여 빛을 방출한다는 것을 말합니다.
+
+### (영단어) equirectangular
+
+정사각형
+
+### (영단어) reflection
+
+반사
+
+### (영단어) refraction
+
+굴절
+
+
+
+<br />
+
+
+
+## RGBELoader 를 사용하여 .hdr 파일을 Texture 로 만들기
+
+3D 공간 자체를 하나의 Mesh 라고 가정해 보겠습니다.
+
+Three.js 에서는 `Scene` 객체가 배경의 역할을 하고 있습니다.
+
+배경화면을 설정하기 위해서는 `Scene` 의 `background` 에 `Texture` 를 입혀서 표현할 수 있습니다.
+
+<br />
+
+Three.js 는 다양한 **DataTextureLoader** 를 제공하는데, Loader 를 사용하면 360도 이미지인 `.hdr` 파일을 읽어서 `Texture` 객체로 만들 수 있습니다.
+
+생성한 `Texture` 를 `Scene` 의 `background` 로 입혀주는 것으로 배경화면을 설정할 수 있습니다.
+
+[Three.js 공식문서 - DataTextureLoader](https://threejs.org/docs/#api/en/loaders/DataTextureLoader)
+
+<br />
+
+```js title="import 하기" showLineNumbers {21, 27}
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+
+    DirectionalLight,
+    DirectionalLightHelper,
+    HemisphereLight,
+    HemisphereLightHelper,
+
+    Mesh,
+    MeshStandardMaterial,
+
+    SphereGeometry,
+    PlaneGeometry,
+
+    VSMShadowMap,
+
+    EquirectangularReflectionMapping,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import {
+    RGBELoader,
+} from 'three/examples/jsm/loaders/RGBELoader';
+```
+
+```js title="Scene 에 배경화면 설정하기" showLineNumbers{68} {4-9}
+function initScene() {
+    scene = new Scene();
+
+    const loader = new RGBELoader();
+    loader.load('/hrd/background.hdr', texture => {
+        texture.mapping = EquirectangularReflectionMapping;
+
+        scene.background = texture;
+    });
+}
+```
+
+<br />
+
+먼저 import 부분을 살펴보겠습니다.
+
+**EquirectangularReflectionMapping** 은 Texture 의 mapping 방식을 제공하는 **객체** 입니다.
+
+Texture 객체의 `mapping` 속성에 **EquirectangularReflectionMapping** 객체를 대입하는 것으로 mapping 방식을 설정하게 됩니다.
+
+<br />
+
+Three.js 에서 제공하는 Texture mapping 방식은 여러가지가 있습니다.
+
+[Three.js 공식문서 - Texture Constants](https://threejs.org/docs/index.html?q=texture#api/en/constants/Textures)
+
+* UVMapping (default)
+* CubeReflectionMapping 
+* CubeRefractionMapping
+* EquirectangularReflectionMapping
+* EquirectangularRefractionMapping 
+* CubeUVReflectionMapping
+
+<br />
+
+위에서 사용한 **EquirectangularReflectionMapping** 은 **environment map** 에 사용하는 Texture mapping 방식 입니다.
+
+이 mapping 방식을 사용하게 되면 `.hdr` 이미지가 마치 배경처럼 렌더링됩니다.
+
+<br />
+
+Texture 의 mapping 방식을 설정해준 뒤, **Scene** 의 `background` 속성에 Texture 를 대입하면 배경화면이 렌더링된 것을 볼 수 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-08-01/2024-01-08-01-01.png" alt="배경화면 설정" />
+
+
+
+<br />
+
+
+
+## 환경조명 설정
+
+빛이 있어야 물체가 렌더링 됩니다.
+
+지금까지는 DirectionalLight 나 HemisphereLight 처럼 조명 객체를 생성하여 빛을 만들었습니다.
+
+이번에는 조명을 모두 제거하고, 환경조명으로 렌더링하고자 합니다.
+
+<br />
+
+**Scene** 의 `environment` 속성에 환경조명으로 사용할 Texture 를 대입하여 설정할 수 있습니다.
+
+`background` 로 사용했던 Texture 를 환경조명으로도 사용하도록 해보겠습니다.
+
+```js title="환경조명 설정하기" showLineNumbers{68} {9}
+function initScene() {
+    scene = new Scene();
+
+    const loader = new RGBELoader();
+    loader.load('/hdr/background.hdr', texture => {
+        texture.mapping = EquirectangularReflectionMapping;
+
+        scene.background = texture;
+        scene.environment = texture;
+    });
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-08-01/2024-01-08-01-02.png" alt="환경조명 설정하기" />
+
+<br />
+
+환경조명으로 설정한 Texture 의 밝은 부분과 어두운 부분이 조명의 세기로 적용되어 배경화면과 자연스러운 연출이 됩니다.
+
+
+
+<br />
+
+
+
+## 배경화면을 반사하는 Mesh 만들기
+
+Sphere 와 Plane Mesh 를 렌더링하고 있습니다.
+
+현재는 각 Mesh 에 설정한 **MeshStandardMaterial** 색상 그대로 렌더링되는 상태입니다.
+
+이번에는 Mesh 의 Material 에 설정을 추가하여, 배경화면이 Mesh 에 비추어지는 효과를 연출해 보겠습니다.
+
+<br />
+
+Mesh 의 외관은 Material 에 의해 렌더링 결과가 달라집니다.
+
+Material 은 Mesh 의 색상이나 질감을 표현하는 객체입니다.
+
+배경화면을 반사하는 Mesh 를 만들기 위해서는 Material 설정을 사용하여 구현할 수 있습니다.
+
+```js title="배경화면을 반사하는 Mesh 설정하기" showLineNumbers{134} {3-8}
+function initSphereMesh() {
+    const geometry = new SphereGeometry();
+    const material = new MeshStandardMaterial({
+        color: new Color('#fff'),
+        roughness: 0,
+        metalness: 1,
+        // emissive: Color('#000'),
+    });
+    const sphere = new Mesh(geometry, material);
+    sphere.castShadow = true;
+
+    scene.add(sphere);
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-08-01/2024-01-08-01-03.png" alt="Material 설정" />
+
+<br />
+
+**MeshStandardMaterial** 생성자 params 를 사용하여 Material 를 설정하고 있습니다.
+
+params 의 각 속성은 다음고 같은 설정을 가집니다.
+
+* `color`: 
+    * Material 자체의 색상입니다. (Mesh 의 색상이 됩니다.)
+* `roughness`: 
+    * 배경화면을 반사하는 Mesh 의 질감을 얼만큼 거칠게 표현할지에 대한 설정입니다.
+    * `0` 설정 시, 배경화면이 깔끔하게 반사됩니다.
+    * `1` 설정 시, 반사되는 배경화면이 분간하기 어려울 정도로 어글어져서 렌더링됩니다.
+* `metalness`:
+    * 매탈 재질처럼 보이는 정도를 설정합니다.
+    * `0` 설정 시, 메탈 느낌 보다는 플라스틱 느낌이 강하며, 함께 설정한 `color` 의 비중이 더 크게 렌더링됩니다.
+    * `1` 설정 시, 함께 설정한 `color` 는 거의 보이지 않고, 메탈 느낌으로 렌더링됩니다.
+* `emissive`:
+    * Mesh(Material) 이 방출하는 빛의 색상을 설정합니다.
+    * `밝은색` 설정 시, 광원처럼 밝은 빛을 내며, 자신의 그림자가 거의 생기지 않습니다.
+    * `어두운색` 설정 시, 발광하는 빛이 거의 없으며, 자신의 그림자가 비교적 선명하게 생깁니다.
+    * 일반적으로 활용도가 떨어지는 설정이라서, 잘 사용하지 않습니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+Material 설정을 통해 배경화면을 반사하는 효과를 연출해 보았습니다.
+
+이번에 사용한 반사효과는 배경화면만을 반사하고, Mesh 간의 반사는 렌더링되지 않습니다.
+
+**Post Processing** 기능을 사용하면, 거울처럼 다른 Mesh 와 상호작용하며 반사하는 연출이 가능해집니다.
+
+이 부분은 차후 정리할 예정입니다.
+
+[Three.js 공식문서 - 거울효과 예시](https://threejs.org/examples/?q=mirror#webgl_mirror)
