@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["wDuWL0psubaLEaPs4XGSE",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["8AE3FXhcu2YnaGtvn0Ioh",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -2914,7 +2914,7 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-17:T2862,---
+17:T2ba5,---
 id: 5
 title: 그림자 표현하기
 description: '그림자 설정방법과 특징에 대해 정리합니다.'
@@ -3328,6 +3328,30 @@ Light 의 shadow 설정 시, 주의할 사항은 다음과 같습니다.
 
 * `shadow.blurSamples`: 값이 커질수록 부드러운 그림자를 표현하지만, 필요 성능이 높아집니다.
 * `shadow.radius`: 값이 너무 작으면 화면이 깨지는 현상이 있으므로, **10 이상** 설정을 권장합니다.
+
+
+
+<br />
+
+
+
+## 추가: VSMShadowMap 에 대하여
+
+Soft Shadow 를 표현하기 위해 VSMShadowMaper 을 사용해 보았습니다.
+
+VSMShadowMap 은 곡선에 대한 그림자를 부드럽게 표현할 수 있는 특징을 가졌습니다.
+
+그래서 지금까지 실습했던 Shpere Mesh 의 그림자를 부드럽게 표현할 수 있었습니다.
+
+<br />
+
+만약 Sphere Mesh 가 아닌 Box Mesh 에 VSMShadowMap 을 적용한다면, 그림자가 드리우지 않아야 하는 영역까지 침범하는 현상을 볼 수 있습니다.
+
+이는 VSMShadowMap 의 Blur 처리가 되면서 번지는 그림자가 렌더링된 결과 입니다.
+
+<br />
+
+화면 구성에 Box Mesh 가 많다면, VSMShadowMap 을 사용했을 때 오히려 지저분한 그림자가 만들어질 수 있다는 점을 고려하여 선택해야 합니다.
 
 
 
