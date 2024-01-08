@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["8AE3FXhcu2YnaGtvn0Ioh",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["BsEKsNOeS56sULsJnUPbZ",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -2914,7 +2914,7 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-17:T2ba5,---
+17:T2c06,---
 id: 5
 title: 그림자 표현하기
 description: '그림자 설정방법과 특징에 대해 정리합니다.'
@@ -3352,6 +3352,8 @@ VSMShadowMap 은 곡선에 대한 그림자를 부드럽게 표현할 수 있는
 <br />
 
 화면 구성에 Box Mesh 가 많다면, VSMShadowMap 을 사용했을 때 오히려 지저분한 그림자가 만들어질 수 있다는 점을 고려하여 선택해야 합니다.
+
+<img src="/markdownAssets/threejs/2024-01-07-02/2024-01-07-02-03.png" alt="VSMShadow 단점" />
 
 
 
