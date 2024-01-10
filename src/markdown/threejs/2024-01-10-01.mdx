@@ -1,0 +1,349 @@
+---
+id: 7
+title: 모델 파일을 Three.js 에 렌더링하기
+description: '.gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    'hdr',
+    '.gltf',
+    '.glb',
+    'model',
+]
+
+createdAt: '2024-01-10 23:50:00'
+modifiedHistories: []
+---
+
+# 모델 파일을 Three.js 에 렌더링하기
+
+3D 모델 파일의 확장자는 아래와 같습니다.
+
+* .gltf
+    * 3D 모델 파일이며 JSON 형식의 데이터입니다.
+* .glb
+    * 3D 모델 파일이며 Binary 데이터입니다.
+    * **3D 모델을 렌더링하여 사용할 목적이라면, .glb 파일의 용량이 더 적으므로 적합합니다.**
+
+<br />
+
+이번 포스팅에서는 3D 모델 파일을 Three.js 에 렌더링하는 방법과 불러온 모델 객체를 수정하는 방법에 대해 정리하고자 합니다.
+
+
+
+<br />
+
+
+
+## 용어 정리
+
+### Luminance
+
+Luminance 는 **휘도** 라는 뜻을 가집니다.
+
+Three.js 에서는 **emissive** 가 **빛을 방출하는 정도에 대한 속성** 이지만, 3D Tool 중 Cinema4D 에서는 **Luminance** 로 표기되어 있습니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이번 포스팅에서 사용할 예시 코드는 다음과 같습니다.
+
+```js title="예시 코드" showLineNumbers
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+    DirectionalLight,
+    HemisphereLight,
+
+    SphereGeometry,
+    MeshStandardMaterial,
+    Mesh,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.shadowMap.enabled = true;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 35;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(0, 0, 2);
+
+    camera.updateProjectionMatrix();
+}
+
+function initControls($emitter) {
+    controls = new OrbitControls(camera, $emitter);
+    controls.enableDamping = true;
+}
+
+//
+// light
+//
+function initDirectionalLight() {
+    const color = new Color('#fff');
+
+    const light = new DirectionalLight(color);
+    light.position.set(1, 1, 1);
+    light.castShadow = true;
+
+    scene.add(light);
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#fff');
+    const groundColor = new Color('#000');
+
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        0.25
+    );
+
+    scene.add(light);
+}
+
+//
+// mesh
+//
+function initSphereMesh() {
+    const geometry = new SphereGeometry();
+    const material = new MeshStandardMaterial();
+    const sphere = new Mesh(geometry, material);
+
+    scene.add(sphere);
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls.update();
+}
+
+function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initDirectionalLight();
+    initHemisphereLight();
+
+    initSphereMesh();
+
+    render();
+}
+
+init();
+```
+
+
+
+<br />
+
+
+
+## GLTFLoader 를 사용하여 3D 모델 파일 불러오기
+
+.glb 또는 .gltf 파일을 불러오기 위해서는 Loader 가 필요합니다.
+
+이 때 사용하는 Loader 는 GLTFLoader 인스턴스 입니다.
+
+아래는 .gltf 파일을 불러온 후, 불러온 모델 객체를 `console.log()` 로 출력하고 있습니다.
+
+```js title="GLTFLoader import 하기" showLineNumbers{17}
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+```
+
+```js title="GLTFLoader 로 .gltf 파일 불러오기" showLineNumbers{112}
+function initRubberDuck() {
+    const loader = new GLTFLoader();
+    loader.load('/gltf/rubberDuck/rubber_duck_toy_4k.gltf', gltf => {
+        console.group('onLoad()');
+        console.log('gltf: ', gltf);
+        console.groupEnd();
+    });
+}
+```
+
+```js title="iniRubberDuct 함수 호출" showLineNumbers{131} {13}
+function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initDirectionalLight();
+    initHemisphereLight();
+
+    initSphereMesh();
+    initRubberDuck();
+
+    render();
+}
+```
+
+<br />
+
+부라우저 콘솔에서 확인하면, GLTFLoader 가 불러온 3D 모델 객체를 확인할 수 있습니다.
+
+
+
+## 불러온 3D 모델 객체 렌더링하기
+
+불러온 3D 모델 객체에는 **scene 속성** 이 있습니다.
+
+**scene 속성** 을 Mesh 와 동일하게 취급할 수 있습니다.
+
+따라서 기존의 sphere Mesh 를 `scene.add()` 메서드로 추가했던 것과 동일한 방법으로 `scene` 에 추가할 수 있습니다.
+
+```js title="3D 모델 객체 렌더링" showLineNumbers{112} {8-9}
+function initRubberDuck() {
+    const loader = new GLTFLoader();
+    loader.load('/gltf/rubberDuck/rubber_duck_toy_4k.gltf', gltf => {
+        console.group('onLoad()');
+        console.log('gltf: ', gltf);
+        console.groupEnd();
+
+        gltf.scene.position.set(0, -0.15, 0);
+        scene.add(gltf.scene);
+    });
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-10-01/2024-01-10-01-01.png" alt="3D 모델 렌더링" />
+
+
+
+<br />
+
+
+
+## 추가: 불러온 3D 모델이 깨지는 현상
+
+3D 모델을 Three.js 에 렌더링했을 때, 깨지는 현상이 발생할 수 있습니다.
+
+이는 3D Tool(예: Cinema4D, Blender) 를 사용하여, 모델의 **Material** 을 수정하여 해결할 수 있습니다.
+
+가장 유력한 케이스는 **Material** 설정 중, **Alpha** 설정이 활성화된 경우 입니다.
+
+만약 **Alpha** 설정이 활성화되어 있었다면, 해제 후 export 한 파일을 사용해봅니다.
+
+<br />
+
+Three.js 는 브라우저 환경에서 동작하기 때문에 3D Tool 의 무거운 기능들은 지원하지 않습니다.
+
+이러한 현상이 나타난다면, **Material** 을 좀 더 가볍게 하면 해소할 수 있습니다.
+
+
+
+<br />
+
+
+
+## 3D 모델 객체 구조 살펴보기
+
+Three.js 에 불러온 3D 모델을 그대로 렌더링했을 때, 원하는 결과를 얻지 못할 가능성이 큽니다.
+
+특히 그림자 설정은 3D 모델을 개발할 때 설정하는 것이 아닌, Three.js 에 렌더링할 객체의 설정이 필요한 경우입니다.
+
+이러한 이유로 Three.js 에 불러온 3D 모델 객체의 주요 속성들을 수정하기 위해, 먼저 속성들을 살펴보겠습니다.
+
+<br />
+
+GLTFLoader 로 불러운 3D 모델을 gltf 로 칭하겠습니다.
+
+gltf 객체는 크게 다음과 같은 속성이 있습니다.
+
+* scene
+    * Mesh 처럼 다룰 수 있으며, 렌더링할 때도 사용합니다.
+* animations
+    * 애니메이션 객체 입니다.
+* children
+    * 3D Tool 로 개발할 때 만든 부모-자식 계층 입니다.
+* material
+    * 현재 Mesh 의 Material 설정입니다.
+
+<br />
+
+gltf 객체의 scene 과 children 의 중첩구조를 살펴보면 크게 2가지 타입으로 이루어져 있습니다.
+
+* Mesh
+    * 실제 Mesh 객체입니다.
+* Object3D
+    * Mesh 가 아닌 기타 타입입니다.
+    * 3D Tool 의 Symmetry(대칭복사), Subdivision(곡선생성) 등의 기능으로 만든 부분 (엄밀히 Mesh 는 아니기 때문)
+
+
+
+<br />
+
+
+
+## 마치며
+
+3D Mesh 파일(.glTF, .gbl) 을 불러온 상태에서는 빛 반사나 그림자와 같은 효과는 적용되지 않습니다.
+
+다음 포스팅에서는 3D Mesh 불러온 후, Mesh 내부 속성을 변경하는 방법을 알아보겠습니다.
