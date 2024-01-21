@@ -1,0 +1,355 @@
+---
+id: 8
+title: 'Model (.gltf, .glb) 객체 구조파악 및 그림자 적용'
+description: 'Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    '.gltf',
+    '.glb',
+    'model',
+    'traverse',
+    'shadow',
+]
+
+createdAt: '2024-01-21 16:00:00'
+modifiedHistories: []
+---
+
+# Model (.gltf, .glb) 객체 구조파악 및 그림자 적용
+
+3D Tool (Cinema3D, Blender...) 에서 만든 Model 파일은 Three.js 에서 제공하는 `GLTFLoader` 를 사용하여 불러올 수 있습니다.
+
+이렇게 불러온 Model 객체에 원하는 연출을 적용하려면, 불러온 Model 객체의 속성값을 변경하며 설정해주어야 합니다.
+
+<br />
+
+예를들어 그림자 효과는 Three.js 환경에 불러온 Model 객체의 `castShadow` 또는 `receiveShadow` 를 `true` 로 설정해주어야 적용됩니다.
+
+뿐만아니라 렌더링 된 Model 의 Material 을 수정한다거나 하는 작업들을 통해서 **빛에 대한 Model 의 양감** 을 변경할 수도 있습니다.
+
+
+
+<br />
+
+
+
+## 예시코드
+
+> [Model 다운로드 링크](https://polyhaven.com/a/coast_rocks_05)
+
+이번 포스팅의 예시코드는 위 모델을 렌더링한 시점입니다.
+
+```js title="예시코드" showLineNumbers {63-64, 82-84, 92-98}
+// three.js
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+    DirectionalLight,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.shadowMap.enabled = true;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 35;
+    camera.aspect = window.innerWidth / window.innerHeight;
+
+    camera.position.set(-3, 3, 3);
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+
+function initControls($target) {
+    controls = new OrbitControls(camera, $target);
+    controls.enableDamping = true;
+}
+
+//
+// light
+//
+function initDirectionalLight() {
+    const color = new Color('#fff');
+    const light = new DirectionalLight(color, 0.75);
+
+    light.position.set(10, 10, 10);
+    light.castShadow = true;
+    light.shadow.mapSize.width = 2048;
+    light.shadow.mapSize.height = 2048;
+
+    scene.add(light);
+}
+
+//
+// mesh
+//
+function initCoastRocksMesh() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/coast-rocks-05/coast_rocks_05_4k.gltf', gltf => {
+        scene.add(gltf.scene);
+    });
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls.update();
+}
+
+(function init() {
+    const $canvas = initCanvas();
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initDirectionalLight();
+
+    initCoastRocksMesh();
+
+    render();
+}());
+```
+
+<img src="/markdownAssets/threejs/2024-01-21-01/2024-01-21-01-01.png" alt="예시코드 결과" />
+
+
+
+<br />
+
+
+
+## Model 객체 구성요소
+
+`GLTFLoader` 를 사용하여 불러온 Model 은 3D Tool 로 개발한 Model 의 정보를 포함하고 있습니다.
+
+3D Tool 에서 parent 와 children 구조를 사용하여 Model 을 만들었다면, Three.js 에서 불러온 Model 객체 역시 동일한 구조를 가지게 됩니다.
+
+그리고 Three.js 에서 활용하기 위한 추가적인 정보와 메소드 등을 가지고 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-21-01/2024-01-21-01-02.png" alt="Model 객체" />
+
+<br />
+
+* `animations`: 3D Tool 에서 만든 Animation 객체
+* `scene`: Model 의 Mesh 객체
+
+<br />
+
+이번 포스팅에서는 **scene** 속성의 일부를 살펴보겠습니다.
+
+
+
+<br />
+
+
+
+## Model 객체의 **scene** 속성
+
+Model 객체의 Scene 속성은 **Group** type 이며, Model 의 최상위 Mesh 역할을 합니다.
+
+우리가 Three.js 에 렌더링할 때 사용했던 속성입니다.
+
+그리고 중첩된 **children** 속성으로 하위 Mesh 를 포함하고 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-21-01/2024-01-21-01-03.png" alt="Model Scene 객체" />
+
+<br />
+
+**children** 의 구성요소로 사용되는 대표적인 **type** 은 다음과 같습니다.
+
+* **Mesh** 타입: 3D Tool 에서 만든 Mesh 객체만이 이 타입의 인스턴스가 됩니다.
+* **Object3D** 타입: **Mesh 타입이 아닌 모든 객체** 가 이 타입의 인스턴스로 표현됩니다.
+    * 3D Tool 의 **Null Object (group)**
+    * 3D Tool 의 **대칭 생성(Symmetry)**, **부드러운 면 만들기(Subdivision surface)** 등의 유틸 객체
+
+
+
+<br />
+
+
+
+## Mesh 타입 객체의 주요 속성
+
+* `name`: 3D Tool 에서 명명한 이름입니다.
+* `isMesh`: `true` 값을 가지며, 이 객체가 **Mesh 타입 객체** 라는 것을 단언할 수 있는 상태값입니다.
+* `type`: 이 객체의 type 명입니다.
+* `material`: `Material` 객체 입니다.
+    * 그림자, 재질 등을 변경할 때 사용하게 될 속성(객체) 입니다.
+* `position`: Three.js 에 렌더링할 좌표값 입니다.
+* `rotation`: Three.js 에서 얼만큼 회전시켜서 렌더링할지 설정값 입니다.
+* `scale`: Three.js 상에서 얼만큼 확대/축소 할지에 대한 설정값 입니다.
+* `castShadow`: 그림자 생성 여부에 대한 설정 입니다.
+* `receiveShadow`: 다른 Mesh 의 그림자에 영향을 받을지에 대한 설정 입니다.
+
+
+
+<br />
+
+
+
+## `traverse` 메서드
+
+Model 은 복수의 Mesh 객체들로 구성될 수 있습니다.
+
+이는 **children** 속성으로 중첩된 구조를 갖습니다.
+
+만약 그림자 설정을 변경한다면, Model 을 구성하는 모든 Mesh 객체의 그림자 설정값을 변경해주어야 합니다.
+
+<br />
+
+3D Tool 에서 만든 Model 이 어떤 구조로 되어있는지 모든 구조를 파악하고 설정을 바꿔주는 것은 매우 어려워 보입니다.
+
+그래서 Model 객체의 **scene** 속성(객체) 는 `traverse()` 메서드를 제공합니다.
+
+<br />
+
+`traverse()` 메소드는 Model 을 구성하는 모든 **children** 을 깊은 탐색하는 기능을 수행합니다.
+
+즉, 그림자 설정을 변경한다면, `traverse()` 메소드를 사용하여 모든 하위 Mesh 에 설정을 일괄 변경할 수 있습니다.
+
+<br />
+
+탐색 대상이 되는 children 구성요소는 Mesh 타입이 아닐수도 있습니다.
+
+이때 Mesh 객체인지 식별하기 위해 `isMesh` 속성을 사용하게 됩니다.
+
+<br />
+
+아래 코드는 `traverse()` 메소드를 사용하여 그림자 설정을 활성화 하고 있습니다.
+
+```js title="traverse() 를 사용한 그림자 설정" showLineNumbers{92} {5-12}
+function initCoastRocksMesh() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/coast-rocks-05/coast_rocks_05_4k.gltf', gltf => {
+        gltf.scene.traverse(obj => {
+            if (!obj.isMesh) {
+                return;
+            }
+
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+        });
+
+        scene.add(gltf.scene);
+    });
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-21-01/2024-01-21-01-04.png" alt="traverse() 메소드" />
+
+
+
+<br />
+
+
+
+## 추가: 빛에 대한 Model 객체의 양감 설정하기
+
+`traverse()` 메소드를 사용하여 Mesh 객체의 **material** 속성을 일괄 변경할 수 있습니다.
+
+Mesh 객체는 **material** 속성을 가지고 있으므로, 이를 사용하여 Mesh 의 양감을 변경할 수 있습니다.
+
+<br />
+
+양감은 Mesh 의 색상이 뚜렷하게 렌더링되는 경우에 풍부하게 연출됩니다.
+
+material 의 `metalness` 값을 `0` 으로 설정하면, 주변 배경을 반사하는 것이 아닌, Mesh 본연의 색상에서 빛의 반사효과만 렌더링됩니다.
+
+<br />
+
+또한 `roughness` 값을 변경하여 빛이 얼마나 뚜렷하게 비춰질지 설정할 수도 있습니다.
+
+```js title="빛에 대한 Metal 객체의 양감 설정하기" showLineNumbers{92} {12-13}
+function initCoastRocksMesh() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/coast-rocks-05/coast_rocks_05_4k.gltf', gltf => {
+        gltf.scene.traverse(obj => {
+            if (!obj.isMesh) {
+                return;
+            }
+
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+            obj.material.metalness = 0;
+            obj.material.roughness = 0;
+        });
+
+        scene.add(gltf.scene);
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+Model 에 그림자 설정을 위한 코드는 `traverse()` 메소드를 사용하면 간단하게 적용할 수 있었습니다.
+
+Model 객체가 어떻게 구성되고, 설정을 변경하는 이유 등을 파악하는 것이 쉽지는 않았습니다.
+
+이번 포스팅에서 정리한 내용은 Three.js 전반에 필요한 개념으로 생각되어 성취감이 느껴집니다.
