@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["xzVW9enBvtG9GCPoqRIBT",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["Si7Xv4LM6d_SZmNtzpZhS",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -911,7 +911,362 @@ Three.js 를 처음 시작하며 제가 느낀 어려움으로는 컴퓨터 그�
 단순히 Three.js 사용법을 익히는 것만으로 원하는 결과물을 얻기는 어려워 보입니다.
 
 지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
-10:T2000,---
+10:T25c2,---
+id: 8
+title: 'Model (.gltf, .glb) 객체 구조파악 및 그림자 적용'
+description: 'Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    '.gltf',
+    '.glb',
+    'model',
+    'traverse',
+    'shadow',
+]
+
+createdAt: '2024-01-21 16:00:00'
+modifiedHistories: []
+---
+
+# Model (.gltf, .glb) 객체 구조파악 및 그림자 적용
+
+3D Tool (Cinema3D, Blender...) 에서 만든 Model 파일은 Three.js 에서 제공하는 `GLTFLoader` 를 사용하여 불러올 수 있습니다.
+
+이렇게 불러온 Model 객체에 원하는 연출을 적용하려면, 불러온 Model 객체의 속성값을 변경하며 설정해주어야 합니다.
+
+<br />
+
+예를들어 그림자 효과는 Three.js 환경에 불러온 Model 객체의 `castShadow` 또는 `receiveShadow` 를 `true` 로 설정해주어야 적용됩니다.
+
+뿐만아니라 렌더링 된 Model 의 Material 을 수정한다거나 하는 작업들을 통해서 **빛에 대한 Model 의 양감** 을 변경할 수도 있습니다.
+
+
+
+<br />
+
+
+
+## 예시코드
+
+> [Model 다운로드 링크](https://polyhaven.com/a/coast_rocks_05)
+
+이번 포스팅의 예시코드는 위 모델을 렌더링한 시점입니다.
+
+```js title="예시코드" showLineNumbers {63-64, 82-84, 92-98}
+// three.js
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+    DirectionalLight,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.shadowMap.enabled = true;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 35;
+    camera.aspect = window.innerWidth / window.innerHeight;
+
+    camera.position.set(-3, 3, 3);
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+
+function initControls($target) {
+    controls = new OrbitControls(camera, $target);
+    controls.enableDamping = true;
+}
+
+//
+// light
+//
+function initDirectionalLight() {
+    const color = new Color('#fff');
+    const light = new DirectionalLight(color, 0.75);
+
+    light.position.set(10, 10, 10);
+    light.castShadow = true;
+    light.shadow.mapSize.width = 2048;
+    light.shadow.mapSize.height = 2048;
+
+    scene.add(light);
+}
+
+//
+// mesh
+//
+function initCoastRocksMesh() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/coast-rocks-05/coast_rocks_05_4k.gltf', gltf => {
+        scene.add(gltf.scene);
+    });
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls.update();
+}
+
+(function init() {
+    const $canvas = initCanvas();
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initDirectionalLight();
+
+    initCoastRocksMesh();
+
+    render();
+}());
+```
+
+<img src="/markdownAssets/threejs/2024-01-21-01/2024-01-21-01-01.png" alt="예시코드 결과" />
+
+
+
+<br />
+
+
+
+## Model 객체 구성요소
+
+`GLTFLoader` 를 사용하여 불러온 Model 은 3D Tool 로 개발한 Model 의 정보를 포함하고 있습니다.
+
+3D Tool 에서 parent 와 children 구조를 사용하여 Model 을 만들었다면, Three.js 에서 불러온 Model 객체 역시 동일한 구조를 가지게 됩니다.
+
+그리고 Three.js 에서 활용하기 위한 추가적인 정보와 메소드 등을 가지고 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-21-01/2024-01-21-01-02.png" alt="Model 객체" />
+
+<br />
+
+* `animations`: 3D Tool 에서 만든 Animation 객체
+* `scene`: Model 의 Mesh 객체
+
+<br />
+
+이번 포스팅에서는 **scene** 속성의 일부를 살펴보겠습니다.
+
+
+
+<br />
+
+
+
+## Model 객체의 **scene** 속성
+
+Model 객체의 Scene 속성은 **Group** type 이며, Model 의 최상위 Mesh 역할을 합니다.
+
+우리가 Three.js 에 렌더링할 때 사용했던 속성입니다.
+
+그리고 중첩된 **children** 속성으로 하위 Mesh 를 포함하고 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-21-01/2024-01-21-01-03.png" alt="Model Scene 객체" />
+
+<br />
+
+**children** 의 구성요소로 사용되는 대표적인 **type** 은 다음과 같습니다.
+
+* **Mesh** 타입: 3D Tool 에서 만든 Mesh 객체만이 이 타입의 인스턴스가 됩니다.
+* **Object3D** 타입: **Mesh 타입이 아닌 모든 객체** 가 이 타입의 인스턴스로 표현됩니다.
+    * 3D Tool 의 **Null Object (group)**
+    * 3D Tool 의 **대칭 생성(Symmetry)**, **부드러운 면 만들기(Subdivision surface)** 등의 유틸 객체
+
+
+
+<br />
+
+
+
+## Mesh 타입 객체의 주요 속성
+
+* `name`: 3D Tool 에서 명명한 이름입니다.
+* `isMesh`: `true` 값을 가지며, 이 객체가 **Mesh 타입 객체** 라는 것을 단언할 수 있는 상태값입니다.
+* `type`: 이 객체의 type 명입니다.
+* `material`: `Material` 객체 입니다.
+    * 그림자, 재질 등을 변경할 때 사용하게 될 속성(객체) 입니다.
+* `position`: Three.js 에 렌더링할 좌표값 입니다.
+* `rotation`: Three.js 에서 얼만큼 회전시켜서 렌더링할지 설정값 입니다.
+* `scale`: Three.js 상에서 얼만큼 확대/축소 할지에 대한 설정값 입니다.
+* `castShadow`: 그림자 생성 여부에 대한 설정 입니다.
+* `receiveShadow`: 다른 Mesh 의 그림자에 영향을 받을지에 대한 설정 입니다.
+
+
+
+<br />
+
+
+
+## `traverse` 메서드
+
+Model 은 복수의 Mesh 객체들로 구성될 수 있습니다.
+
+이는 **children** 속성으로 중첩된 구조를 갖습니다.
+
+만약 그림자 설정을 변경한다면, Model 을 구성하는 모든 Mesh 객체의 그림자 설정값을 변경해주어야 합니다.
+
+<br />
+
+3D Tool 에서 만든 Model 이 어떤 구조로 되어있는지 모든 구조를 파악하고 설정을 바꿔주는 것은 매우 어려워 보입니다.
+
+그래서 Model 객체의 **scene** 속성(객체) 는 `traverse()` 메서드를 제공합니다.
+
+<br />
+
+`traverse()` 메소드는 Model 을 구성하는 모든 **children** 을 깊은 탐색하는 기능을 수행합니다.
+
+즉, 그림자 설정을 변경한다면, `traverse()` 메소드를 사용하여 모든 하위 Mesh 에 설정을 일괄 변경할 수 있습니다.
+
+<br />
+
+탐색 대상이 되는 children 구성요소는 Mesh 타입이 아닐수도 있습니다.
+
+이때 Mesh 객체인지 식별하기 위해 `isMesh` 속성을 사용하게 됩니다.
+
+<br />
+
+아래 코드는 `traverse()` 메소드를 사용하여 그림자 설정을 활성화 하고 있습니다.
+
+```js title="traverse() 를 사용한 그림자 설정" showLineNumbers{92} {5-12}
+function initCoastRocksMesh() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/coast-rocks-05/coast_rocks_05_4k.gltf', gltf => {
+        gltf.scene.traverse(obj => {
+            if (!obj.isMesh) {
+                return;
+            }
+
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+        });
+
+        scene.add(gltf.scene);
+    });
+}
+```
+
+<img src="/markdownAssets/threejs/2024-01-21-01/2024-01-21-01-04.png" alt="traverse() 메소드" />
+
+
+
+<br />
+
+
+
+## 추가: 빛에 대한 Model 객체의 양감 설정하기
+
+`traverse()` 메소드를 사용하여 Mesh 객체의 **material** 속성을 일괄 변경할 수 있습니다.
+
+Mesh 객체는 **material** 속성을 가지고 있으므로, 이를 사용하여 Mesh 의 양감을 변경할 수 있습니다.
+
+<br />
+
+양감은 Mesh 의 색상이 뚜렷하게 렌더링되는 경우에 풍부하게 연출됩니다.
+
+material 의 `metalness` 값을 `0` 으로 설정하면, 주변 배경을 반사하는 것이 아닌, Mesh 본연의 색상에서 빛의 반사효과만 렌더링됩니다.
+
+<br />
+
+또한 `roughness` 값을 변경하여 빛이 얼마나 뚜렷하게 비춰질지 설정할 수도 있습니다.
+
+```js title="빛에 대한 Metal 객체의 양감 설정하기" showLineNumbers{92} {12-13}
+function initCoastRocksMesh() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/coast-rocks-05/coast_rocks_05_4k.gltf', gltf => {
+        gltf.scene.traverse(obj => {
+            if (!obj.isMesh) {
+                return;
+            }
+
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+            obj.material.metalness = 0;
+            obj.material.roughness = 0;
+        });
+
+        scene.add(gltf.scene);
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+Model 에 그림자 설정을 위한 코드는 `traverse()` 메소드를 사용하면 간단하게 적용할 수 있었습니다.
+
+Model 객체가 어떻게 구성되고, 설정을 변경하는 이유 등을 파악하는 것이 쉽지는 않았습니다.
+
+이번 포스팅에서 정리한 내용은 Three.js 전반에 필요한 개념으로 생각되어 성취감이 느껴집니다.
+11:T2000,---
 id: 7
 title: 모델 파일을 Three.js 에 렌더링하기
 description: '.gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.'
@@ -1260,7 +1615,7 @@ gltf 객체의 scene 과 children 의 중첩구조를 살펴보면 크게 2가�
 3D Mesh 파일(.glTF, .gbl) 을 불러온 상태에서는 빛 반사나 그림자와 같은 효과는 적용되지 않습니다.
 
 다음 포스팅에서는 3D Mesh 불러온 후, Mesh 내부 속성을 변경하는 방법을 알아보겠습니다.
-11:T3408,---
+12:T3408,---
 id: 6
 title: 배경화면 및 환경조명 설정하기
 description: '360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.'
@@ -1769,7 +2124,7 @@ Material 설정을 통해 배경화면을 반사하는 효과를 연출해 보�
 이 부분은 차후 정리할 예정입니다.
 
 [Three.js 공식문서 - 거울효과 예시](https://threejs.org/examples/?q=mirror#webgl_mirror)
-12:T2c06,---
+13:T2c06,---
 id: 5
 title: 그림자 표현하기
 description: '그림자 설정방법과 특징에 대해 정리합니다.'
@@ -2223,7 +2578,7 @@ VSMShadowMap 은 곡선에 대한 그림자를 부드럽게 표현할 수 있는
 그래서 그림자를 최소한으로 사용할 수 있도록 여러가지 설정을 분리시켜놓은 느낌이 들었습니다.
 
 Three.js 를 활용할 때, 그림자 설정이 성능 최적화 대상이라는 것을 알게 되었습니다.
-13:T1a79,---
+14:T1a79,---
 id: 4
 title: 평평한 바닥(땅) 만들기 (Plane Mesh)
 description: '바닥을 표현하기 위해 Plane Mesh 를 생성합니다.'
@@ -2521,7 +2876,7 @@ plane.rotation.set(
 Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
 
 다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
-14:T2eef,---
+15:T2eef,---
 id: 3
 title: 조명 종류와 설정
 description: '조명 종류와 설정 방법에 대해 정리합니다.'
@@ -3095,7 +3450,7 @@ HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보�
 <br />
 
 Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
-15:T3ac1,---
+16:T3ac1,---
 id: 2
 title: 카메라 설정 (PerspectiveCamera)
 description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
@@ -3699,4 +4054,4 @@ Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드
 OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
 
 Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
-d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$15"}]}]
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"}]}]
