@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["Si7Xv4LM6d_SZmNtzpZhS",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["2oZM5CKmdgh7vnhWXrMv0",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -911,7 +911,485 @@ Three.js 를 처음 시작하며 제가 느낀 어려움으로는 컴퓨터 그�
 단순히 Three.js 사용법을 익히는 것만으로 원하는 결과물을 얻기는 어려워 보입니다.
 
 지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
-10:T25c2,---
+10:T2b48,---
+id: 9
+title: 'Model 에 Animation 효과 적용하기'
+description: 'Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'javascript',
+    '3d',
+    '.gltf',
+    '.glb',
+    'model',
+    'animation',
+]
+
+createdAt: '2024-01-26 20:00:00'
+modifiedHistories: []
+---
+
+# Model 에 Animation 효과 적용하기
+
+C4D 또는 Blender 를 사용하여 Model 을 만들고 Three.js 에 렌더링할 수 있게 되었습니다.
+
+이번 포스팅에서는 Model 에 Animation 효과를 적용하는 방법에 대해 알아보고자 합니다.
+
+<br />
+
+예시코드에서 사용한 Model 은 [상상력을 자극하는 고퀄리티 3D 인터랙티브 웹 제작 (최인 강사님)](https://coloso.co.kr/products/graphicdesign-choiin) 강좌 리소스를 사용하였습니다.
+
+
+
+<br />
+
+
+
+## Model 의 Animation 을 적용하는 방법
+
+Animation 은 2가지 방법으로 적용할 수 있습니다.
+
+* 첫번쨰 방법: Model 의 position, rotation, scale 등의 값을 직접 update 하는 방법
+* 두번째 방법: 3D Tool 에서 Model 에 적용한 Keyframe Animation 을 불러와서 Update 하는 방법
+
+<br />
+
+두가지 방법 모두 원리는 HTMLCanvasElement 를 사용한 Animation 을 적용하는 방법과 동일합니다.
+
+첫번째 방법은 가속도와 같은 자연스러운 효과를 구현하기 어렵지만, 두번째 방법을 사용하면 3D Tool 에서 정교하게 만든 Animation 을 사용할 수 있습니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이번 포스팅은 Rocket Model 을 렌더링 한 시점부터 시작합니다.
+
+```js title="예시 코드" showLineNumbers
+// three.js
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+    DirectionalLight,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.shadowMap.enabled = true;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 35;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.position.set(0, 0, 30);
+
+    camera.updateProjectionMatrix();
+}
+
+function initControls($target) {
+    controls = new OrbitControls(camera, $target);
+    controls.enableDamping = true;
+}
+
+//
+// light
+//
+function initDirectionalLight() {
+    const color = new Color('#fff');
+
+    const light = new DirectionalLight(color, 1);
+    light.castShadow = true;
+    light.shadow.mapSize.set(2048, 2048);
+    light.shadow.radius = 8;
+    light.position.set(10, 10, 10);
+    light.lookAt(0, 0, 0);
+
+    scene.add(light);
+}
+
+//
+// model
+//
+function initRocketModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/rocket.glb', gltf => {
+        gltf.scene.position.set(0, -5, 5);
+        gltf.scene.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            child.castShadow = true;
+            child.receiveShadow = true;
+            child.material.metalness = 0;
+        });
+
+        scene.add(gltf.scene);
+    });
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls.update();
+}
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initControls($canvas);
+
+    initDirectionalLight();
+
+    initRocketModel();
+
+    render();
+}());
+```
+
+<img src="/markdownAssets/threejs/2024-01-26-01/2024-01-26-01-01.png" alt="예시 코드 결과" />
+
+
+
+<br />
+
+
+
+## 첫번째 방법: Model 을 직접 변형하여 Animation 효과 구현하기
+
+GLTFLoader 를 사용하여 Model 을 불러옵니다.
+
+불러온 Model 의 position, roation, scale 을 변경하는 함수를 만들고, 매 Frame 을 렌더링할 때마다 update 시켜줍니다.
+
+<br />
+
+아래 코드는 Model 의 rotation.y 의 좌표값을 변경하여, 로켓 Model 이 회전하는 Animation 을 구현합니다.
+
+```js title="첫번째 방법: rocketModel global 변수 추가" showLineNumbers {10, 33-34}
+// three.js
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+    DirectionalLight,
+
+    Mesh,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+/** @type { Mesh } */
+let rocketModel;
+```
+
+```js title="첫번쨰 방법 - Animation 구현" showLineNumbers{93} {8, 25-34, 45}
+//
+// model
+//
+function initRocketModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/rocket.glb', gltf => {
+        rocketModel = gltf.scene;
+
+        gltf.scene.position.set(0, -5, 5);
+        gltf.scene.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            child.castShadow = true;
+            child.receiveShadow = true;
+            child.material.metalness = 0;
+        });
+
+        scene.add(gltf.scene);
+    });
+}
+
+//
+// animation
+//
+function animateRocket() {
+    if (!rocketModel) {
+        return;
+    }
+
+    rocketModel.rotation.y += 0.1;
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls.update();
+
+    animateRocket();
+}
+```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-01-26-01/2024-01-26-01-02.webm" type="video/webm" />
+    첫번쨰 방법 - Animation 구현
+</video>
+
+
+
+<br />
+
+
+
+## 두번째 방법: 3D Model 의 Keyframe Animation 사용하기
+
+첫번쨰 방법으로는 복잡한 Animation 을 구현하기 어렵습니다.
+
+3D Tool 을 사용하여 Model 의 Keyframe Animation 을 만들 수 있으며, Model 이 가진 Animation 을 그대로 사용할 수 있으므로, 정교하고 자연스러운 Animation 을 연출할 수 있습니다.
+
+<br />
+
+GLTFLoader 를 사용하여 Model 을 불러오면, callback 을 통하여 gltf 객체에 접근할 수 있습니다.
+
+gltf 객체에는 animations 속성이 Model 의 Keyframe Animation 을 가지고 있습니다.
+
+<br />
+
+gltf 객체의 animations 를 사용하기 위해 `THREE.AnimationMixer` 객체를 생성합니다.
+
+아래는 `THREE.AnimationMixer` 를 사용하여 Animation 을 적용한 코드 입니다.
+
+```js title="두번째 방법 - AnimationMixer global 변수 정의" showLineNumbers {12, 38-39}
+// three.js
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+    DirectionalLight,
+
+    Mesh,
+
+    AnimationMixer,
+} from 'three';
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+/** @type { Mesh } */
+let rocketModel;
+
+/** @type { AnimationMixer } */
+let animationMixer;
+```
+
+```js title="두번째 방법: Animation 구현" showLineNumbers{98} {10-13, 40-44}
+//
+// model
+//
+function initRocketModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/rocket.glb', gltf => {
+        rocketModel = gltf.scene;
+
+        animationMixer = new AnimationMixer(rocketModel);
+        gltf.animations.forEach(clip => {
+            animationMixer.clipAction(clip).play();
+        });
+
+        gltf.scene.position.set(0, -5, 5);
+        gltf.scene.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            child.castShadow = true;
+            child.receiveShadow = true;
+            child.material.metalness = 0;
+        });
+
+        scene.add(gltf.scene);
+    });
+}
+
+//
+// animation
+//
+function animateRocket() {
+    // if (!rocketModel) {
+    //     return;
+    // }
+
+    // rocketModel.rotation.y += 0.1;
+
+    if (!animationMixer) {
+        return;
+    }
+
+    animationMixer.update(1 / 60);
+}
+```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-01-26-01/2024-01-26-01-03.webm" type="video/webm" />
+    두번쨰 방법 - Animation 구현
+</video>
+
+<br />
+
+위 코드를 살펴 보겠습니다.
+
+먼저 `AnimationMixer` 타입 변수를 선언하고 있습니다.
+
+이는 `AnimationMixer` 인스턴스를 생성하는 곳과 사용하는 scope 가 달라서 global 변수로 선언합니다.
+
+<br />
+
+그리고 GLTFLoader 를 사용하여 gltf 파일을 로드하게 되면, `AnimationMixer` 인스턴스를 생성합니다.
+
+여기서 중요한 점은 `gltf.animations` 의 구성요소인 `animationClip` 객체를 `AnimationMixer` 에 모두 등록`(clipAction())` 해주고 `play()` 시켜주는 것 입니다.
+
+이렇게 등록하게 되면, Frame 을 그릴때 마다 호출하는 `animate()` 함수 내부에서 `AnimationMixer` 의 `update(프레임_증감_값)` 으로 다음 Frame 을 그리게 됩니다.
+
+결과적으로 `AnimationMixer` 에 등록한 Model 의 `animations` 속성을 렌더링하여, Animation 효과가 연출됩니다.
+
+
+
+<br />
+
+
+
+## 추가: gltf.animations 구성
+
+* `AnimationClip` 타입: `gltf.animations` 를 구성하는 객체 타입
+
+
+
+
+<br />
+
+
+
+## 추가: AnimationClip 구성
+
+* `duration`: Animation 의 길이(`초` 단위 시간값)
+* `tracks`: Animation 을 구성하는 변화 데이터
+    * `VectorKeyframeTrack` 타입 객체: Model 의 위치를 변경하는 Track
+    * `QuaternionKeyframeTrack` 타입 객체: Model 을 회전시키는 Track
+    * `tracks` 하위의 타입은 Three.js 에서 변경하기 보다, 어떤 효과로 구성된 Animation 인지 파악하는 정도로만 사용하면 될 것 같습니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+원하는 Animation 을 구현하기 위해서는 3D Tool 사용방법도 익혀야 할 것 같습니다.
+
+Model 의 Animation 을 코드로 구현하는 것은 원하는 결과를 얻기에는 쉽지 않을 것으로 생각되었습니다.
+11:T25c2,---
 id: 8
 title: 'Model (.gltf, .glb) 객체 구조파악 및 그림자 적용'
 description: 'Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.'
@@ -1266,7 +1744,7 @@ Model 에 그림자 설정을 위한 코드는 `traverse()` 메소드를 사용�
 Model 객체가 어떻게 구성되고, 설정을 변경하는 이유 등을 파악하는 것이 쉽지는 않았습니다.
 
 이번 포스팅에서 정리한 내용은 Three.js 전반에 필요한 개념으로 생각되어 성취감이 느껴집니다.
-11:T2000,---
+12:T2000,---
 id: 7
 title: 모델 파일을 Three.js 에 렌더링하기
 description: '.gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.'
@@ -1615,7 +2093,7 @@ gltf 객체의 scene 과 children 의 중첩구조를 살펴보면 크게 2가�
 3D Mesh 파일(.glTF, .gbl) 을 불러온 상태에서는 빛 반사나 그림자와 같은 효과는 적용되지 않습니다.
 
 다음 포스팅에서는 3D Mesh 불러온 후, Mesh 내부 속성을 변경하는 방법을 알아보겠습니다.
-12:T3408,---
+13:T3408,---
 id: 6
 title: 배경화면 및 환경조명 설정하기
 description: '360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.'
@@ -2124,7 +2602,7 @@ Material 설정을 통해 배경화면을 반사하는 효과를 연출해 보�
 이 부분은 차후 정리할 예정입니다.
 
 [Three.js 공식문서 - 거울효과 예시](https://threejs.org/examples/?q=mirror#webgl_mirror)
-13:T2c06,---
+14:T2c06,---
 id: 5
 title: 그림자 표현하기
 description: '그림자 설정방법과 특징에 대해 정리합니다.'
@@ -2578,7 +3056,7 @@ VSMShadowMap 은 곡선에 대한 그림자를 부드럽게 표현할 수 있는
 그래서 그림자를 최소한으로 사용할 수 있도록 여러가지 설정을 분리시켜놓은 느낌이 들었습니다.
 
 Three.js 를 활용할 때, 그림자 설정이 성능 최적화 대상이라는 것을 알게 되었습니다.
-14:T1a79,---
+15:T1a79,---
 id: 4
 title: 평평한 바닥(땅) 만들기 (Plane Mesh)
 description: '바닥을 표현하기 위해 Plane Mesh 를 생성합니다.'
@@ -2876,7 +3354,7 @@ plane.rotation.set(
 Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
 
 다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
-15:T2eef,---
+16:T2eef,---
 id: 3
 title: 조명 종류와 설정
 description: '조명 종류와 설정 방법에 대해 정리합니다.'
@@ -3450,7 +3928,7 @@ HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보�
 <br />
 
 Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
-16:T3ac1,---
+17:T3ac1,---
 id: 2
 title: 카메라 설정 (PerspectiveCamera)
 description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
@@ -4054,4 +4532,4 @@ Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드
 OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
 
 Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
-d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"}]}]
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$17"}]}]
