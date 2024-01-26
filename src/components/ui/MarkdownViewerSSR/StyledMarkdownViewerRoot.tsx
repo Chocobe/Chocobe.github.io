@@ -171,7 +171,8 @@ const _StyledMarkdownViewerRoot = styled.div`
      *
      * (MDXRemote.components.img 미지원)
      */
-    img {
+    img,
+    video {
         border: 1px solid #eee;
         border-radius: 8px;
 
