@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["Oi7d1_xO3w9mRtg57s3v1",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["JtP2Df03p9_RMhPY9lA3-",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -12,7 +12,7 @@ b:I[689,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks
 a:["$","div",null,{"children":["$","div",null,{"className":"w-full\n                    flex items-start","children":[["$","$Lb",null,{"className":"shrink-0\n                        ml-auto\n                        h-[calc(100vh-72px)]\n                        sticky top-[72px]\n                        overflow-auto\n                        max-[600px]:w-0","navTitle":"블로그 카테고리"}],["$","div",null,{"style":{"maxWidth":"980px"},"className":"flex-1\n                        mr-auto\n                        w-full\n                        overflow-x-hidden","children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children","blog","children",["category","threejs","d"],"children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined","childProp":{"current":["$Lc","$Ld",null],"segment":"__PAGE__?{\"category\":\"threejs\"}"},"styles":null}]}]]}]}]
 c:null
 e:I[2317,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","254","static/chunks/app/blog/%5Bcategory%5D/page-864fbedea356ae73.js"],""]
-f:Te0e,---
+f:Te10,---
 id: 10
 title: 'Gamma, GammFactor, sRGB 정리'
 description: '디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.'
@@ -35,7 +35,7 @@ modifiedHistories: []
 Three.js 를 스터디하며 아래와 같은 용어를 접하게 되었습니다.
 
 * Gamma
-* GammaFactor
+* GammaFactor`
 * sRGB
 
 <br />
@@ -126,7 +126,7 @@ sRGB 는 **Standard RGB Color Space** 의 약자 입니다.
 
 Three.js 스터디를 하는 중, gammaFactor 설정이 궁금하여 이번 포스팅을 작성하게 되었습니다.
 
-의미와 용도 정도만 파악하려는 목적이었지만, gamm 와 sRGB 는 상당히 깊고 어려운 내용이었습니다.
+의미와 용도 정도만 파악하려는 목적이었지만, gamma 와 sRGB 는 상당히 깊고 어려운 내용이었습니다.
 
 지금은 간단한 의미 정도만 파악한 후, 차후 필요성이 생겼을 때 좀 더 깊게 알아볼 예정입니다.
 10:T2b48,---

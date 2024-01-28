@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["Oi7d1_xO3w9mRtg57s3v1",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["JtP2Df03p9_RMhPY9lA3-",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -215,7 +215,7 @@ describe('mock-fs 를 사용한 "node:fs" 테스트', () => {
 이번 포스팅에서는 built-in modules 중 "fs" 를 테스트하는 방법에 대해 정리해 보았습니다.
 
 "fs" 가 아닌 다른 module 에 대한 테스트를 한다면, 결국은 Jest 공식문서에서 안내하는 mockup 방법도 사용해 보아야 할 것 같습니다.
-e:Te0e,---
+e:Te10,---
 id: 10
 title: 'Gamma, GammFactor, sRGB 정리'
 description: '디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.'
@@ -238,7 +238,7 @@ modifiedHistories: []
 Three.js 를 스터디하며 아래와 같은 용어를 접하게 되었습니다.
 
 * Gamma
-* GammaFactor
+* GammaFactor`
 * sRGB
 
 <br />
@@ -329,7 +329,7 @@ sRGB 는 **Standard RGB Color Space** 의 약자 입니다.
 
 Three.js 스터디를 하는 중, gammaFactor 설정이 궁금하여 이번 포스팅을 작성하게 되었습니다.
 
-의미와 용도 정도만 파악하려는 목적이었지만, gamm 와 sRGB 는 상당히 깊고 어려운 내용이었습니다.
+의미와 용도 정도만 파악하려는 목적이었지만, gamma 와 sRGB 는 상당히 깊고 어려운 내용이었습니다.
 
 지금은 간단한 의미 정도만 파악한 후, 차후 필요성이 생겼을 때 좀 더 깊게 알아볼 예정입니다.
 f:T1171,---
