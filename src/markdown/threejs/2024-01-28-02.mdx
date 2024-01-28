@@ -1,0 +1,263 @@
+---
+id: 11
+title: 'canvas 크기 설정 및 material 렌더링 side 설정'
+description: '사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'setSize()',
+    'setPixelRatio()',
+    'material',
+    'FrontSide',
+    'BackSide',
+    'DoubleSide',
+]
+
+createdAt: '2024-01-28 23:00:00'
+modifiedHistories: []
+---
+
+# canvas 크기 설정 및 material 렌더링 side 설정
+
+지금까지는 HTMLCanvasElement 인스턴스의 width, height 를 직접 설정하여 사용하고 있었습니다.
+
+이번에는 좀 더 사용자 장치(모니터)에 적합한 렌더링이 되도록 설정하는 방법과 material 의 side 속성에 대해 정리하겠습니다.
+
+
+
+<br />
+
+
+
+## WebGLRenderer 를 사용한 canvas 크기 및 Pixel 비율 설정
+
+지금까지는 HTMLCanvasElement 의 크기를 아래와 같이 설정하였습니다.
+
+```js title="HTMLCanvasElement 크기 설정하기" showLineNumbers
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    // ...
+}
+```
+
+이렇게 설정하여도 일반적인 모니터에서는 문제없이 렌더링 됩니다.
+
+이는 **Pixel Ratio** 가 **1** 인 모니터에 대한 설정이며, 기본 설정값입니다.
+
+<br />
+
+> 참고: [Window: devicePixelRatio 속성 - MDN](https://developer.mozilla.org/ko/docs/Web/API/Window/devicePixelRatio)
+
+Pixel Ratio 이란, **렌더링할 Pixel 크기** 와 **모니터의 물리적 Pixel 크기** 에 대한 비율입니다.
+
+웹을 기준으로 본다면, 아래의 값이 Pixel Ratio 를 도출할 수 있습니다.
+
+* `물리적(모니터) Pixel 크기` / `CSS Pixel 크기`
+
+즉, 일반적인 모니터의 **Pixel Ratio** 가 **1** 이라는 뜻은, **CSS Pixel 1개** 당 **모니터의 실제 Pixel 1개** 를 사용하여 렌더링한다는 의미입니다.
+
+<br />
+
+**HiDPI** 와 **Apple 의 retina** 디스플레이는 Pixel Ratio 가 2인 모니터입니다.
+
+이는 기존의 **CSS Pixel 1개** 를 **모니터의 실제 Pixel 2개** 에 렌더링한다는 의미가 되며, 이러한 제품은 더 많은 물리적 Pixel 을 사용하여 더 선명한 화질을 제공하기 위함입니다.
+
+<br />
+
+우리가 Web 에서 사용하는 HTMLCanvasElement 에 Pixel Ratio 를 적용하려면, 아래와 같은 설정이 필요합니다.
+
+```js title="HTMLCanvasElement 에 Pixel Ratio 적용하기" showLineNumbers
+const pixelRatio = window.devicePixelRatio;
+
+const $canvas = document.createElement('canvas');
+
+$canvas.style.width = `${window.innerWidth}px`;
+$canvas.style.height = `${window.innerHeight}px`;
+
+$canvas.width = window.innerWidth * pixelRatio;
+$canvas.width = window.innerHeight * pixelRatio;
+```
+
+<br />
+
+이렇게 설정하게 되면, 아래와 같이 선명도의 차이가 나타납니다.
+
+> 이미지 출처: [Window: devicePixelRatio 속성 - MDN](https://developer.mozilla.org/ko/docs/Web/API/Window/devicePixelRatio)
+
+<img src="/markdownAssets/threejs/2024-01-28-02/2024-01-28-02-01.png" alt="Pixel Ratio" />
+
+<br />
+
+Three.js 는 WebGLRenderer 인스턴스를 사용하여 Pixel Ratio 를 설정할 수 있습니다.
+
+```js title="Three.js 에 Pixel Ratio 설정하기"
+const renderer = new WebGLRenderer();
+
+renderer.setPixelRatio(window.devicePixelRatio);
+```
+
+<br />
+
+추가로 HTMLCanvasElement 의 width 와 height 를 직접 설정하는 것이 아닌 WebGLRenderer 의 `setSize()` 메소드를 사용하여 설정할 수 있습니다.
+
+`setSize()` 는 HTMLCanvasElement 의 크기 변경과 함께, **Viewport** 까지 **Fit** 하게 설정해 줍니다.
+
+이를 적용하면 아래와 같이 코드를 작성할 수 있습니다.
+
+```js title="WebGLRenderer 설정" showLineNumbers
+import {
+    WebGLRenderer,
+} from 'three';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+}
+```
+
+
+
+<br />
+
+
+
+## Material 의 side 프로퍼티
+
+Material 은 Model 의 재질을 담당하며, 렌더링 대상 중 하나입니다.
+
+렌더링 대상이 많을수록 더 많은 PC 성능을 요구하게 되므로, Material 도 최적화가 필요합니다.
+
+<br />
+
+Three.js 의 Material 인스턴스는 `side` 라는 프로퍼티를 제공합니다.
+
+이는 실제로 렌더링할 **면** 을 지정하여, 렌더링 대상에 속한 Material 만 렌더링하게 됩니다.
+
+<br />
+
+Material 의 `side` 는 다음과 같은 설정을 할 수 있습니다.
+
+* `FrontSide`
+    * Mesh 의 **앞면** 에 해당하는 Material 만 렌더링 합니다.
+    * 뒷면은 렌더링하지 않습니다.
+    * 기본값 입니다.
+* `BackSide`
+    * Mesh 의 **뒷면** 에 해당하는 Material 만 렌더링 합니다.
+    * 앞면은 렌더링하지 않습니다.
+* `DoubleSide`
+    * Mesh 의 전체 Material 을 렌더링 합니다.
+
+<br />
+
+GLTFLoader 를 사용하여 불러온 Model 에 `side` 를 적용하면 다음과 같습니다.
+
+```js title="Material 의 side 설정" showLineNumbers
+import {
+    FrontSide,
+    BackSide,
+    DoubleSide,
+} from 'three';
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loader/GLTFLoader';
+
+function initFrontSideModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/someModel.gltf', gltf => {
+        gltf.scene.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            // `앞면` 만 렌더링
+            child.material.side = FrontSide;
+        });
+    });
+}
+
+function initBackSideModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/someModel.gltf', gltf => {
+        gltf.scene.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            // `뒷면` 만 렌더링
+            child.material.side = BackSide;
+        });
+    });
+}
+
+function initDoubleSideModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/someModel.gltf', gltf => {
+        gltf.scene.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            // 앞, 뒤 모두 렌더링
+            child.material.side = DoubleSide;
+        });
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+스터디를 한 후, 내용이 이해되지 않거나 전혀 생각나지 않을 경우, 상실감을 느낍니다.
+
+그래서 강의 수강과 함께 정리를 병행하고 있습니다.
+
+내용에 따라 하나의 강의를 분리하여 정리하기도 합니다.
+
+이렇게 학습하게 되면, 비교적 학습시간이 많이 필요하게 되지만, 많은 것을 기억할 수 있습니다.
+
+<br />
+
+느린 학습 속도에 조바심이 나기도 하고, 정리에 대한 부담감도 생깁니다.
+
+100% 를 기억하지는 못하더라도, 맥락과 주요 개념을 기억하기 위해서는 당연한 방법이라고 생각합니다.
+
+다만 투자하는 시간에 대한 아쉬움으로 짧은 푸념을 남깁니다.
