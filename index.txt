@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["JtP2Df03p9_RMhPY9lA3-",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["R14p8M390OZr9u_v45sbZ",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -2132,7 +2132,270 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-17:T2b48,---
+17:T1d82,---
+id: 11
+title: 'canvas 크기 설정 및 material 렌더링 side 설정'
+description: '사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    'setSize()',
+    'setPixelRatio()',
+    'material',
+    'FrontSide',
+    'BackSide',
+    'DoubleSide',
+]
+
+createdAt: '2024-01-28 23:00:00'
+modifiedHistories: []
+---
+
+# canvas 크기 설정 및 material 렌더링 side 설정
+
+지금까지는 HTMLCanvasElement 인스턴스의 width, height 를 직접 설정하여 사용하고 있었습니다.
+
+이번에는 좀 더 사용자 장치(모니터)에 적합한 렌더링이 되도록 설정하는 방법과 material 의 side 속성에 대해 정리하겠습니다.
+
+
+
+<br />
+
+
+
+## WebGLRenderer 를 사용한 canvas 크기 및 Pixel 비율 설정
+
+지금까지는 HTMLCanvasElement 의 크기를 아래와 같이 설정하였습니다.
+
+```js title="HTMLCanvasElement 크기 설정하기" showLineNumbers
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+    $canvas.width = window.innerWidth;
+    $canvas.height = window.innerHeight;
+
+    // ...
+}
+```
+
+이렇게 설정하여도 일반적인 모니터에서는 문제없이 렌더링 됩니다.
+
+이는 **Pixel Ratio** 가 **1** 인 모니터에 대한 설정이며, 기본 설정값입니다.
+
+<br />
+
+> 참고: [Window: devicePixelRatio 속성 - MDN](https://developer.mozilla.org/ko/docs/Web/API/Window/devicePixelRatio)
+
+Pixel Ratio 이란, **렌더링할 Pixel 크기** 와 **모니터의 물리적 Pixel 크기** 에 대한 비율입니다.
+
+웹을 기준으로 본다면, 아래의 값이 Pixel Ratio 를 도출할 수 있습니다.
+
+* `물리적(모니터) Pixel 크기` / `CSS Pixel 크기`
+
+즉, 일반적인 모니터의 **Pixel Ratio** 가 **1** 이라는 뜻은, **CSS Pixel 1개** 당 **모니터의 실제 Pixel 1개** 를 사용하여 렌더링한다는 의미입니다.
+
+<br />
+
+**HiDPI** 와 **Apple 의 retina** 디스플레이는 Pixel Ratio 가 2인 모니터입니다.
+
+이는 기존의 **CSS Pixel 1개** 를 **모니터의 실제 Pixel 2개** 에 렌더링한다는 의미가 되며, 이러한 제품은 더 많은 물리적 Pixel 을 사용하여 더 선명한 화질을 제공하기 위함입니다.
+
+<br />
+
+우리가 Web 에서 사용하는 HTMLCanvasElement 에 Pixel Ratio 를 적용하려면, 아래와 같은 설정이 필요합니다.
+
+```js title="HTMLCanvasElement 에 Pixel Ratio 적용하기" showLineNumbers
+const pixelRatio = window.devicePixelRatio;
+
+const $canvas = document.createElement('canvas');
+
+$canvas.style.width = `${window.innerWidth}px`;
+$canvas.style.height = `${window.innerHeight}px`;
+
+$canvas.width = window.innerWidth * pixelRatio;
+$canvas.width = window.innerHeight * pixelRatio;
+```
+
+<br />
+
+이렇게 설정하게 되면, 아래와 같이 선명도의 차이가 나타납니다.
+
+> 이미지 출처: [Window: devicePixelRatio 속성 - MDN](https://developer.mozilla.org/ko/docs/Web/API/Window/devicePixelRatio)
+
+<img src="/markdownAssets/threejs/2024-01-28-02/2024-01-28-02-01.png" alt="Pixel Ratio" />
+
+<br />
+
+Three.js 는 WebGLRenderer 인스턴스를 사용하여 Pixel Ratio 를 설정할 수 있습니다.
+
+```js title="Three.js 에 Pixel Ratio 설정하기"
+const renderer = new WebGLRenderer();
+
+renderer.setPixelRatio(window.devicePixelRatio);
+```
+
+<br />
+
+추가로 HTMLCanvasElement 의 width 와 height 를 직접 설정하는 것이 아닌 WebGLRenderer 의 `setSize()` 메소드를 사용하여 설정할 수 있습니다.
+
+`setSize()` 는 HTMLCanvasElement 의 크기 변경과 함께, **Viewport** 까지 **Fit** 하게 설정해 줍니다.
+
+이를 적용하면 아래와 같이 코드를 작성할 수 있습니다.
+
+```js title="WebGLRenderer 설정" showLineNumbers
+import {
+    WebGLRenderer,
+} from 'three';
+
+/** @type { WebGLRenderer } */
+let renderer;
+
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+}
+```
+
+
+
+<br />
+
+
+
+## Material 의 side 프로퍼티
+
+Material 은 Model 의 재질을 담당하며, 렌더링 대상 중 하나입니다.
+
+렌더링 대상이 많을수록 더 많은 PC 성능을 요구하게 되므로, Material 도 최적화가 필요합니다.
+
+<br />
+
+Three.js 의 Material 인스턴스는 `side` 라는 프로퍼티를 제공합니다.
+
+이는 실제로 렌더링할 **면** 을 지정하여, 렌더링 대상에 속한 Material 만 렌더링하게 됩니다.
+
+<br />
+
+Material 의 `side` 는 다음과 같은 설정을 할 수 있습니다.
+
+* `FrontSide`
+    * Mesh 의 **앞면** 에 해당하는 Material 만 렌더링 합니다.
+    * 뒷면은 렌더링하지 않습니다.
+    * 기본값 입니다.
+* `BackSide`
+    * Mesh 의 **뒷면** 에 해당하는 Material 만 렌더링 합니다.
+    * 앞면은 렌더링하지 않습니다.
+* `DoubleSide`
+    * Mesh 의 전체 Material 을 렌더링 합니다.
+
+<br />
+
+GLTFLoader 를 사용하여 불러온 Model 에 `side` 를 적용하면 다음과 같습니다.
+
+```js title="Material 의 side 설정" showLineNumbers
+import {
+    FrontSide,
+    BackSide,
+    DoubleSide,
+} from 'three';
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loader/GLTFLoader';
+
+function initFrontSideModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/someModel.gltf', gltf => {
+        gltf.scene.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            // `앞면` 만 렌더링
+            child.material.side = FrontSide;
+        });
+    });
+}
+
+function initBackSideModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/someModel.gltf', gltf => {
+        gltf.scene.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            // `뒷면` 만 렌더링
+            child.material.side = BackSide;
+        });
+    });
+}
+
+function initDoubleSideModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/someModel.gltf', gltf => {
+        gltf.scene.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            // 앞, 뒤 모두 렌더링
+            child.material.side = DoubleSide;
+        });
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+스터디를 한 후, 내용이 이해되지 않거나 전혀 생각나지 않을 경우, 상실감을 느낍니다.
+
+그래서 강의 수강과 함께 정리를 병행하고 있습니다.
+
+내용에 따라 하나의 강의를 분리하여 정리하기도 합니다.
+
+이렇게 학습하게 되면, 비교적 학습시간이 많이 필요하게 되지만, 많은 것을 기억할 수 있습니다.
+
+<br />
+
+느린 학습 속도에 조바심이 나기도 하고, 정리에 대한 부담감도 생깁니다.
+
+100% 를 기억하지는 못하더라도, 맥락과 주요 개념을 기억하기 위해서는 당연한 방법이라고 생각합니다.
+
+다만 투자하는 시간에 대한 아쉬움으로 짧은 푸념을 남깁니다.
+18:T2b48,---
 id: 9
 title: 'Model 에 Animation 효과 적용하기'
 description: 'Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.'
@@ -2610,7 +2873,7 @@ function animateRocket() {
 원하는 Animation 을 구현하기 위해서는 3D Tool 사용방법도 익혀야 할 것 같습니다.
 
 Model 의 Animation 을 코드로 구현하는 것은 원하는 결과를 얻기에는 쉽지 않을 것으로 생각되었습니다.
-18:T25c2,---
+19:T25c2,---
 id: 8
 title: 'Model (.gltf, .glb) 객체 구조파악 및 그림자 적용'
 description: 'Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.'
@@ -2965,7 +3228,7 @@ Model 에 그림자 설정을 위한 코드는 `traverse()` 메소드를 사용�
 Model 객체가 어떻게 구성되고, 설정을 변경하는 이유 등을 파악하는 것이 쉽지는 않았습니다.
 
 이번 포스팅에서 정리한 내용은 Three.js 전반에 필요한 개념으로 생각되어 성취감이 느껴집니다.
-19:T2000,---
+1a:T2000,---
 id: 7
 title: 모델 파일을 Three.js 에 렌더링하기
 description: '.gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.'
@@ -3314,7 +3577,7 @@ gltf 객체의 scene 과 children 의 중첩구조를 살펴보면 크게 2가�
 3D Mesh 파일(.glTF, .gbl) 을 불러온 상태에서는 빛 반사나 그림자와 같은 효과는 적용되지 않습니다.
 
 다음 포스팅에서는 3D Mesh 불러온 후, Mesh 내부 속성을 변경하는 방법을 알아보겠습니다.
-1a:T3408,---
+1b:T3408,---
 id: 6
 title: 배경화면 및 환경조명 설정하기
 description: '360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.'
@@ -3823,7 +4086,7 @@ Material 설정을 통해 배경화면을 반사하는 효과를 연출해 보�
 이 부분은 차후 정리할 예정입니다.
 
 [Three.js 공식문서 - 거울효과 예시](https://threejs.org/examples/?q=mirror#webgl_mirror)
-1b:T2c06,---
+1c:T2c06,---
 id: 5
 title: 그림자 표현하기
 description: '그림자 설정방법과 특징에 대해 정리합니다.'
@@ -4277,7 +4540,7 @@ VSMShadowMap 은 곡선에 대한 그림자를 부드럽게 표현할 수 있는
 그래서 그림자를 최소한으로 사용할 수 있도록 여러가지 설정을 분리시켜놓은 느낌이 들었습니다.
 
 Three.js 를 활용할 때, 그림자 설정이 성능 최적화 대상이라는 것을 알게 되었습니다.
-1c:T1a79,---
+1d:T1a79,---
 id: 4
 title: 평평한 바닥(땅) 만들기 (Plane Mesh)
 description: '바닥을 표현하기 위해 Plane Mesh 를 생성합니다.'
@@ -4575,7 +4838,7 @@ plane.rotation.set(
 Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
 
 다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
-1d:T2eef,---
+1e:T2eef,---
 id: 3
 title: 조명 종류와 설정
 description: '조명 종류와 설정 방법에 대해 정리합니다.'
@@ -5149,7 +5412,7 @@ HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보�
 <br />
 
 Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
-1e:T3ac1,---
+1f:T3ac1,---
 id: 2
 title: 카메라 설정 (PerspectiveCamera)
 description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
@@ -5753,7 +6016,7 @@ Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드
 OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
 
 Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
-1f:T5077,---
+20:T5077,---
 id: 1
 title: Three.js 설치 및 실행
 description: 'Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.'
@@ -6652,4 +6915,4 @@ Three.js 를 처음 시작하며 제가 느낀 어려움으로는 컴퓨터 그�
 단순히 Three.js 사용법을 익히는 것만으로 원하는 결과물을 얻기는 어려워 보입니다.
 
 지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
-b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"},{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$e"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"javascript","slug":"2023-12-30-01","href":"/blog/javascript/2023-12-30-01","frontmatter":{"id":2,"title":"AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정","description":"AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript","PDF","PDF Metadata","AWS","S3"],"createdAt":"$D2023-12-30T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2024-01-06-01","href":"/blog/jest/2024-01-06-01","frontmatter":{"id":4,"title":"Nextjs 의 useRouter mock 정의하기","description":"Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","@testing-library","useRouter","next-router-mock","유닛 테스트"],"createdAt":"$D2024-01-06T17:30:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"nextjs","slug":"2024-01-01-01","href":"/blog/nextjs/2024-01-01-01","frontmatter":{"id":2,"title":".DS_Store not found 에러","description":"Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs",".DS_Store"],"createdAt":"$D2024-01-01T15:20:00.000Z","modifiedHistories":[]},"markdownFile":"---\nid: 2\ntitle: .DS_Store not found 에러\ndescription: 'Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.'\nthumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg\n\nfeatured: false\ntags: [\n    'nextjs',\n    '.DS_Store',\n]\n\ncreatedAt: '2024-01-01 15:20:00'\nmodifiedHistories: []\n---\n\n# .DS_Store not found 에러\n\nNextjs 프로젝트에 이미지 파일을 추가하고 삭제한 후, 빌드 에러가 발생하였습니다.\n\n> Error: ENOENT: no such file or directory, open '/.../.DS_Store\n\n\n\n<br />\n\n\n\n## 에러 원인 파악\n\n.DS_Store 는 맥북의 폴더 관련 메타데이터 파일이며, Finder 로 폴더에 접근하게 되면 자동으로 생성됩니다.\n\n문제는 Nextjs 프로젝트를 개발 환경으로 실행하거나 빌드할 때, .DS_Store 파일이 추가되면, 빌드 에러가 발생합니다.\n\n\n\n\n<br />\n\n\n\n## 해결 방법\n\n* 참고: [Stack Overflow](https://github.com/vercel/next.js/discussions/15573#discussioncomment-2415012)\n\n<br />\n\nNextjs 프로젝트 하위에 존재하는 .DS_Store 파일을 모두 삭제하는 것으로 해결할 수 있었습니다.\n\n모든 폴더를 직접 열어보면서 지우는 방법도 있겠지만, 터미널을 사용하여 삭제 명령으로 처리할 수 있습니다.\n\n```bash title=\"프로젝트 내의 모든 .DS_Store 파일 삭제\"\nrm **/.DS_Store\n```\n\n<br />\n\n삭제 명령이 실행 완료되면, Nextjs 프로젝트가 정상적으로 빌드되는 것을 확인할 수 있습니다.\n"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1a"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1b"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$1c"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1d"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1e"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$1f"}]}]
+b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"},{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$e"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"javascript","slug":"2023-12-30-01","href":"/blog/javascript/2023-12-30-01","frontmatter":{"id":2,"title":"AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정","description":"AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript","PDF","PDF Metadata","AWS","S3"],"createdAt":"$D2023-12-30T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2024-01-06-01","href":"/blog/jest/2024-01-06-01","frontmatter":{"id":4,"title":"Nextjs 의 useRouter mock 정의하기","description":"Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","@testing-library","useRouter","next-router-mock","유닛 테스트"],"createdAt":"$D2024-01-06T17:30:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"nextjs","slug":"2024-01-01-01","href":"/blog/nextjs/2024-01-01-01","frontmatter":{"id":2,"title":".DS_Store not found 에러","description":"Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs",".DS_Store"],"createdAt":"$D2024-01-01T15:20:00.000Z","modifiedHistories":[]},"markdownFile":"---\nid: 2\ntitle: .DS_Store not found 에러\ndescription: 'Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.'\nthumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg\n\nfeatured: false\ntags: [\n    'nextjs',\n    '.DS_Store',\n]\n\ncreatedAt: '2024-01-01 15:20:00'\nmodifiedHistories: []\n---\n\n# .DS_Store not found 에러\n\nNextjs 프로젝트에 이미지 파일을 추가하고 삭제한 후, 빌드 에러가 발생하였습니다.\n\n> Error: ENOENT: no such file or directory, open '/.../.DS_Store\n\n\n\n<br />\n\n\n\n## 에러 원인 파악\n\n.DS_Store 는 맥북의 폴더 관련 메타데이터 파일이며, Finder 로 폴더에 접근하게 되면 자동으로 생성됩니다.\n\n문제는 Nextjs 프로젝트를 개발 환경으로 실행하거나 빌드할 때, .DS_Store 파일이 추가되면, 빌드 에러가 발생합니다.\n\n\n\n\n<br />\n\n\n\n## 해결 방법\n\n* 참고: [Stack Overflow](https://github.com/vercel/next.js/discussions/15573#discussioncomment-2415012)\n\n<br />\n\nNextjs 프로젝트 하위에 존재하는 .DS_Store 파일을 모두 삭제하는 것으로 해결할 수 있었습니다.\n\n모든 폴더를 직접 열어보면서 지우는 방법도 있겠지만, 터미널을 사용하여 삭제 명령으로 처리할 수 있습니다.\n\n```bash title=\"프로젝트 내의 모든 .DS_Store 파일 삭제\"\nrm **/.DS_Store\n```\n\n<br />\n\n삭제 명령이 실행 완료되면, Nextjs 프로젝트가 정상적으로 빌드되는 것을 확인할 수 있습니다.\n"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-01-28-02","href":"/blog/threejs/2024-01-28-02","frontmatter":{"id":11,"title":"canvas 크기 설정 및 material 렌더링 side 설정","description":"사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","setSize()","setPixelRatio()","material","FrontSide","BackSide","DoubleSide"],"createdAt":"$D2024-01-28T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1a"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1b"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1c"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$1d"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1e"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1f"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$20"}]}]
