@@ -1,0 +1,461 @@
+---
+id: 12
+title: '키보드를 사용하여 카메라 이동 인터렉션 만들기'
+description: '키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    '3D',
+    'keyboard event',
+    'camera',
+    'interaction',
+]
+
+createdAt: '2024-01-30 18:00:00'
+modifiedHistories: []
+---
+
+# 키보드를 사용하여 카메라 이동 인터렉션 만들기
+
+이번에는 사용자 인터렉션을 구현해 보겠습니다.
+
+키보드 입력값에 따라 카메라를 이동할 수 있는 기능을 구현해 보고자 합니다.
+
+추가로 브라우저 resize 이벤트를 사용하여 canvas 의 크기를 조정하는 기능까지 구현해 보겠습니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이번 포스팅에서 사용할 예시 코드는 다음과 같습니다.
+
+```js title="예시 코드" showLineNumbers
+// three.js
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+    PointLight,
+    HemisphereLight,
+
+    MeshBasicMaterial,
+    MeshStandardMaterial,
+} from 'three';
+// three.js - addons
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+/** @type { WebGLRenderer} */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function initScene() {
+    scene = new Scene();
+    scene.background = new Color('#000');
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.near = 0.1;
+    camera.far = 3000;
+    camera.position.set(0, 0, 0);
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+
+//
+// light
+//
+function initPointLight() {
+    const color = new Color('#fff');
+
+    const light = new PointLight(color, 1);
+    light.position.set(0, 0, 0);
+
+    scene.add(light);
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#000');
+    const groundColor = new Color('#fff');
+
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        0.4
+    );
+    light.position.set(1, 0, 1);
+
+    scene.add(light);
+}
+
+//
+// model
+//
+function initMoveModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/move.glb', gltf => {
+        const moveModel = gltf.scene;
+
+        // Model 의 크기가 너무 커서, 0.1 배로 줄여서 사용합니다.
+        const ratio = 0.1;
+
+        moveModel.scale.set(
+            ratio,
+            ratio,
+            ratio
+        );
+        moveModel.position.set(0, 0, 0);
+
+        moveModel.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            switch(child.name) {
+                case 'light':
+                    child.material = new MeshBasicMaterial({
+                        color: new Color('#fff'),
+                    });
+                    break;
+                default:
+                    child.material = new MeshStandardMaterial({
+                        color: new Color('#fff'),
+                        roughness: 0.5,
+                    });
+            }
+        });
+
+        // Model 에 포함되어 있는 카메라 위치값을 사용합니다.
+        const moveModelCamera = gltf.cameras[0];
+        camera.position.set(
+            moveModelCamera.position.x * ratio,
+            moveModelCamera.position.y * ratio,
+            moveModelCamera.position.z * ratio
+        );
+
+        scene.add(moveModel);
+    });
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+}
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+
+    initPointLight();
+    initHemisphereLight();
+
+    initMoveModel();
+
+    render();
+}());
+```
+
+<br />
+
+예시코드에서 사용한 Model 은 [상상력을 자극하는 고퀄리티 3D 인터랙티브 웹 제작 (최인 강사님)](https://coloso.co.kr/products/graphicdesign-choiin) 강좌 리소스를 사용하였습니다.
+
+
+
+<br />
+
+
+
+## 이동 상태값 만들기
+
+눌러진 키보드 방향키에 따라 카메라의 Z 축 위치를 변경하는 인터렉션을 만들고자 합니다.
+
+* ArrowUp(위쪽 방향키): 카메라가 -Z 축으로 이동합니다.
+* ArrowDown(아래쪽 방향키): 카메라가 +Z 축으로 이동합니다.
+
+<br />
+
+ArrowUp, ArrowDown 키가 눌려졌는지 상태값이 필요합니다.
+
+이 상태값을 사용하여, 키가 눌려졌다면 Camera 의 `position.z` 값을 증감시켜서, 마치 화면(카메라) 가 이동하는 듯한 효과를 연출하겠습니다.
+
+<br />
+
+```js title="이동 상태값 만들기" showLineNumbers{21} {10-13}
+/** @type { WebGLRenderer} */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+const moveInteractionState = {
+    forward: false,
+    backward: false,
+};
+```
+
+
+
+<br />
+
+
+
+## 키보드 이벤트 리스너 만들기
+
+ArrowUp, ArrowDown 에 대한 키보드 이벤트 리스너를 추가해 보겠습니다.
+
+이벤트 리스너는 `moveInteractionState` 의 값을 변경하여, 해당 키가 눌려졌는지에 대한 상태를 변경하는 역할을 하게 됩니다.
+
+```js title="키보드 이벤트 리스너 만들기" showLineNumbers{153}
+//
+// interaction
+//
+function initMoveInteraction() {
+    window.addEventListener('keydown', e => {
+        const key = e.key.toLowerCase();
+
+        switch(key) {
+            case 'up':
+            case 'arrowup':
+                moveInteractionState.forward = true;
+                break;
+            case 'down':
+            case 'arrowdown':
+                moveInteractionState.backward = true;
+                break;
+        }
+    });
+
+    window.addEventListener('keyup', e => {
+        const key = e.key.toLowerCase();
+
+        switch(key) {
+            case 'up':
+            case 'arrowup':
+                moveInteractionState.forward = false;
+                break;
+            case 'down':
+            case 'arrowdown':
+                moveInteractionState.backward = false;
+                break;
+        }
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## 키보드 상태값으로 카메라 이동시키기
+
+예시 코드의 `render()` 함수는 60 프레임으로 호출됩니다.
+
+매 프레임마다 키보드 상태값에 따라 카메라의 위치를 증감 시켜주는 기능을 추가하여, 카메라를 이동시키는 기능을 구현할 수 있습니다.
+
+<br />
+
+카메라를 이동시키는 기능으로 `animateCamera()` 함수를 만들면 다음과 같습니다.
+
+```js title="키보다 상태값으로 카메라 이동시키기" showLineNumbers {4-13, 23, 38}
+//
+// animation
+//
+function animateCamera() {
+    switch(true) {
+        case moveInteractionState.forward:
+            camera.position.z -= 6;
+            break;
+        case moveInteractionState.backward:
+            camera.position.z += 6;
+            break;
+    }
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+
+    animateCamera();
+}
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+
+    initPointLight();
+    initHemisphereLight();
+
+    initMoveModel();
+
+    initMoveInteraction();
+
+    render();
+}());
+```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-01-30-01/2024-01-30-01-01.webm" type="video/webm" />
+    키보드 상태값으로 카메라 이동시키기
+</video>
+
+
+
+<br />
+
+
+
+## 브라우저 resize 이벤트로 canvas 크기 조정하기
+
+**resize** 이벤트는 브라우저의 크기가 변경되면 발생하는 이벤트 입니다.
+
+resize 이벤트가 발생했을 때, canvas 의 크기를 변경된 브라우저 크기로 변경하는 기능을 구현해 보겠습니다.
+
+<br />
+
+먼저 canvas 의 크기를 변경하기 위에 `renderer.setSize()` 메솓드를 사용합니다.
+
+```js title="브라우저 resize 이벤트로 canvas 크기 조정하기" showLineNumbers{47} {13-18}
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+    });
+}
+```
+
+<br />
+
+위 코드를 적용한 후, 브라우저 크기를 변경해보면, canvas 의 크기도 함께 조정됩니다.
+
+하지만 찌그러진 결과가 렌더링됨을 볼 수 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-30-01/2024-01-30-01-02.png" alt="찌그러진 결과" />
+
+<br />
+
+이 현상은 **Camera** 의 **비율 (aspect ratio)** 는 최초 브라우저의 비율을 그대로 사용하고 있기 때문입니다.
+
+`camera.aspect` 속성에도 변경된 브라우저 크기의 비율을 적용하여 문제를 해결할 수 있습니다.
+
+```js title="찌그러짐 해소" showLineNumbers{47} {19-20}
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+처음으로 사용자 인터렉션을 적용해 보았습니다.
+
+Javascript 의 이벤트 처리 방식을 그대로 따르는 방법이라서 친숙하였습니다.
+
+<br />
+
+그리고 인터렉션에 의한 렌더링을 변경할 때, **프레임** 을 그리는 `render()` 함수에서 변화를 적용하여야 함을 알게 되었습니다.
+
+만약 화면을 변경하는 부분을 `render()` 함수가 아닌, event listener 에서 직접 하게 되면, **뚝뚝 끊기면서 렌더링되는 현상** 이 나타났습니다.
+
+이는 키보드를 누르고 있을 때, 체터링 간격이 `1 /60` 보다 큰 값인 것으로 추측되었습니다.
