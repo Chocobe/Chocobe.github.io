@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["R14p8M390OZr9u_v45sbZ",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["4CNC2g-Sw7DkgIHD_o83I",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -129,7 +129,468 @@ Three.js 스터디를 하는 중, gammaFactor 설정이 궁금하여 이번 포�
 의미와 용도 정도만 파악하려는 목적이었지만, gamma 와 sRGB 는 상당히 깊고 어려운 내용이었습니다.
 
 지금은 간단한 의미 정도만 파악한 후, 차후 필요성이 생겼을 때 좀 더 깊게 알아볼 예정입니다.
-10:T1d82,---
+10:T2afe,---
+id: 12
+title: '키보드를 사용하여 카메라 이동 인터렉션 만들기'
+description: '키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    '3D',
+    'keyboard event',
+    'camera',
+    'interaction',
+]
+
+createdAt: '2024-01-30 18:00:00'
+modifiedHistories: []
+---
+
+# 키보드를 사용하여 카메라 이동 인터렉션 만들기
+
+이번에는 사용자 인터렉션을 구현해 보겠습니다.
+
+키보드 입력값에 따라 카메라를 이동할 수 있는 기능을 구현해 보고자 합니다.
+
+추가로 브라우저 resize 이벤트를 사용하여 canvas 의 크기를 조정하는 기능까지 구현해 보겠습니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이번 포스팅에서 사용할 예시 코드는 다음과 같습니다.
+
+```js title="예시 코드" showLineNumbers
+// three.js
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+
+    Color,
+    PointLight,
+    HemisphereLight,
+
+    MeshBasicMaterial,
+    MeshStandardMaterial,
+} from 'three';
+// three.js - addons
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+/** @type { WebGLRenderer} */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+}
+
+function initScene() {
+    scene = new Scene();
+    scene.background = new Color('#000');
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.near = 0.1;
+    camera.far = 3000;
+    camera.position.set(0, 0, 0);
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+
+//
+// light
+//
+function initPointLight() {
+    const color = new Color('#fff');
+
+    const light = new PointLight(color, 1);
+    light.position.set(0, 0, 0);
+
+    scene.add(light);
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#000');
+    const groundColor = new Color('#fff');
+
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        0.4
+    );
+    light.position.set(1, 0, 1);
+
+    scene.add(light);
+}
+
+//
+// model
+//
+function initMoveModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/move.glb', gltf => {
+        const moveModel = gltf.scene;
+
+        // Model 의 크기가 너무 커서, 0.1 배로 줄여서 사용합니다.
+        const ratio = 0.1;
+
+        moveModel.scale.set(
+            ratio,
+            ratio,
+            ratio
+        );
+        moveModel.position.set(0, 0, 0);
+
+        moveModel.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            switch(child.name) {
+                case 'light':
+                    child.material = new MeshBasicMaterial({
+                        color: new Color('#fff'),
+                    });
+                    break;
+                default:
+                    child.material = new MeshStandardMaterial({
+                        color: new Color('#fff'),
+                        roughness: 0.5,
+                    });
+            }
+        });
+
+        // Model 에 포함되어 있는 카메라 위치값을 사용합니다.
+        const moveModelCamera = gltf.cameras[0];
+        camera.position.set(
+            moveModelCamera.position.x * ratio,
+            moveModelCamera.position.y * ratio,
+            moveModelCamera.position.z * ratio
+        );
+
+        scene.add(moveModel);
+    });
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+}
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+
+    initPointLight();
+    initHemisphereLight();
+
+    initMoveModel();
+
+    render();
+}());
+```
+
+<br />
+
+예시코드에서 사용한 Model 은 [상상력을 자극하는 고퀄리티 3D 인터랙티브 웹 제작 (최인 강사님)](https://coloso.co.kr/products/graphicdesign-choiin) 강좌 리소스를 사용하였습니다.
+
+
+
+<br />
+
+
+
+## 이동 상태값 만들기
+
+눌러진 키보드 방향키에 따라 카메라의 Z 축 위치를 변경하는 인터렉션을 만들고자 합니다.
+
+* ArrowUp(위쪽 방향키): 카메라가 -Z 축으로 이동합니다.
+* ArrowDown(아래쪽 방향키): 카메라가 +Z 축으로 이동합니다.
+
+<br />
+
+ArrowUp, ArrowDown 키가 눌려졌는지 상태값이 필요합니다.
+
+이 상태값을 사용하여, 키가 눌려졌다면 Camera 의 `position.z` 값을 증감시켜서, 마치 화면(카메라) 가 이동하는 듯한 효과를 연출하겠습니다.
+
+<br />
+
+```js title="이동 상태값 만들기" showLineNumbers{21} {10-13}
+/** @type { WebGLRenderer} */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+const moveInteractionState = {
+    forward: false,
+    backward: false,
+};
+```
+
+
+
+<br />
+
+
+
+## 키보드 이벤트 리스너 만들기
+
+ArrowUp, ArrowDown 에 대한 키보드 이벤트 리스너를 추가해 보겠습니다.
+
+이벤트 리스너는 `moveInteractionState` 의 값을 변경하여, 해당 키가 눌려졌는지에 대한 상태를 변경하는 역할을 하게 됩니다.
+
+```js title="키보드 이벤트 리스너 만들기" showLineNumbers{153}
+//
+// interaction
+//
+function initMoveInteraction() {
+    window.addEventListener('keydown', e => {
+        const key = e.key.toLowerCase();
+
+        switch(key) {
+            case 'up':
+            case 'arrowup':
+                moveInteractionState.forward = true;
+                break;
+            case 'down':
+            case 'arrowdown':
+                moveInteractionState.backward = true;
+                break;
+        }
+    });
+
+    window.addEventListener('keyup', e => {
+        const key = e.key.toLowerCase();
+
+        switch(key) {
+            case 'up':
+            case 'arrowup':
+                moveInteractionState.forward = false;
+                break;
+            case 'down':
+            case 'arrowdown':
+                moveInteractionState.backward = false;
+                break;
+        }
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## 키보드 상태값으로 카메라 이동시키기
+
+예시 코드의 `render()` 함수는 60 프레임으로 호출됩니다.
+
+매 프레임마다 키보드 상태값에 따라 카메라의 위치를 증감 시켜주는 기능을 추가하여, 카메라를 이동시키는 기능을 구현할 수 있습니다.
+
+<br />
+
+카메라를 이동시키는 기능으로 `animateCamera()` 함수를 만들면 다음과 같습니다.
+
+```js title="키보다 상태값으로 카메라 이동시키기" showLineNumbers {4-13, 23, 38}
+//
+// animation
+//
+function animateCamera() {
+    switch(true) {
+        case moveInteractionState.forward:
+            camera.position.z -= 6;
+            break;
+        case moveInteractionState.backward:
+            camera.position.z += 6;
+            break;
+    }
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+
+    animateCamera();
+}
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+
+    initPointLight();
+    initHemisphereLight();
+
+    initMoveModel();
+
+    initMoveInteraction();
+
+    render();
+}());
+```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-01-30-01/2024-01-30-01-01.webm" type="video/webm" />
+    키보드 상태값으로 카메라 이동시키기
+</video>
+
+
+
+<br />
+
+
+
+## 브라우저 resize 이벤트로 canvas 크기 조정하기
+
+**resize** 이벤트는 브라우저의 크기가 변경되면 발생하는 이벤트 입니다.
+
+resize 이벤트가 발생했을 때, canvas 의 크기를 변경된 브라우저 크기로 변경하는 기능을 구현해 보겠습니다.
+
+<br />
+
+먼저 canvas 의 크기를 변경하기 위에 `renderer.setSize()` 메솓드를 사용합니다.
+
+```js title="브라우저 resize 이벤트로 canvas 크기 조정하기" showLineNumbers{47} {13-18}
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+    });
+}
+```
+
+<br />
+
+위 코드를 적용한 후, 브라우저 크기를 변경해보면, canvas 의 크기도 함께 조정됩니다.
+
+하지만 찌그러진 결과가 렌더링됨을 볼 수 있습니다.
+
+<img src="/markdownAssets/threejs/2024-01-30-01/2024-01-30-01-02.png" alt="찌그러진 결과" />
+
+<br />
+
+이 현상은 **Camera** 의 **비율 (aspect ratio)** 는 최초 브라우저의 비율을 그대로 사용하고 있기 때문입니다.
+
+`camera.aspect` 속성에도 변경된 브라우저 크기의 비율을 적용하여 문제를 해결할 수 있습니다.
+
+```js title="찌그러짐 해소" showLineNumbers{47} {19-20}
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+    );
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+처음으로 사용자 인터렉션을 적용해 보았습니다.
+
+Javascript 의 이벤트 처리 방식을 그대로 따르는 방법이라서 친숙하였습니다.
+
+<br />
+
+그리고 인터렉션에 의한 렌더링을 변경할 때, **프레임** 을 그리는 `render()` 함수에서 변화를 적용하여야 함을 알게 되었습니다.
+
+만약 화면을 변경하는 부분을 `render()` 함수가 아닌, event listener 에서 직접 하게 되면, **뚝뚝 끊기면서 렌더링되는 현상** 이 나타났습니다.
+
+이는 키보드를 누르고 있을 때, 체터링 간격이 `1 /60` 보다 큰 값인 것으로 추측되었습니다.
+11:T1d82,---
 id: 11
 title: 'canvas 크기 설정 및 material 렌더링 side 설정'
 description: '사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.'
@@ -392,7 +853,7 @@ function initDoubleSideModel() {
 100% 를 기억하지는 못하더라도, 맥락과 주요 개념을 기억하기 위해서는 당연한 방법이라고 생각합니다.
 
 다만 투자하는 시간에 대한 아쉬움으로 짧은 푸념을 남깁니다.
-11:T2b48,---
+12:T2b48,---
 id: 9
 title: 'Model 에 Animation 효과 적용하기'
 description: 'Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.'
@@ -870,7 +1331,7 @@ function animateRocket() {
 원하는 Animation 을 구현하기 위해서는 3D Tool 사용방법도 익혀야 할 것 같습니다.
 
 Model 의 Animation 을 코드로 구현하는 것은 원하는 결과를 얻기에는 쉽지 않을 것으로 생각되었습니다.
-12:T25c2,---
+13:T25c2,---
 id: 8
 title: 'Model (.gltf, .glb) 객체 구조파악 및 그림자 적용'
 description: 'Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.'
@@ -1225,7 +1686,7 @@ Model 에 그림자 설정을 위한 코드는 `traverse()` 메소드를 사용�
 Model 객체가 어떻게 구성되고, 설정을 변경하는 이유 등을 파악하는 것이 쉽지는 않았습니다.
 
 이번 포스팅에서 정리한 내용은 Three.js 전반에 필요한 개념으로 생각되어 성취감이 느껴집니다.
-13:T2000,---
+14:T2000,---
 id: 7
 title: 모델 파일을 Three.js 에 렌더링하기
 description: '.gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.'
@@ -1574,7 +2035,7 @@ gltf 객체의 scene 과 children 의 중첩구조를 살펴보면 크게 2가�
 3D Mesh 파일(.glTF, .gbl) 을 불러온 상태에서는 빛 반사나 그림자와 같은 효과는 적용되지 않습니다.
 
 다음 포스팅에서는 3D Mesh 불러온 후, Mesh 내부 속성을 변경하는 방법을 알아보겠습니다.
-14:T3408,---
+15:T3408,---
 id: 6
 title: 배경화면 및 환경조명 설정하기
 description: '360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.'
@@ -2083,7 +2544,7 @@ Material 설정을 통해 배경화면을 반사하는 효과를 연출해 보�
 이 부분은 차후 정리할 예정입니다.
 
 [Three.js 공식문서 - 거울효과 예시](https://threejs.org/examples/?q=mirror#webgl_mirror)
-15:T2c06,---
+16:T2c06,---
 id: 5
 title: 그림자 표현하기
 description: '그림자 설정방법과 특징에 대해 정리합니다.'
@@ -2537,7 +2998,7 @@ VSMShadowMap 은 곡선에 대한 그림자를 부드럽게 표현할 수 있는
 그래서 그림자를 최소한으로 사용할 수 있도록 여러가지 설정을 분리시켜놓은 느낌이 들었습니다.
 
 Three.js 를 활용할 때, 그림자 설정이 성능 최적화 대상이라는 것을 알게 되었습니다.
-16:T1a79,---
+17:T1a79,---
 id: 4
 title: 평평한 바닥(땅) 만들기 (Plane Mesh)
 description: '바닥을 표현하기 위해 Plane Mesh 를 생성합니다.'
@@ -2835,7 +3296,7 @@ plane.rotation.set(
 Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
 
 다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
-17:T2eef,---
+18:T2eef,---
 id: 3
 title: 조명 종류와 설정
 description: '조명 종류와 설정 방법에 대해 정리합니다.'
@@ -3409,7 +3870,7 @@ HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보�
 <br />
 
 Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
-18:T3ac1,---
+19:T3ac1,---
 id: 2
 title: 카메라 설정 (PerspectiveCamera)
 description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
@@ -4013,7 +4474,7 @@ Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드
 OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
 
 Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
-19:T5077,---
+1a:T5077,---
 id: 1
 title: Three.js 설치 및 실행
 description: 'Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.'
@@ -4912,4 +5373,4 @@ Three.js 를 처음 시작하며 제가 느낀 어려움으로는 컴퓨터 그�
 단순히 Three.js 사용법을 익히는 것만으로 원하는 결과물을 얻기는 어려워 보입니다.
 
 지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
-d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-28-02","href":"/blog/threejs/2024-01-28-02","frontmatter":{"id":11,"title":"canvas 크기 설정 및 material 렌더링 side 설정","description":"사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","setSize()","setPixelRatio()","material","FrontSide","BackSide","DoubleSide"],"createdAt":"$D2024-01-28T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$19"}]}]
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-30-01","href":"/blog/threejs/2024-01-30-01","frontmatter":{"id":12,"title":"키보드를 사용하여 카메라 이동 인터렉션 만들기","description":"키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","keyboard event","camera","interaction"],"createdAt":"$D2024-01-30T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2024-01-28-02","href":"/blog/threejs/2024-01-28-02","frontmatter":{"id":11,"title":"canvas 크기 설정 및 material 렌더링 side 설정","description":"사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","setSize()","setPixelRatio()","material","FrontSide","BackSide","DoubleSide"],"createdAt":"$D2024-01-28T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$1a"}]}]
