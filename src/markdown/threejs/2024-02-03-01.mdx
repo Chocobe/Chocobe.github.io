@@ -1,0 +1,149 @@
+---
+id: 13
+title: '(Issue) 조명이 어둡게 보이는 현상'
+description: '강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    '3D',
+    'DirectionalLgith',
+    'HemisphereLight',
+    'intensity'
+]
+
+createdAt: '2024-02-03 14:00:00'
+modifiedHistories: []
+---
+
+# (Issue) 조명이 어둡게 보이는 현상
+
+강좌에서 제공하는 프로젝트 환경에서 실습을 하였습니다.
+
+그 후, Vite 프로젝트를 생성하여 복습한 결과, 어둡게 렌더링되는 현상이 발생하였습니다.
+
+* 강좌 결과: 밝게 렌더링
+* 복습 결과: 어둡게 렌더링
+
+<img src="/markdownAssets/threejs/2024-02-03-01/2024-02-03-01-01.png" alt="발기 차이" />
+
+
+
+<br />
+
+
+
+## 원인은 Three.js 버전
+
+강좌에서 사용한 Three.js 버전은 **0.132.2**, 복습에서는 **0.162.2** 을 사용하였습니다.
+
+<br />
+
+동일한 코드임에도 불구하고 복습 결과가 더 어둡게 렌더링된 것은, Three.js 의 버전이 올라가면서 Light 의 **intensity** 값에 대한 단위가 바뀌었기 때문입니다.
+
+> 참고: [Three.js 포럼](https://discourse.threejs.org/t/breaking-changes-between-r132-vs-r133/30629)
+>
+> 참고: [Three.js 포럼 질문](https://discourse.threejs.org/t/r132-r133-darkened-scene/30951)
+
+
+
+<br />
+
+
+
+## 해결 방법 1 (deprecated)
+
+WebGLRenderer 인스턴스의 `useLegacyLights` 속성을 `true` 설정하면 강좌 처럼 밝게 렌더링됩니다.
+
+다만 `useLegacyLights` 는 deprecated 된 속성이기 때문에 권장하는 방법이 필요합니다.
+
+```js title="useLegacyLights 설정" {6}
+const renderer = new WebGLRenderer({
+    canvas,
+    antialias: true,
+});
+
+renderer.useLegacyLights = true;
+```
+
+
+
+<br />
+
+
+
+## 해결 방법 2 (recommanded)
+
+어둡게 렌더링되는 원인인 Light 의 intensity 값을 조정하는 방법을 권장합니다.
+
+기존에는 intensity 값을 **정수** 를 기준으로 하였지만, **PI** 값을 기준으로 변경되었습니다.
+
+그래서 기존과 동일한 밝기로 렌더링하고자 한다면, **기존_intensity_값 * PI** 를 사용하여 얻을 수 있습니다.
+
+* v0.131.0 에서 Light intensity: **1**
+* 이후 버전에서 Light intensity: **1 * Math.PI**
+
+<br />
+
+```js title="Light intensity 에 PI 적용"
+const directionalLight = new DirectionalLight(
+    new Color('#fff'),
+    Math.PI * 1
+);
+
+const hemisphereLight = new HemisphereLight(
+    new Color('#fff'),
+    new Color('#000'),
+    Math.PI * 0.5
+);
+```
+
+<img src="/markdownAssets/threejs/2024-02-03-01/2024-02-03-01-02.png" alt="Light intensity 에 PI 적용" />
+
+<br />
+
+Light 의 intensity 를 사용하여 기존과 거의 유사한 밝기의 결과를 확인할 수 있습니다.
+
+다만 완벽히 동일한 결과를 얻을수는 없습니다.
+
+
+
+<br />
+
+
+
+## Light 의 intensity 단위가 바뀐 이유
+
+> [참고: Physically Based Rendering and Lighting](https://discoverthreejs.com/book/first-steps/physically-based-rendering/)
+
+**물리 기반 렌더링 (Phycally Based Renderering)** 을 위해 Light 의 intensity 값에 PI 를 도입하게 되었다고 합니다.
+
+물리 기반이란, Light 와 물체의 거리에 따라 생성할 그림자에 물리 법칙을 적용하여 더 사실적으로 렌더링할 수 있게 됩니다.
+
+<br />
+
+intensity 에 PI 를 적용하도록 변경된 Light 는 다음과 같습니다.
+
+* AmbientLight
+* DirectionalLight
+* HemisphereLight
+* SpotLight
+
+
+
+<br />
+
+
+
+## 마치며
+
+복습한 결과가 강좌의 결과와 다른 이유가 너무나 궁금하였습니다.
+
+만약 이번 이슈를 해결하지 못하고 넘어간다면, 의도한 밝기의 결과를 만들지 못한다는 걱정이 컸습니다.
+
+다행히 Three.js 포럼에 관련 질문과 설명이 있었습니다.
+
+<br />
+
+Three.js 의 공식 문서는 개요 파악 정도로 사용하고, Three.js 포럼에서 좀 더 자세한 내용을 찾아보아야 할 것 같습니다.
