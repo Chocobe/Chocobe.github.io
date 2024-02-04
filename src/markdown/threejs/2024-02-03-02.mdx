@@ -1,0 +1,509 @@
+---
+id: 13
+title: 'Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)'
+description: 'Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    '3D',
+    'mouse event',
+    'click interaction',
+]
+
+createdAt: '2024-02-03 16:00:00'
+modifiedHistories: []
+---
+
+# Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)
+
+Canvas 에 렌더링된 Model 에 Click 기능을 추가해 보겠습니다.
+
+DOM 과 다르게 Canvas 에 그려지는 Model 은 직접 eventListener 를 적용할 수 없습니다.
+
+그래서 **Raycasting** 이라는 개념을 사용하여 Click Event 를 구현합니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+이번 포스팅에서 사용할 예시코드는 다음과 같습니다.
+
+<br />
+
+예시코드에서 사용한 Model 은 [상상력을 자극하는 고퀄리티 3D 인터랙티브 웹 제작 (최인 강사님)](https://coloso.co.kr/products/graphicdesign-choiin) 강좌 리소스를 사용하였습니다.
+
+```js title="예시 코드" showLineNumbers {6, 57}
+// three/js
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+    ACESFilmicToneMapping,
+
+    Color,
+    DirectionalLight,
+    HemisphereLight,
+
+    MeshStandardMaterial,
+} from 'three';
+// three.js - addons
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+//
+// state
+//
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { Parameters<Parameters<GLTFLoader['load']>[1]>[0]['scene'] } */
+let mainModel;
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.toneMapping = ACESFilmicToneMapping;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.near = 0.5;
+    camera.far = 2000;
+    camera.position.set(100, 100, 100);
+    camera.lookAt(-20, 0, -20);
+
+    camera.updateProjectionMatrix();
+}
+
+//
+// light
+//
+function initDirectionalLight() {
+    const color = new Color('#fff');
+
+    const light = new DirectionalLight(
+        color,
+        Math.PI * 1
+    );
+
+    light.position.set(-1, 1, 0.5);
+    light.castShadow = true;
+
+    light.shadow.mapSize.set(1024, 1024);
+    light.shadow.camera.near = 0.5;
+    light.shadow.camera.far = 500;
+
+    light.shadow.camera.top = 180;
+    light.shadow.camera.bottom = -100;
+    light.shadow.camera.left = -120;
+    light.shadow.camera.right = 120;
+
+    scene.add(light);
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#fff');
+    const groundColor = new Color('#555');
+
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        Math.PI * 0.5
+    );
+
+    light.position.set(0, -1, 0);
+
+    scene.add(light);
+}
+
+//
+// model
+//
+function initMainModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/click.glb', gltf => {
+        const ratio = 0.1;
+
+        mainModel = gltf.scene;
+        mainModel.position.set(0, 0, 0);
+        mainModel.scale.set(ratio, ratio, ratio);
+
+        mainModel.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            child.material = new MeshStandardMaterial({
+                color: child.material.color,
+                roughness: 0.3,
+            });
+
+            child.castShadow = true;
+            child.receiveShadow = true;
+        });
+
+        scene.add(mainModel);
+    });
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+}
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+
+    initDirectionalLight();
+    initHemisphereLight();
+
+    initMainModel();
+
+    render();
+}());
+```
+
+
+
+<br />
+
+
+
+## toneMapping 이란?
+
+예시 코드 57번줄을 보면 다음과 같은 코드가 있습니다.
+
+```js title="toneMapping 설정"
+renderer.toneMapping = ACESFilmicToneMapping;
+```
+
+<br />
+
+HDR(High Dynamic Range) 과 같은 Model 을 LDR(Low Dynamic Range) 로 변환하는 방식을 설정하는 부분입니다.
+
+3D Model 의 경우 HDR 로 만드는데, 사용자의 모니터나 모바일 화면은 LDR 입니다.
+
+고해상도를 저해상도로 변환하는 원리는, 복수 Pixel 의 근사치를 구하여 하나의 Pixel 로 만드는 것입니다.
+
+설정한 방식의 HDR => LDR 변환 방식을 사용하여 렌더링을 하게 되므로, 선명도가 다르거나 색상의 밝기가 달라지는 차이를 확인할 수 있습니다.
+
+<br />
+
+예시 코드에서 사용한 **ACESFilmicToneMapping** 은 toneMapping 중 하나입니다.
+
+* ACESFilmicToneMapping: Academy Color Encoding System FIlmic Tone Mapping
+
+ACESFilmicToneMapping 는 영화 예술 과학 아카데미의 후원으로 개발한 무료 ToneMapping 방식입니다.
+
+**실제 사진과 유사한 시각혁 효과를 만들 때 사용합니다.**
+
+<br />
+
+어떤 toneMapping 을 사용할지는 자신의 시각적 취향이나 개발 요구사항에 맞게 선택하면 됩니다.
+
+
+
+<br />
+
+
+
+## DirectionalLight 의 shadow 설정
+
+예시 코드의 DirectionalLight 생성 함수를 보면, shadow 관련 설정이 있습니다.
+
+```js title="DirectionalLight 의 shadow 설정"
+function initDirectionalLight() {
+    const color = new Color('#fff');
+
+    const light = new DirectionalLight(
+        color,
+        Math.PI * 1
+    );
+
+    light.position.set(-1, 1, 0.5);
+    light.castShadow = true;
+
+    light.shadow.mapSize.set(1024, 1024);
+    light.shadow.camera.near = 0.5;
+    light.shadow.camera.far = 500;
+
+    light.shadow.camera.top = 180;
+    light.shadow.camera.bottom = -100;
+    light.shadow.camera.left = -120;
+    light.shadow.camera.right = 120;
+
+    scene.add(light);
+}
+```
+
+이 중, `light.shahdow.camera` 속성을 살펴보고자 합니다.
+
+<br />
+
+Light 는 빛을 만들고 Mesh 의 그림자도 만들어 줍니다.
+
+위 코드를 보면 `shadow` 속성 하위에 `camera` 속성이 있습니다.
+
+쏘아지는 빛에 의한 **그림자를 만드는 시점 설정** 으로 볼 수 있습니다.
+
+<br />
+
+`light.shadow.camera` 는 **OrthographicCamera** 객체 입니다.
+
+우리가 지금까지 사용했던 Camera 인 **PerspectiveCamera** 와 다른점은 다음과 같습니다.
+
+* PerspectiveCamera: 3D 환경처럼 **원근법** 이 표현되는 카메라 입니다.
+* OrthographicCamera: 2D 환경처럼 원근법이 나타나지 않는 카메라 입니다.
+
+즉, light 가 비추는 빛은 2D 환경과 같이 원근법을 계산하지 않는 방식을 사용합니다.
+
+<br />
+
+그림자는 Light 가 비추는 범위 내에 Mesh 가 있어야 생성됩니다.
+
+이 범위는 **절두체(frustum)** 로 표현됩니다.
+
+> [이미지 출처: 위키백과](https://ko.wikipedia.org/wiki/%EC%A0%88%EB%91%90%EC%B2%B4)
+
+<img src="/markdownAssets/threejs/2024-02-03-02/2024-02-03-02-01.png" alt="절두체" />
+
+<br />
+
+`light.shadow.camera.top` 설정은 카메라가 비추는 절두체 영역의 중신점에서 **top (위쪽)** 까지의 거리를 설정하는 것입니다.
+
+마찬가지로 bottom, left, right 도 같은 맥락의 설정입니다.
+
+> [이미지 출처: 게임을 게임답게](https://m.blog.naver.com/canny708/221547085908)
+
+<img src="/markdownAssets/threejs/2024-02-03-02/2024-02-03-02-02.png" alt="절두체" />
+
+
+
+<br />
+
+
+
+## Raycaster 를 사용하여 Click 이벤트 만들기
+
+이번 포스팅의 메인 내용인 Click 이벤트에 대해 알아보겠습니다.
+
+canvas 에 렌더링하는 요소는 DOM 이벤트로 감지할 수 없습니다.
+
+그래서 **Raycasting** 이라는 개념을 사용합니다.
+
+> 참고: [위키백과](https://ko.wikipedia.org/wiki/%EA%B4%91%EC%84%A0_%ED%88%AC%EC%82%AC)
+
+* Raycasting: 가상의 광선을 쏘아서 물체와 교차되는 좌표값을 계산하기 위한 기법
+
+<br />
+
+Three.js 에서는 `Raycaster` 인스턴스를 생성하여 Mesh, Model 을 특정할 수 있습니다.
+
+HTMLCanvasElement 에 click 이벤트를 추가하고, handler 에서 Raycaster 를 사용하여 어떤 Mesh, Model 이 교차되었는지 식별하는 방법으로 구현합니다.
+
+<br />
+
+```js title="Raycaster import 하기" showLineNumbers {14-15}
+// three/js
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+    ACESFilmicToneMapping,
+
+    Color,
+    DirectionalLight,
+    HemisphereLight,
+
+    MeshStandardMaterial,
+
+    Raycaster,
+    Vector2,
+} from 'three';
+```
+
+```js title="Raycaster 로 click 이벤트 만들기" showLineNumbers{152} {4-9, 11-42, 65}
+//
+// interaction
+//
+function changeColor(color) {
+    scene.background = color;
+
+    const targetModel = scene.getObjectByName('change');
+    targetModel.material.color = color;
+}
+
+function initClickInteraction() {
+    const raycaster = new Raycaster();
+
+    window.addEventListener('click', e => {
+        const {
+            clientX,
+            clientY,
+        } = e;
+
+        // Raycaster 좌표계로 변환 및 Vector2 인스턴스 생성
+        const mouseCoord = new Vector2();
+        mouseCoord.x = (clientX / window.innerWidth) * 2 - 1;
+        mouseCoord.y = -(clientY / window.innerHeight) * 2 + 1;
+
+        // Raycaster 에 좌표값과 대상 카메라 적용
+        raycaster.setFromCamera(mouseCoord, camera);
+
+        // `Ray(광선)` 과 교차하는 Mesh, Model 을 추출
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        const firstIntersect = intersects[0];
+        const firstModel = firstIntersect?.object;
+
+        if (!firstModel) {
+            return;
+        }
+
+        if (!firstModel.name.match(/^button.*/)) {
+            return;
+        }
+
+        const buttonColor = firstModel.material.color;
+
+        changeColor(buttonColor);
+    });
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+}
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+
+    initDirectionalLight();
+    initHemisphereLight();
+
+    initMainModel();
+
+    initClickInteraction();
+
+    render();
+}());
+```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-02-03-02/2024-02-03-02-03.webm" type="video/webm" />
+    Raycaster
+</video>
+
+<br />
+
+click 이벤트를 초기화 하는 `initClickInteraction` 함수를 살펴보겠습니다.
+
+Raycasting 을 사용하기 위해 `new Raycaster()` 로 인스턴스를 만듭니다.
+
+그리고 click 이벤트가 발생하면, raycaster 인스턴스를 사용하게 됩니다.
+
+<br />
+
+위 코드에서 사용한 Raycaster 메소드는 다음과 같습니다.
+
+* `setFromCamera(좌표값, 카메라)`
+* `intersectObjects(감지대상_리스트, 재귀_여부)`
+
+<br />
+
+click 이벤트가 발생하면, 마우스위 위치를 알 수 있습니다.
+
+이 좌표값을 사용하여 **Vector2** 인스턴스를 생성할 수 있습니다.
+
+> 참고: [Three.js 공식문서 - Raycaster](https://threejs.org/docs/?q=raycaster#api/en/core/Raycaster)
+
+여기서 중요한 점은 **Raycaster 의 좌표계** 에 맞도록 변환하는 것입니다.
+
+Raycaster 의 좌표계는 2D 이며 다음과 같습니다.
+
+* X축: **-1 ~ 1**
+* Y축: **-1 ~ 1**
+
+<br />
+
+그래서 clientX, clientY 좌표값을 아래와 같은 공식으로 변환하여 Vector2 인스턴스를 생성하게 됩니다.
+
+```js title="Raycaster 좌표계로 변환"
+window.addEventListener('click', e => {
+    const {
+        clientX,
+        clientY,
+    } = e;
+
+    const x = (clientX / window.innerWidth) * 2 - 1;
+    const y = -(clientY / window.innerHeight) * 2 + 1;
+});
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+Path2D 를 사용하여 구현했었던 Canvas API 에 비해, Raycaster 는 코드상으로도 가독성이 좋은 것 같습니다.
+
+Three.js 를 좀 더 잘 사용할 수 있게된다면, 지금까지 사용했던 Canvas API 를 대체하여 사용하고 싶습니다.
