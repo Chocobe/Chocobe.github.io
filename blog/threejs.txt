@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["Ohfu4b66ah2SOllMRuwzZ",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["f-kaMTx4dPkt7gBHQ32FP",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -129,7 +129,7 @@ Three.js 스터디를 하는 중, gammaFactor 설정이 궁금하여 이번 포�
 의미와 용도 정도만 파악하려는 목적이었지만, gamma 와 sRGB 는 상당히 깊고 어려운 내용이었습니다.
 
 지금은 간단한 의미 정도만 파악한 후, 차후 필요성이 생겼을 때 좀 더 깊게 알아볼 예정입니다.
-10:T3091,---
+10:T3178,---
 id: 13
 title: 'Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)'
 description: 'Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.'
@@ -575,6 +575,11 @@ function render() {
     render();
 }());
 ```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-02-03-02/2024-02-03-02-03.webm" type="video/webm" />
+    Raycaster
+</video>
 
 <br />
 
