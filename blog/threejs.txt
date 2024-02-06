@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["f-kaMTx4dPkt7gBHQ32FP",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["nNDeTMxXGDmnlR0Af0FrX",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -129,7 +129,694 @@ Three.js 스터디를 하는 중, gammaFactor 설정이 궁금하여 이번 포�
 의미와 용도 정도만 파악하려는 목적이었지만, gamma 와 sRGB 는 상당히 깊고 어려운 내용이었습니다.
 
 지금은 간단한 의미 정도만 파악한 후, 차후 필요성이 생겼을 때 좀 더 깊게 알아볼 예정입니다.
-10:T3178,---
+10:T4780,---
+id: 14
+title: 'click 이벤트에 animation 연동하기'
+description: '특정 버튼을 click 했을 때 animation 을 실행하는 방법을 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    '3D',
+    'mouse event',
+    'click interaction',
+    'animation',
+    'AnimationMixer',
+    'AnimationClip',
+    'AnimationAction',
+]
+
+createdAt: '2024-02-06 15:00:00'
+modifiedHistories: []
+---
+
+# click 이벤트에 animation 연동하기
+
+Animation 은 이전 포스팅 [Model 에 Animation 효과 적용하기](https://chocobe.github.io/blog/threejs/2024-01-26-01) 에서 한번 사용해 보았습니다.
+
+사용자 인터렉션이 아닌, 동영상 링크처럼 자동 재생되는 형식으로 구현했습니다.
+
+이번 포스팅에서는 버튼을 click 했을 때, 해당 버튼의 Animation 만 실행되도록 구현해 보고자 합니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+예시코드에서 사용한 Model 은 [상상력을 자극하는 고퀄리티 3D 인터랙티브 웹 제작 (최인 강사님)](https://coloso.co.kr/products/graphicdesign-choiin) 강좌 리소스를 사용하였습니다.
+
+3D Tool 에서 Model 에 Keyframe Animation 을 함께 포함시켰을 때, 이 Animation 을 Three.js 에서 필요한 시점에만 실행시키는 동작을 구현할 예정입니다.
+
+<br />
+
+아래 예시 코드는 클릭한 버튼의 color 를 scene 의 배경과 rocket model 에 적용하는 기능까지 구현한 상태 입니다.
+
+```js title="예시 코드" showLineNumbers
+// three
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+    ACESFilmicToneMapping,
+
+    Color,
+    DirectionalLight,
+    HemisphereLight,
+
+    MeshStandardMaterial,
+
+    Vector2,
+    Raycaster,
+} from 'three';
+// three.js - addons
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+//
+// state
+//
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = ACESFilmicToneMapping;
+    renderer.shadowMap.enabled = true;
+}
+
+function initScene() {
+    scene = new Scene();
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.fov = 45;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.near = 0.5;
+    camera.far = 2000;
+
+    camera.position.set(100, 100, 100);
+    camera.lookAt(-20, 0, -20);
+
+    camera.updateProjectionMatrix();
+}
+
+//
+// light
+//
+function initDirectionalLight() {
+    const color = new Color('#fff');
+
+    const light = new DirectionalLight(
+        color,
+        Math.PI * 1
+    );
+
+    light.position.set(-1, 1, 0.5);
+    light.lookAt(0, 0, 0);
+    light.castShadow = true;
+
+    light.shadow.mapSize.set(1024, 1024);
+    light.shadow.camera.near = 0.5;
+    light.shadow.camera.far = 500;
+    light.shadow.camera.top = 180;
+    light.shadow.camera.bottom = -120;
+    light.shadow.camera.left = -100;
+    light.shadow.camera.right = 100;
+
+    scene.add(light);
+}
+
+function initHemisphereLight() {
+    const skyColor = new Color('#fff');
+    const groundColor = new Color('#555');
+
+    const light = new HemisphereLight(
+        skyColor,
+        groundColor,
+        Math.PI * 0.5
+    );
+
+    light.position.set(0, -1, 0);
+
+    scene.add(light);
+}
+
+//
+// model
+//
+function initModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/click.glb', gltf => {
+        const model = gltf.scene;
+
+        const ratio = 0.1;
+        model.scale.set(ratio, ratio, ratio);
+        model.position.set(0, 0, 0);
+
+        model.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            child.castShadow = true;
+            child.receiveShadow = true;
+
+            child.material = new MeshStandardMaterial({
+                color: child.material.color,
+                roughness: 0.3,
+            });
+        });
+
+        scene.add(model);
+    });
+}
+
+//
+// interaction
+//
+function initResize() {
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+}
+
+function initClickInteraction($target) {
+    const raycaster = new Raycaster();
+
+    $target.addEventListener('click', e => {
+        const {
+            clientX,
+            clientY,
+        } = e;
+
+        const mouseCoord = new Vector2(
+            (clientX / window.innerWidth) * 2 - 1,
+            -(clientY / window.innerHeight) * 2 + 1
+        );
+
+        raycaster.setFromCamera(mouseCoord, camera);
+
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        const firstModel = intersects[0]?.object;
+
+        if (!firstModel || !firstModel.name.match(/^button.*/)) {
+            return;
+        }
+
+        const rocketChangingModel = scene.getObjectByName('change');
+
+        const buttonColor = firstModel.material.color;
+
+        rocketChangingModel.material.color = buttonColor;
+        scene.background = buttonColor;
+    });
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+}
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+
+    initDirectionalLight();
+    initHemisphereLight();
+
+    initModel();
+
+    initResize();
+    initClickInteraction($canvas);
+
+    render();
+}());
+```
+
+
+
+<br />
+
+
+
+## AnimationMixer 만들기
+
+Model 에 포함된 Animation 을 실행시키기 위해서는 **AnimationMixer** 가 필요 합니다.
+
+AnimationMixer 는 **애니메이션 플레이어** 역할을 합니다.
+
+실행시킬 Animation 을 AnimationMixer 에 등록 시켜주고, `render()` 함수에서 `animationMixer.update(프레임)` 으로 다음 장면을 업데이트 해주는 방식으로 동작합니다.
+
+<br />
+
+이와 관련한 class 를 살펴보면 다음과 같습니다.
+
+* AnimationMixer: 애니메이션 플레이어 역할을 합니다.
+* AnimationClip: 실행할 애니메이션 1개의 정보를 담고 있습니다.
+* AnimationAction: AnimationClip 을 재생, 정지, 반복 등의 컨트롤 기능을 제공하는 객체 입니다.
+
+<br />
+
+애니메이션을 실행하는데 필요한 작업은 다음과 같은 과정이 필요합니다.
+
+1. 애니메이션 대상이 되는 Model 을 사용하여 AnimationMixer 인스턴스를 생성합니다.
+2. Model 에 포함된 `gltf.animations` 를 AnimationMixer 의 `clipAction(clip)` 으로 **AnimationAction** 으로 만듭니다.
+3. click 이벤트가 발생하면, 원하는 AnimationAction 을 실행시킵니다.
+4. 프레임마다 실행되는 `render()` 함수 내부에서 AnimationMixer 의 `update()` 로 장면을 갱신해줍니다.
+
+```js title="AnimationMixer import 하기" showLineNumbers {17-19, 40-41, 43-44}
+// three
+import {
+    WebGLRenderer,
+    Scene,
+    PerspectiveCamera,
+    ACESFilmicToneMapping,
+
+    Color,
+    DirectionalLight,
+    HemisphereLight,
+
+    MeshStandardMaterial,
+
+    Vector2,
+    Raycaster,
+
+    AnimationMixer,
+    AnimationAction,
+    LoopOnce,
+} from 'three';
+// three.js - addons
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+//
+// state
+//
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { AnimationMixer } */
+let animationMixer;
+
+/** @type { Record<string, AnimationAction> } */
+let animationActions = {};
+```
+
+```js title="AnimationMixer 및 AnimationAction 인스턴스 생성하기" showLineNumbers{129} {28-29, 31-37}
+//
+// model
+//
+function initModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/click.glb', gltf => {
+        const model = gltf.scene;
+
+        const ratio = 0.1;
+        model.scale.set(ratio, ratio, ratio);
+        model.position.set(0, 0, 0);
+
+        model.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            child.castShadow = true;
+            child.receiveShadow = true;
+
+            child.material = new MeshStandardMaterial({
+                color: child.material.color,
+                roughness: 0.3,
+            });
+        });
+
+        // 1. AnimationMixer 생성하기
+        animationMixer = new AnimationMixer(model);
+
+        // 2. AnimationAction 생성하기
+        gltf.animations.forEach(clip => {
+            const animationAction = animationMixer.clipAction(clip);
+            animationAction.loop = LoopOnce;
+
+            animationActions.push(animationAction);
+        });
+
+        scene.add(model);
+    });
+}
+```
+
+```js title="click 시, AnimationAction play() 하기" showLineNumbers{183} {31-34}
+function initClickInteraction($target) {
+    const raycaster = new Raycaster();
+
+    $target.addEventListener('click', e => {
+        const {
+            clientX,
+            clientY,
+        } = e;
+
+        const mouseCoord = new Vector2(
+            (clientX / window.innerWidth) * 2 - 1,
+            -(clientY / window.innerHeight) * 2 + 1
+        );
+
+        raycaster.setFromCamera(mouseCoord, camera);
+
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        const firstModel = intersects[0]?.object;
+
+        if (!firstModel || !firstModel.name.match(/^button.*/)) {
+            return;
+        }
+
+        const rocketChangingModel = scene.getObjectByName('change');
+
+        const buttonColor = firstModel.material.color;
+
+        rocketChangingModel.material.color = buttonColor;
+        scene.background = buttonColor;
+
+        animationActions.forEach(animationAction => {
+            animationAction.reset();
+            animationAction.play();
+        });
+    });
+}
+```
+
+```js title="render() 함수에서 animationMixer.update() 호출하기" showLineNumbers{220} {9}
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+
+    animationMixer?.update(1 / 60);
+}
+```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-02-06-01/2024-02-06-01-01.webm" type="video/webm" />
+    animation
+</video>
+
+
+
+<br />
+
+
+
+## click 한 버튼만 Animation 실행시키기
+
+버튼을 click 하면 모든 버튼의 Animation 이 플레이 되는 것을 볼 수 있습니다.
+
+현재는 click 이벤트가 발생하면, 모든 AnimationAction 을 `play()` 하기 때문입니다.
+
+<br />
+
+버튼별 Animation 을 적용하기 위해, Model 에 포함된 `animations` 구조를 파악해야 합니다.
+
+이는 3D Tool 로 구현한 Animations 의 구조에 따라 다르기 때문에, Model animations 의 구조를 파악하고 사용하기 편하게 재구성할 수 있는 능력이 필요합니다.
+
+<br />
+
+먼저 Model 의 animations 를 `console` 에서 확인하면 다음과 같습니다.
+
+```js title="gltf.animations 구조" showLineNumbers{129} {39}
+//
+// model
+//
+function initModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/click.glb', gltf => {
+        const model = gltf.scene;
+
+        const ratio = 0.1;
+        model.scale.set(ratio, ratio, ratio);
+        model.position.set(0, 0, 0);
+
+        model.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            child.castShadow = true;
+            child.receiveShadow = true;
+
+            child.material = new MeshStandardMaterial({
+                color: child.material.color,
+                roughness: 0.3,
+            });
+        });
+
+        // 1. AnimationMixer 생성하기
+        animationMixer = new AnimationMixer(model);
+
+        // 2. AnimationAction 생성하기
+        gltf.animations.forEach(clip => {
+            const animationAction = animationMixer.clipAction(clip);
+            animationAction.loop = LoopOnce;
+
+            animationActions.push(animationAction);
+        });
+
+        console.log('gltf.animations: ', gltf.animations);
+
+        scene.add(model);
+    });
+}
+```
+
+<img src="/markdownAssets/threejs/2024-02-06-01/2024-02-06-01-02.png" alt="gltf.animations" />
+
+<br />
+
+* `name`
+    * AnimationClip 의 이름입니다.
+    * `animation_0` 이라는 이름이라서, 버튼별 식별자로 사용할 수는 없어 보입니다.
+* `tracks`
+    * AnimationClip 을 이루는 **최소 단위 Animation** 의 리스트입니다.
+    * 하나의 Animation 에서 회전, 위치 등이 동시에 변형될 수도 있는데, 이를 **VectorKeyframeTrack** 인스턴스로 표현합니다.
+    * `console` 에서 확인하면, **각 track 의 name** 으로 **특정 버튼을 식별** 할 수 있을 것 같습니다.
+        * `button.position`, `button.scale`
+        * `button_1.position`, `button_1.scale`
+        * `button_2.position`, `button_2.scale`
+        * `button_3.position`, `button_3.scale`
+        * `button_4.position`, `button_4.scale`
+        * `button_5.position`, `button_5.scale`
+        * `button_6.position`, `button_6.scale`
+
+<br />
+
+click 이벤트가 발생하면 Raycaster 의 `intersectObjects()` 로 대상 Model 을 참조할 수 있었습니다.
+
+그리고 아래와 같이 대상 Model 의 name 을 참조할 수 있습니다.
+
+```js
+const intersects = raycaster.intersectObjects(scene.children, true);
+
+const targetModel = intersects[0].object;
+
+const targetModelName = targetModel.name;
+```
+
+대상 Model 의 name 과 VectorKeyframeTract 의 name 의 관계를 찾아보면 다음과 같습니다.
+
+```js
+if (targetModelName === track.name.split('.')[0]) {
+    // targetModel 에 대한 track 식별 성공
+}
+```
+
+<br />
+
+지금까지 파악한 Model 의 animations 를 요약하면 다음과 같습니다.
+
+* 단일 AnimationClip 이 존재합니다.
+* 모든 버튼의 VectorKeyframeTrack 이 단일 AnimationClip 에 묶여있습니다.
+
+묶여있는 VectorKeyframeTrack 을 각 버튼별 AnimationClip 으로 재구성해야 버튼별 Animation 을 개별로 플레이 할 수 있습니다.
+
+단일 AnimationClip 을 버튼별 AnimationClip 으로 재구성하면 다음과 같습니다.
+
+```js title="animationActions 를 animationActionMapper 로 변경" showLineNumbers
+/** @type { Record<string, AnimationAction> } */
+let animationActionMapper = {};
+```
+
+```js title="버튼별 AnimationClip 으로 재구성하기" showLineNumbers{130} {39-63}
+//
+// model
+//
+function initModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/click.glb', gltf => {
+        const model = gltf.scene;
+
+        const ratio = 0.1;
+        model.scale.set(ratio, ratio, ratio);
+        model.position.set(0, 0, 0);
+
+        model.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            child.castShadow = true;
+            child.receiveShadow = true;
+
+            child.material = new MeshStandardMaterial({
+                color: child.material.color,
+                roughness: 0.3,
+            });
+        });
+
+        // 1. AnimationMixer 생성하기
+        animationMixer = new AnimationMixer(model);
+
+        // 2. AnimationAction 생성하기
+        // gltf.animations.forEach(clip => {
+        //     const animationAction = animationMixer.clipAction(clip);
+        //     animationAction.loop = LoopOnce;
+
+        //     animationActions.push(animationAction);
+        // });
+
+        /** @type { Record<string, AnimationClip> } */
+        const animationClipMapper = {};
+
+        gltf.animations[0].tracks.forEach(track => {
+            const name = track.name.split('.')[0];
+            const targetClip = animationClipMapper[name];
+
+            if (targetClip) {
+                targetClip.tracks.push(track);
+            } else {
+                const newClip = new AnimationClip(name, -1, [
+                    track,
+                ]);
+                animationClipMapper[name] = newClip;
+            }
+        });
+
+        Object
+            .entries(animationClipMapper)
+            .forEach(([name, clip]) => {
+                const clipAction = animationMixer.clipAction(clip);
+                clipAction.loop = LoopOnce;
+
+                animationActionMapper[name] = clipAction;
+            });
+
+        scene.add(model);
+    });
+}
+```
+
+```js title="click 한 버튼의 animationAction 만 플레이 하기" showLineNumbers{212} {35-37}
+function initClickInteraction($target) {
+    const raycaster = new Raycaster();
+
+    $target.addEventListener('click', e => {
+        const {
+            clientX,
+            clientY,
+        } = e;
+
+        const mouseCoord = new Vector2(
+            (clientX / window.innerWidth) * 2 - 1,
+            -(clientY / window.innerHeight) * 2 + 1
+        );
+
+        raycaster.setFromCamera(mouseCoord, camera);
+
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        const firstModel = intersects[0]?.object;
+
+        if (!firstModel || !firstModel.name.match(/^button.*/)) {
+            return;
+        }
+
+        const rocketChangingModel = scene.getObjectByName('change');
+
+        const buttonColor = firstModel.material.color;
+
+        rocketChangingModel.material.color = buttonColor;
+        scene.background = buttonColor;
+
+        // animationActions.forEach(animationAction => {
+        //     animationAction.reset();
+        //     animationAction.play();
+        // });
+        const targetAnimationAction = animationActionMapper[firstModel.name];
+        targetAnimationAction?.reset();
+        targetAnimationAction?.play();
+    });
+}
+```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-02-06-01/2024-02-06-01-03.webm" type="video/webm" />
+    animation
+</video>11:T3178,---
 id: 13
 title: 'Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)'
 description: 'Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.'
@@ -638,7 +1325,7 @@ window.addEventListener('click', e => {
 Path2D 를 사용하여 구현했었던 Canvas API 에 비해, Raycaster 는 코드상으로도 가독성이 좋은 것 같습니다.
 
 Three.js 를 좀 더 잘 사용할 수 있게된다면, 지금까지 사용했던 Canvas API 를 대체하여 사용하고 싶습니다.
-11:T1049,---
+12:T1049,---
 id: 13
 title: '(Issue) 조명이 어둡게 보이는 현상'
 description: '강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.'
@@ -787,7 +1474,7 @@ intensity 에 PI 를 적용하도록 변경된 Light 는 다음과 같습니다.
 <br />
 
 Three.js 의 공식 문서는 개요 파악 정도로 사용하고, Three.js 포럼에서 좀 더 자세한 내용을 찾아보아야 할 것 같습니다.
-12:T2afe,---
+13:T2afe,---
 id: 12
 title: '키보드를 사용하여 카메라 이동 인터렉션 만들기'
 description: '키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.'
@@ -1248,7 +1935,7 @@ Javascript 의 이벤트 처리 방식을 그대로 따르는 방법이라서 �
 만약 화면을 변경하는 부분을 `render()` 함수가 아닌, event listener 에서 직접 하게 되면, **뚝뚝 끊기면서 렌더링되는 현상** 이 나타났습니다.
 
 이는 키보드를 누르고 있을 때, 체터링 간격이 `1 /60` 보다 큰 값인 것으로 추측되었습니다.
-13:T1d82,---
+14:T1d82,---
 id: 11
 title: 'canvas 크기 설정 및 material 렌더링 side 설정'
 description: '사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.'
@@ -1511,7 +2198,7 @@ function initDoubleSideModel() {
 100% 를 기억하지는 못하더라도, 맥락과 주요 개념을 기억하기 위해서는 당연한 방법이라고 생각합니다.
 
 다만 투자하는 시간에 대한 아쉬움으로 짧은 푸념을 남깁니다.
-14:T2b48,---
+15:T2b48,---
 id: 9
 title: 'Model 에 Animation 효과 적용하기'
 description: 'Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.'
@@ -1989,7 +2676,7 @@ function animateRocket() {
 원하는 Animation 을 구현하기 위해서는 3D Tool 사용방법도 익혀야 할 것 같습니다.
 
 Model 의 Animation 을 코드로 구현하는 것은 원하는 결과를 얻기에는 쉽지 않을 것으로 생각되었습니다.
-15:T25c2,---
+16:T25c2,---
 id: 8
 title: 'Model (.gltf, .glb) 객체 구조파악 및 그림자 적용'
 description: 'Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.'
@@ -2344,7 +3031,7 @@ Model 에 그림자 설정을 위한 코드는 `traverse()` 메소드를 사용�
 Model 객체가 어떻게 구성되고, 설정을 변경하는 이유 등을 파악하는 것이 쉽지는 않았습니다.
 
 이번 포스팅에서 정리한 내용은 Three.js 전반에 필요한 개념으로 생각되어 성취감이 느껴집니다.
-16:T2000,---
+17:T2000,---
 id: 7
 title: 모델 파일을 Three.js 에 렌더링하기
 description: '.gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.'
@@ -2693,7 +3380,7 @@ gltf 객체의 scene 과 children 의 중첩구조를 살펴보면 크게 2가�
 3D Mesh 파일(.glTF, .gbl) 을 불러온 상태에서는 빛 반사나 그림자와 같은 효과는 적용되지 않습니다.
 
 다음 포스팅에서는 3D Mesh 불러온 후, Mesh 내부 속성을 변경하는 방법을 알아보겠습니다.
-17:T3408,---
+18:T3408,---
 id: 6
 title: 배경화면 및 환경조명 설정하기
 description: '360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.'
@@ -3202,7 +3889,7 @@ Material 설정을 통해 배경화면을 반사하는 효과를 연출해 보�
 이 부분은 차후 정리할 예정입니다.
 
 [Three.js 공식문서 - 거울효과 예시](https://threejs.org/examples/?q=mirror#webgl_mirror)
-18:T2c06,---
+19:T2c06,---
 id: 5
 title: 그림자 표현하기
 description: '그림자 설정방법과 특징에 대해 정리합니다.'
@@ -3656,7 +4343,7 @@ VSMShadowMap 은 곡선에 대한 그림자를 부드럽게 표현할 수 있는
 그래서 그림자를 최소한으로 사용할 수 있도록 여러가지 설정을 분리시켜놓은 느낌이 들었습니다.
 
 Three.js 를 활용할 때, 그림자 설정이 성능 최적화 대상이라는 것을 알게 되었습니다.
-19:T1a79,---
+1a:T1a79,---
 id: 4
 title: 평평한 바닥(땅) 만들기 (Plane Mesh)
 description: '바닥을 표현하기 위해 Plane Mesh 를 생성합니다.'
@@ -3954,7 +4641,7 @@ plane.rotation.set(
 Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
 
 다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
-1a:T2eef,---
+1b:T2eef,---
 id: 3
 title: 조명 종류와 설정
 description: '조명 종류와 설정 방법에 대해 정리합니다.'
@@ -4528,7 +5215,7 @@ HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보�
 <br />
 
 Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
-1b:T3ac1,---
+1c:T3ac1,---
 id: 2
 title: 카메라 설정 (PerspectiveCamera)
 description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
@@ -5132,7 +5819,7 @@ Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드
 OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
 
 Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
-1c:T5077,---
+1d:T5077,---
 id: 1
 title: Three.js 설치 및 실행
 description: 'Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.'
@@ -6031,4 +6718,4 @@ Three.js 를 처음 시작하며 제가 느낀 어려움으로는 컴퓨터 그�
 단순히 Three.js 사용법을 익히는 것만으로 원하는 결과물을 얻기는 어려워 보입니다.
 
 지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
-d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-02-03-02","href":"/blog/threejs/2024-02-03-02","frontmatter":{"id":13,"title":"Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)","description":"Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction"],"createdAt":"$D2024-02-03T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2024-02-03-01","href":"/blog/threejs/2024-02-03-01","frontmatter":{"id":13,"title":"(Issue) 조명이 어둡게 보이는 현상","description":"강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","DirectionalLgith","HemisphereLight","intensity"],"createdAt":"$D2024-02-03T14:00:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"threejs","slug":"2024-01-30-01","href":"/blog/threejs/2024-01-30-01","frontmatter":{"id":12,"title":"키보드를 사용하여 카메라 이동 인터렉션 만들기","description":"키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","keyboard event","camera","interaction"],"createdAt":"$D2024-01-30T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"threejs","slug":"2024-01-28-02","href":"/blog/threejs/2024-01-28-02","frontmatter":{"id":11,"title":"canvas 크기 설정 및 material 렌더링 side 설정","description":"사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","setSize()","setPixelRatio()","material","FrontSide","BackSide","DoubleSide"],"createdAt":"$D2024-01-28T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1a"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1b"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$1c"}]}]
+d:["$","$Le",null,{"featuredMarkdownFileDataList":[{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$f"}],"commonMarkdownFileDataList":[{"category":"threejs","slug":"2024-02-06-01","href":"/blog/threejs/2024-02-06-01","frontmatter":{"id":14,"title":"click 이벤트에 animation 연동하기","description":"특정 버튼을 click 했을 때 animation 을 실행하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction","animation","AnimationMixer","AnimationClip","AnimationAction"],"createdAt":"$D2024-02-06T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"threejs","slug":"2024-02-03-02","href":"/blog/threejs/2024-02-03-02","frontmatter":{"id":13,"title":"Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)","description":"Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction"],"createdAt":"$D2024-02-03T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"threejs","slug":"2024-02-03-01","href":"/blog/threejs/2024-02-03-01","frontmatter":{"id":13,"title":"(Issue) 조명이 어둡게 보이는 현상","description":"강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","DirectionalLgith","HemisphereLight","intensity"],"createdAt":"$D2024-02-03T14:00:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"threejs","slug":"2024-01-30-01","href":"/blog/threejs/2024-01-30-01","frontmatter":{"id":12,"title":"키보드를 사용하여 카메라 이동 인터렉션 만들기","description":"키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","keyboard event","camera","interaction"],"createdAt":"$D2024-01-30T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"threejs","slug":"2024-01-28-02","href":"/blog/threejs/2024-01-28-02","frontmatter":{"id":11,"title":"canvas 크기 설정 및 material 렌더링 side 설정","description":"사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","setSize()","setPixelRatio()","material","FrontSide","BackSide","DoubleSide"],"createdAt":"$D2024-01-28T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$1a"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1b"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$1c"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$1d"}]}]
