@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["QuMzDJ1xmfotOjbDH5Jv_",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["OzQtixyCEWpq7__kEramg",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -2132,7 +2132,7 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-17:Tf3d,---
+17:Tf6c,---
 id: 15
 title: 'Material 의 map, bumpMap, normalMap'
 description: 'Material 의 표현 방식과 울퉁불퉁한 재질을 처리하는 방식을 정리합니다.'
@@ -2238,6 +2238,7 @@ function initMaterial() {
     * 이미지의 밝거나 어두운 부분을 표면의 시각적인 높낮이로 표현합니다.
         * 밝은 부분: 높게 표현
         * 어두운 부분: 낮게 표현
+    * Light 에 영향을 받지 않습니다.
     * map 보다 많은 성능을 사용합니다.
 * normalMap
     * 3D Graphics 용어 의미
