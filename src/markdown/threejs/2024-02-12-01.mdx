@@ -1,0 +1,147 @@
+---
+id: 15
+title: 'Material 의 map, bumpMap, normalMap'
+description: 'Material 의 표현 방식과 울퉁불퉁한 재질을 처리하는 방식을 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    '3D',
+    'Material',
+    'Texture',
+    'map',
+    'bumpMap',
+    'normalMap',
+]
+
+createdAt: '2024-02-12 15:17:30'
+modifiedHistories: []
+---
+
+# Material 의 map, bumpMap, normalMap
+
+Mesh 는 형태를 정의하는 Geometry 와 재질을 표현하는 Material 로 구성합니다.
+
+이번 포스팅에서는 Material 의 표면 처리 방식에 대해 정리합니다.
+
+
+
+<br />
+
+
+
+## Material 에 Texture Image 설정
+
+Material 은 다양한 종류가 있습니다.
+
+재질을 표현하기 위해 **Texture Image** 를 입힐 때, `TextureLoader` class 를 사용하여 **이미지 파일 (.png 등)** 을 사용할 수 있습니다.
+
+Texture Image 를 Material 에 적용하는 가장 기본 속성은 `map` 입니다.
+
+아래는 MeshStandardMaterial 에 map 을 사용하여 Texture Image 를 입히는 예시코드 입니다.
+
+```js title="map 속성으로 Texture Image 입히기"
+import {
+    MeshStandardMaterial,
+    TextureLoader,
+} from 'three';
+
+function createMaterial() {
+    const material = new MeshStandardMaterial({
+        map: new TextureLoader().load('/imgs/my-image.png'),
+    });
+}
+```
+
+
+
+<br />
+
+
+
+## bumpMap 과 normalMap
+
+모든 Material 이 갖지는 않지만, **MeshStandardMaterial** 과 **MeshPhysicalMaterial** 등 에는 또다른 map 속성이 있습니다.
+
+```js title="bumpMap 과 normalMap 속성"
+import {
+    MeshStandardMaterial,
+    TextureLoader,
+} from 'three';
+
+function initMaterial() {
+    const material = new MeshStandardMaterial({
+        map: new TextureLoader().load('/imgs/my-image.png'),
+        bumpMap: new TextureLoader().load('/imgs/my-image.png'),
+        normalMap: new TextureLoader().load('/imgs/my-image.png'),
+    });
+}
+```
+
+* `bumpMap`
+* `normalMap`
+
+<br />
+
+물론 `map` 속성도 사용할 수 있지만, 재질을 표현하는 방식과 결과에 차이가 있습니다.
+
+
+
+<br />
+
+
+
+## map, bumpMap, normalMap 정의
+
+* map
+    * 단순 이미지(.png 등) 을 표면에 입혀줍니다.
+    * Light 에 영향을 받지 않습니다.
+    * 가장 낮은 성능을 사용합니다.
+* bumpMap
+    * 3D Graphics 용어 의미
+        * **표면이 조금씩 불규칙한 부분** 을 의미합니다.
+    * 이미지의 밝거나 어두운 부분을 표면의 시각적인 높낮이로 표현합니다.
+        * 밝은 부분: 높게 표현
+        * 어두운 부분: 낮게 표현
+    * Light 에 영향을 받지 않습니다.
+    * map 보다 많은 성능을 사용합니다.
+* normalMap
+    * 3D Graphics 용어 의미
+        * **표면의 수직 방향 벡터** 를 의미합니다.
+    * **법선 벡터 (Normal Vector)** 를 사용하여 **Light 의 반사 방향** 조정하며, 결과적으로 **Light 와 상호작용하여 입체감을 표현** 합니다.
+    * bumpMap 보다 많은 성능을 사용합니다.
+
+
+
+<br />
+
+
+
+## map, bumpMap, normalMap 사용처
+
+map 방식에 따라 성능차이와 렌더링 차이가 있으므로, 사용처에 따라 적합한 선택이 필요 합니다.
+
+* map
+    * 단순 이미지를 입히거나 패턴으로 사용할 때 적합합니다.
+* bumpMap
+    * 흙이나 벽돌처럼 울퉁불퉁한 질감을 표현할 때 사용합니다.
+* normalMap
+    * 울퉁불퉁함을 넘어 입체감까지 표현할 때 사용합니다.
+    * Light 와 상호작용이 필요할 때 사용합니다.
+
+<br />
+
+표현할 재질에 따라 map, bumpMap, normalMap 을 혼합하여 사용하기도 합니다.
+
+
+
+<br />
+
+
+
+## 마치며...
+
+Three.js 자체의 학습보다는 3D Graphics 개념을 파악하는 것이 더 어려운 것 같습니다.
+
+Three.js 공식 문서는 API 소개 정도만 안내하고 있어서 아쉽습니다.
