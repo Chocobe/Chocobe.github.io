@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["2YqwK_FmVSoyGW4SvqkcX",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["bTo6wyWnTWU_hu8lDfUVl",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -2132,7 +2132,7 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-17:T4115,---
+17:T429f,---
 id: 16
 title: 'Particle 로 반딧불이 표현하기'
 description: '3D 환경에서 반딧불이나 별을 표현할 때 Particle 을 활용합니다. 매우 많은 입자들로 표현하는 Particle 을 어떻게 구현하는지 정리하고자 합니다.'
@@ -2871,6 +2871,14 @@ function initParticle() {
 Three.js 의 Particle 생성 방법을 스터디하기 전까지는 개별 Particle 요소를 하나하나 만들어야 하는 것 같았습니다.
 
 이번 포스팅을 통해 Particle 을 효과적으로 활용할 수 있을 것 같습니다.
+
+<br />
+
+다만 위 예제처럼 `scene.background` 와 `scene.fog` 를 어두운 색(`#383841`) 일 경우에 한하여 의도한 결과가 렌더링되었습니다.
+
+`scene.background` 와 `scene.fog` 를 밝은 색상으로 설정하면, 여전히 Particle 의 외곽선이 보이는 현상이 있습니다.
+
+차후 관련하여 좀 더 찾아본 후, 해결방법을 정리하겠습니다.
 18:Tf6c,---
 id: 15
 title: 'Material 의 map, bumpMap, normalMap'
