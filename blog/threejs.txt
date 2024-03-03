@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["P92zMhEoyTtiWES11Gau2",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["LoD_-C8ThqhWbaipOaz6z",[[["",{"children":["blog",{"children":[["category","threejs","d"],{"children":["__PAGE__?{\"category\":\"threejs\"}",{}]}]}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -129,7 +129,7 @@ Three.js 스터디를 하는 중, gammaFactor 설정이 궁금하여 이번 포�
 의미와 용도 정도만 파악하려는 목적이었지만, gamma 와 sRGB 는 상당히 깊고 어려운 내용이었습니다.
 
 지금은 간단한 의미 정도만 파악한 후, 차후 필요성이 생겼을 때 좀 더 깊게 알아볼 예정입니다.
-10:T43b8,---
+10:T4422,---
 id: 16
 title: 'Particle 로 반딧불이 표현하기'
 description: '3D 환경에서 반딧불이나 별을 표현할 때 Particle 을 활용합니다. 매우 많은 입자들로 표현하는 Particle 을 어떻게 구현하는지 정리하고자 합니다.'
@@ -883,11 +883,13 @@ Three.js 의 Particle 생성 방법을 스터디하기 전까지는 개별 Parti
 
 
 
-## (Issue) Particle 의 배경이 보이는 현상
+## (Issue 해결) Particle 의 배경이 보이는 현상
 
 위 예시에서 사용한 png 파일을 확인한 결과, 배경이 투명이 아닌 검은색이었습니다.
 
 배경이 투명하게 처리된 png 파일을 사용하면 정상적으로 렌더릴 되었습니다.
+
+<img src="/markdownAssets/threejs/2024-02-29-01/2024-02-29-01-04.png" alt="Particle 만들기" />
 11:Tf6c,---
 id: 15
 title: 'Material 의 map, bumpMap, normalMap'
