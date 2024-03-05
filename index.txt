@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["LoD_-C8ThqhWbaipOaz6z",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["K3X-sbbP7wEEH1b4HnM7Q",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -2132,7 +2132,604 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-17:T4422,---
+17:T3653,---
+id: 17
+title: 'Particle 좌표를 사용한 애니메이션 구현'
+description: '각 Particle 의 좌표값을 변경하여, 흘러가는 애니메이션을 만드는 방법을 정리하고자 합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'threejs',
+    '3D',
+    'Particle',
+    'BufferGeometry',
+    'Animation',
+]
+
+createdAt: '2024-03-04 22:00:00'
+modifiedHistories: []
+---
+
+# Particle 좌표를 사용한 애니메이션 구현
+
+Particle 을 렌더링할 위치값은 BufferGeometry 에 설정합니다.
+
+이번 포스팅에서는 BufferGeometry 의 위치값에 **SIN** 그래프와 같이 흘러가는 애니메이션을 구현해보겠습니다.
+
+
+
+<br />
+
+
+
+## 예시 코드
+
+> [Model 다운로드 링크](https://polyhaven.com/a/coast_rocks_05)
+>
+> [circle.png 이미지](/markdownAssets/threejs/2024-03-04-01/circle.png)
+>
+> [cloud3.png 이미지](/markdownAssets/threejs/2024-03-04-01/cloud3.png)
+
+이번 포스팅의 예시 코드는 위 모델과 함께 circleParticle 과 cloudParticle 을 렌더링한 시점입니다.
+
+```js title="예시 코드" showLineNumbers
+// three.js
+import {
+    WebGLRenderer,
+    ACESFilmicToneMapping,
+
+    Scene,
+    Color,
+    Fog,
+
+    PerspectiveCamera,
+
+    AxesHelper,
+
+    DirectionalLight,
+    DirectionalLightHelper,
+
+    BufferAttribute,
+    BufferGeometry,
+    PointsMaterial,
+    TextureLoader,
+    AdditiveBlending,
+    Points,
+} from 'three';
+// three.js - addons
+import {
+    OrbitControls,
+} from 'three/examples/jsm/controls/OrbitControls';
+import {
+    GLTFLoader,
+} from 'three/examples/jsm/loaders/GLTFLoader';
+// style
+import './style.css';
+
+//
+// state
+//
+/** @type { WebGLRenderer } */
+let renderer;
+
+/** @type { Scene } */
+let scene;
+
+/** @type { PerspectiveCamera } */
+let camera;
+
+/** @type { OrbitControls } */
+let controls;
+
+const circleParticleState = {
+    config: {
+        NUM_OF_PARTICLES: 250,
+    },
+
+    originPosition: null,
+
+    /** @type { Points } */
+    particle: null,
+};
+
+const cloudParticleState = {
+    config: {
+        NUM_OF_PARTICLES: 125,
+    },
+
+    originPosition: null,
+
+    /** @type { Points } */
+    particle: null,
+};
+
+//
+// core
+//
+function initCanvas() {
+    const $canvas = document.createElement('canvas');
+
+    const $app = document.querySelector('#app');
+    $app?.appendChild($canvas);
+
+    return $canvas;
+}
+
+function initRenderer($canvas) {
+    renderer = new WebGLRenderer({
+        canvas: $canvas,
+        antialias: true,
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = ACESFilmicToneMapping;
+    renderer.shadowMap.enabled = true;
+}
+
+function initScene() {
+    const color = new Color('#383841');
+
+    scene = new Scene();
+    scene.background = color;
+    scene.fog = new Fog(
+        color,
+        0.5,
+        15
+    );
+}
+
+function initCamera() {
+    camera = new PerspectiveCamera();
+
+    camera.fov = 30;
+    camera.aspect = window.innerWidth / window.innerHeight;
+
+    camera.near = 0.5;
+    camera.far = 2000;
+
+    camera.position.set(0, 0, 5);
+    camera.lookAt(0, 0, 0);
+
+    camera.updateProjectionMatrix();
+}
+
+function initAxesHelper() {
+    const helper = new AxesHelper(3);
+
+    scene.add(helper);
+}
+
+function initControls($target) {
+    controls = new OrbitControls(camera, $target);
+    controls.enableDamping = true;
+}
+
+//
+// light
+//
+function initDirectionalLight() {
+    const color = new Color('#fff');
+
+    const light = new DirectionalLight(
+        color,
+        Math.PI * 1
+    );
+
+    light.position.set(-2, 2, 1);
+    light.lookAt(0, 0, 0);
+    light.castShadow = true;
+
+    const helper = new DirectionalLightHelper(light);
+
+    scene.add(light);
+    scene.add(helper);
+}
+
+//
+// model
+//
+function initModel() {
+    const loader = new GLTFLoader();
+
+    loader.load('/gltf/coast-rocks-05/coast_rocks_05_4k.gltf', gltf => {
+        const model = gltf.scene;
+        model.position.set(0, -1, 0);
+
+        model.traverse(child => {
+            if (!child.isMesh) {
+                return;
+            }
+
+            child.castShadow = true;
+            child.receiveShadow = true;
+        });
+
+        scene.add(model);
+    });
+}
+
+//
+// particle
+//
+function initCircleParticle() {
+    const {
+        config: {
+            NUM_OF_PARTICLES,
+        },
+    } = circleParticleState;
+
+    const position = Array.from(
+        { length: 3 * NUM_OF_PARTICLES },
+        () => {
+            return Math.random() * (Math.random() * 2 - 1) * 3;
+        }
+    );
+    circleParticleState.originPosition = position;
+
+    const buffer = new Float32Array(position);
+    const positionAttribute = new BufferAttribute(buffer, 3);
+
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', positionAttribute);
+
+    const material = new PointsMaterial({
+        map: new TextureLoader().load('/particle/circle.png'),
+        size: 0.2,
+        color: new Color('#006400'),
+        opacity: 0.2,
+
+        transparent: true,
+        blending: AdditiveBlending,
+        depthWrite: false,
+    });
+
+    const particle = new Points(geometry, material);
+    circleParticleState.particle = particle;
+
+    scene.add(particle);
+}
+
+function initCloudParticle() {
+    const AXIS_MAPPER = {
+        X: 0,
+        Y: 1,
+        Z: 2,
+    };
+
+    const {
+        config: {
+            NUM_OF_PARTICLES,
+        },
+    } = cloudParticleState;
+
+    const position = Array.from(
+        ({ length: 3 * NUM_OF_PARTICLES }),
+        (_, i) => {
+            const axis = i % 3;
+            const randomValue = Math.random();
+
+            switch (axis) {
+                case AXIS_MAPPER.X:
+                case AXIS_MAPPER.Z:
+                    return (randomValue * 2 - 1) * 3;
+                case AXIS_MAPPER.Y:
+                default:
+                    return randomValue * 2;
+            }
+        }
+    );
+    cloudParticleState.originPosition = position;
+
+    const buffer = new Float32Array(position);
+
+    const positionAttribute = new BufferAttribute(buffer, 3);
+
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', positionAttribute);
+
+    const material = new PointsMaterial({
+        map: new TextureLoader().load('/particle/cloud3.png'),
+        size: 1,
+        color: new Color('#fff'),
+        opacity: 0.25,
+
+        transparent: true,
+        blending: AdditiveBlending,
+        depthWrite: false,
+    });
+
+    const particle = new Points(geometry, material);
+    cloudParticleState.particle = particle;
+
+    scene.add(particle);
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls?.update();
+}
+
+(function init() {
+    const $canvas = initCanvas();
+
+    initRenderer($canvas);
+    initScene();
+    initCamera();
+    initAxesHelper();
+    initControls($canvas);
+
+    initDirectionalLight();
+
+    initModel();
+
+    initCircleParticle();
+    initCloudParticle();
+
+    render();
+}());
+```
+
+<img src="/markdownAssets/threejs/2024-03-04-01/2024-03-04-01-01.png" alt="예시코드" />
+
+
+
+<br />
+
+
+
+## Particle 회전 애니메이션 구현하기
+
+먼저 Particle 이 회전하는 애니메이션을 구현해 보겠습니다.
+
+Particle 은 **Points** 객체입니다.
+
+Mesh 객체와 동일한 **rotation** 속성의 `y` 축에 값을 변경하여 회전하는 효과를 구현할 수 있습니다.
+
+```js title="Particle 회전 애니메이션 구현하기 - 설정값 추가" showLineNumbers{49} {4-7}
+const circleParticleState = {
+    config: {
+        NUM_OF_PARTICLES: 250,
+        // (Math.PI / 180) * 45: 45도 에 대한 호도법
+        // 60: 1초
+        // => 1초에 45도 회전
+        ROTATION_Y_UNIT: (Math.PI / 180) / 60 * 45,
+    },
+
+    originPosition: null,
+
+    /** @type { Points } */
+    particle: null,
+};
+
+const cloudParticleState = {
+    config: {
+        NUM_OF_PARTICLES: 125,
+        // (Math.PI / 180) * 11.25: 11.25도 에 대한 호도법
+        // 60: 1초
+        // => 1초에 11.25도 회전
+        ROTATION_Y_UNIT: (Math.PI / 180) / 60 * 11.25,
+    },
+
+    originPosition: null,
+
+    /** @type { Points } */
+    particle: null,
+};
+```
+
+```js title="Particle 회전 애니메이션 구현하기" showLineNumbers{281} {4-13, 15-24, 35-36}
+//
+// animation
+//
+function rotateCircleParticle() {
+    const {
+        config: {
+            ROTATION_Y_UNIT,
+        },
+        particle
+    } = circleParticleState;
+
+    particle.rotation.y += ROTATION_Y_UNIT;
+}
+
+function rotateCloudParticle() {
+    const {
+        config: {
+            ROTATION_Y_UNIT,
+        },
+        particle
+    } = cloudParticleState;
+
+    particle.rotation.y += ROTATION_Y_UNIT;
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls?.update();
+
+    rotateCircleParticle();
+    rotateCloudParticle();
+}
+```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-03-04-01/2024-03-04-01-02.webm" type="video/webm" />
+    회전 애니메이션
+</video>
+
+<br />
+
+`render()` 함수가 Frame 을 렌더링할 때마다 Particle 의 `roation.y` 값을 증가시키는 방식으로 회전 애니메이션이 렌더링됩니다.
+
+
+
+<br />
+
+
+
+## Particle 의 Y 좌표값에 SIN 함수 적용하기
+
+이번에는 Particle 의 Y 좌표값에 SIN 함수를 적용해 보겠습니다.
+
+결과적으로 Particle 이 흘러가면서 SIN 그래프를 그리는 애니메이션이 구현됩니다.
+
+<br />
+
+구현 원리는 다음과 같습니다.
+
+* Y 좌표값의 최초 원본값을 기준값으로 사용합니다.
+* 삼각함수 SIN 의 인자로 넘겨줄 **radian (각도)** 은 시간이 지남에 따라 일정하게 증가시켜줍니다.
+* 증가된 **radian (각도)** 에 의해 SIN 함수의 값을 Y 좌표값에 더해줍니다.
+* SIN 함수는 **-1 ~ 1** 범위의 값을 가지므로, **SIN * RADIUS(반지름)** 으로 값의 범위를 변경할 수 있습니다.
+
+<br />
+
+먼저 Y축 애니메이션을 위한 state 를 추가하겠습니다.
+
+```js title="state 추가" showLineNumbers{49} {9-10, 12-13, 17-18, 32-33, 35-36, 40-41}
+const circleParticleState = {
+    config: {
+        NUM_OF_PARTICLES: 250,
+        // (Math.PI / 180) * 45: 45도 에 대한 호도법
+        // 60: 1초
+        // => 1초에 45도 회전
+        ROTATION_Y_UNIT: (Math.PI / 180) / 60 * 45,
+
+        // 반지름: Y축 범위 절대값
+        RADIUS: 0.4,
+
+        // 1프레임에 sin(4) 만큼 Y축 이동
+        RADIAN_UNIT: (Math.PI / 180) * 4,
+    },
+
+    originPosition: null,
+    // 45 도를 초기값으로 설정
+    radian: Math.PI / 180 * 45,
+
+    /** @type { Points } */
+    particle: null,
+};
+
+const cloudParticleState = {
+    config: {
+        NUM_OF_PARTICLES: 125,
+        // (Math.PI / 180) * 11.25: 11.25도 에 대한 호도법
+        // 60: 1초
+        // => 1초에 11.25도 회전
+        ROTATION_Y_UNIT: (Math.PI / 180) / 60 * 11.25,
+
+        // 반지름: Y축 범위 절대값
+        RADIUS: 0.2,
+
+        // 1프레임에 sin(1) 만큼 Y축 이동
+        RADIAN_UNIT: (Math.PI / 180) * 4,
+    },
+
+    originPosition: null,
+    // 0도를 초기값으로 설정
+    radian: 0,
+
+    /** @type { Points } */
+    particle: null,
+};
+```
+
+<br />
+
+매 프레임을 렌더링할 때, Particle state 의 **radian 값을 증가** 시키고, **SIN(radian)** 값을 Particle 의 Y축에 적용하여 애니메이션을 구현할 수 있습니다.
+
+```js title="Y축 애니메이션 구현하기" showLineNumbers{322} {1-28, 42-43}
+/**
+ * @param {typeof circleParticleState} particleState 
+ */
+function animateParticle(particleState) {
+    const {
+        config: {
+            RADIAN_UNIT,
+            RADIUS,
+            NUM_OF_PARTICLES,
+        },
+
+        particle,
+        originPosition,
+    } = particleState;
+
+    particleState.radian += RADIAN_UNIT;
+
+    Array
+        .from({ length: NUM_OF_PARTICLES })
+        .forEach((_, i) => {
+            const yIndex = i * 3 + 1;
+            const originY = originPosition[yIndex];
+            const nextY = originY + Math.sin(particleState.radian) * RADIUS;
+
+            particle.geometry.attributes.position.array[yIndex] = nextY;
+
+            // attribute 갱신 여부를 설정해야 렌더링 결과에 반영됩니다. (default: false)
+            particle.geometry.attributes.position.needsUpdate = true;
+        });
+}
+
+//
+// executor
+//
+function render() {
+    window.requestAnimationFrame(render);
+
+    renderer.render(scene, camera);
+    controls?.update();
+
+    rotateCircleParticle();
+    rotateCloudParticle();
+
+    animateParticle(circleParticleState);
+    animateParticle(cloudParticleState);
+}
+```
+
+<video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
+    <source src="/markdownAssets/threejs/2024-03-04-01/2024-03-04-01-03.webm" type="video/webm" />
+    Y축 애니메이션
+</video>
+
+<br />
+
+`animateParticle()` 함수를 살펴보겠습니다.
+
+`337 번줄` 에서 radian(각도) 가 매 프레임마다 증가하게 됩니다.
+
+그리고 모든 Particle 의 Y축 좌표값을 갱신해 줍니다.
+
+중요한 점은 `BufferGeometry` 의 `attributes` 하위 속성을 변경할 경우, `needsUpdate = true` 설정을 해주어야만 렌더링 결과에 반영되는 것입니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+이번 포스팅에서 정리했던 Particle 은 블로그에 Three.js 를 적용하는 시작점이 될 것 같습니다.
+
+우려되는 부분은 아직 최적화에 대한 지식이 없어서, 버벅거리는 현상을 감수해야 한다는 것입니다.
+
+(Y좌표 연산부를 Iterator 로 구현하면 좀 나아질까요?)
+
+테스트도 겸하는 블로그이므로, 첫번째 Three.js 적용에 도전해보고자 합니다.
+18:T4422,---
 id: 16
 title: 'Particle 로 반딧불이 표현하기'
 description: '3D 환경에서 반딧불이나 별을 표현할 때 Particle 을 활용합니다. 매우 많은 입자들로 표현하는 Particle 을 어떻게 구현하는지 정리하고자 합니다.'
@@ -2893,7 +3490,7 @@ Three.js 의 Particle 생성 방법을 스터디하기 전까지는 개별 Parti
 배경이 투명하게 처리된 png 파일을 사용하면 정상적으로 렌더릴 되었습니다.
 
 <img src="/markdownAssets/threejs/2024-02-29-01/2024-02-29-01-04.png" alt="Particle 만들기" />
-18:Tf6c,---
+19:Tf6c,---
 id: 15
 title: 'Material 의 map, bumpMap, normalMap'
 description: 'Material 의 표현 방식과 울퉁불퉁한 재질을 처리하는 방식을 정리합니다.'
@@ -3040,7 +3637,7 @@ map 방식에 따라 성능차이와 렌더링 차이가 있으므로, 사용처
 Three.js 자체의 학습보다는 3D Graphics 개념을 파악하는 것이 더 어려운 것 같습니다.
 
 Three.js 공식 문서는 API 소개 정도만 안내하고 있어서 아쉽습니다.
-19:T4780,---
+1a:T4780,---
 id: 14
 title: 'click 이벤트에 animation 연동하기'
 description: '특정 버튼을 click 했을 때 animation 을 실행하는 방법을 정리합니다.'
@@ -3727,7 +4324,7 @@ function initClickInteraction($target) {
 <video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
     <source src="/markdownAssets/threejs/2024-02-06-01/2024-02-06-01-03.webm" type="video/webm" />
     animation
-</video>1a:T3178,---
+</video>1b:T3178,---
 id: 13
 title: 'Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)'
 description: 'Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.'
@@ -4236,7 +4833,7 @@ window.addEventListener('click', e => {
 Path2D 를 사용하여 구현했었던 Canvas API 에 비해, Raycaster 는 코드상으로도 가독성이 좋은 것 같습니다.
 
 Three.js 를 좀 더 잘 사용할 수 있게된다면, 지금까지 사용했던 Canvas API 를 대체하여 사용하고 싶습니다.
-1b:T1049,---
+1c:T1049,---
 id: 13
 title: '(Issue) 조명이 어둡게 보이는 현상'
 description: '강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.'
@@ -4385,7 +4982,7 @@ intensity 에 PI 를 적용하도록 변경된 Light 는 다음과 같습니다.
 <br />
 
 Three.js 의 공식 문서는 개요 파악 정도로 사용하고, Three.js 포럼에서 좀 더 자세한 내용을 찾아보아야 할 것 같습니다.
-1c:T2afe,---
+1d:T2afe,---
 id: 12
 title: '키보드를 사용하여 카메라 이동 인터렉션 만들기'
 description: '키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.'
@@ -4846,7 +5443,7 @@ Javascript 의 이벤트 처리 방식을 그대로 따르는 방법이라서 �
 만약 화면을 변경하는 부분을 `render()` 함수가 아닌, event listener 에서 직접 하게 되면, **뚝뚝 끊기면서 렌더링되는 현상** 이 나타났습니다.
 
 이는 키보드를 누르고 있을 때, 체터링 간격이 `1 /60` 보다 큰 값인 것으로 추측되었습니다.
-1d:T1d82,---
+1e:T1d82,---
 id: 11
 title: 'canvas 크기 설정 및 material 렌더링 side 설정'
 description: '사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.'
@@ -5109,7 +5706,7 @@ function initDoubleSideModel() {
 100% 를 기억하지는 못하더라도, 맥락과 주요 개념을 기억하기 위해서는 당연한 방법이라고 생각합니다.
 
 다만 투자하는 시간에 대한 아쉬움으로 짧은 푸념을 남깁니다.
-1e:T2b48,---
+1f:T2b48,---
 id: 9
 title: 'Model 에 Animation 효과 적용하기'
 description: 'Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.'
@@ -5587,7 +6184,7 @@ function animateRocket() {
 원하는 Animation 을 구현하기 위해서는 3D Tool 사용방법도 익혀야 할 것 같습니다.
 
 Model 의 Animation 을 코드로 구현하는 것은 원하는 결과를 얻기에는 쉽지 않을 것으로 생각되었습니다.
-1f:T25c2,---
+20:T25c2,---
 id: 8
 title: 'Model (.gltf, .glb) 객체 구조파악 및 그림자 적용'
 description: 'Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.'
@@ -5942,7 +6539,7 @@ Model 에 그림자 설정을 위한 코드는 `traverse()` 메소드를 사용�
 Model 객체가 어떻게 구성되고, 설정을 변경하는 이유 등을 파악하는 것이 쉽지는 않았습니다.
 
 이번 포스팅에서 정리한 내용은 Three.js 전반에 필요한 개념으로 생각되어 성취감이 느껴집니다.
-20:T2000,---
+21:T2000,---
 id: 7
 title: 모델 파일을 Three.js 에 렌더링하기
 description: '.gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.'
@@ -6291,7 +6888,7 @@ gltf 객체의 scene 과 children 의 중첩구조를 살펴보면 크게 2가�
 3D Mesh 파일(.glTF, .gbl) 을 불러온 상태에서는 빛 반사나 그림자와 같은 효과는 적용되지 않습니다.
 
 다음 포스팅에서는 3D Mesh 불러온 후, Mesh 내부 속성을 변경하는 방법을 알아보겠습니다.
-21:T3408,---
+22:T3408,---
 id: 6
 title: 배경화면 및 환경조명 설정하기
 description: '360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.'
@@ -6800,7 +7397,7 @@ Material 설정을 통해 배경화면을 반사하는 효과를 연출해 보�
 이 부분은 차후 정리할 예정입니다.
 
 [Three.js 공식문서 - 거울효과 예시](https://threejs.org/examples/?q=mirror#webgl_mirror)
-22:T2c06,---
+23:T2c06,---
 id: 5
 title: 그림자 표현하기
 description: '그림자 설정방법과 특징에 대해 정리합니다.'
@@ -7254,7 +7851,7 @@ VSMShadowMap 은 곡선에 대한 그림자를 부드럽게 표현할 수 있는
 그래서 그림자를 최소한으로 사용할 수 있도록 여러가지 설정을 분리시켜놓은 느낌이 들었습니다.
 
 Three.js 를 활용할 때, 그림자 설정이 성능 최적화 대상이라는 것을 알게 되었습니다.
-23:T1a79,---
+24:T1a79,---
 id: 4
 title: 평평한 바닥(땅) 만들기 (Plane Mesh)
 description: '바닥을 표현하기 위해 Plane Mesh 를 생성합니다.'
@@ -7552,7 +8149,7 @@ plane.rotation.set(
 Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
 
 다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
-24:T2eef,---
+25:T2eef,---
 id: 3
 title: 조명 종류와 설정
 description: '조명 종류와 설정 방법에 대해 정리합니다.'
@@ -8126,7 +8723,7 @@ HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보�
 <br />
 
 Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
-25:T3ac1,---
+26:T3ac1,---
 id: 2
 title: 카메라 설정 (PerspectiveCamera)
 description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
@@ -8730,7 +9327,7 @@ Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드
 OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
 
 Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
-26:T5077,---
+27:T5077,---
 id: 1
 title: Three.js 설치 및 실행
 description: 'Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.'
@@ -9629,4 +10226,4 @@ Three.js 를 처음 시작하며 제가 느낀 어려움으로는 컴퓨터 그�
 단순히 Three.js 사용법을 익히는 것만으로 원하는 결과물을 얻기는 어려워 보입니다.
 
 지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
-b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"},{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$e"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"javascript","slug":"2023-12-30-01","href":"/blog/javascript/2023-12-30-01","frontmatter":{"id":2,"title":"AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정","description":"AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript","PDF","PDF Metadata","AWS","S3"],"createdAt":"$D2023-12-30T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2024-01-06-01","href":"/blog/jest/2024-01-06-01","frontmatter":{"id":4,"title":"Nextjs 의 useRouter mock 정의하기","description":"Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","@testing-library","useRouter","next-router-mock","유닛 테스트"],"createdAt":"$D2024-01-06T17:30:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"nextjs","slug":"2024-01-01-01","href":"/blog/nextjs/2024-01-01-01","frontmatter":{"id":2,"title":".DS_Store not found 에러","description":"Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs",".DS_Store"],"createdAt":"$D2024-01-01T15:20:00.000Z","modifiedHistories":[]},"markdownFile":"---\nid: 2\ntitle: .DS_Store not found 에러\ndescription: 'Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.'\nthumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg\n\nfeatured: false\ntags: [\n    'nextjs',\n    '.DS_Store',\n]\n\ncreatedAt: '2024-01-01 15:20:00'\nmodifiedHistories: []\n---\n\n# .DS_Store not found 에러\n\nNextjs 프로젝트에 이미지 파일을 추가하고 삭제한 후, 빌드 에러가 발생하였습니다.\n\n> Error: ENOENT: no such file or directory, open '/.../.DS_Store\n\n\n\n<br />\n\n\n\n## 에러 원인 파악\n\n.DS_Store 는 맥북의 폴더 관련 메타데이터 파일이며, Finder 로 폴더에 접근하게 되면 자동으로 생성됩니다.\n\n문제는 Nextjs 프로젝트를 개발 환경으로 실행하거나 빌드할 때, .DS_Store 파일이 추가되면, 빌드 에러가 발생합니다.\n\n\n\n\n<br />\n\n\n\n## 해결 방법\n\n* 참고: [Stack Overflow](https://github.com/vercel/next.js/discussions/15573#discussioncomment-2415012)\n\n<br />\n\nNextjs 프로젝트 하위에 존재하는 .DS_Store 파일을 모두 삭제하는 것으로 해결할 수 있었습니다.\n\n모든 폴더를 직접 열어보면서 지우는 방법도 있겠지만, 터미널을 사용하여 삭제 명령으로 처리할 수 있습니다.\n\n```bash title=\"프로젝트 내의 모든 .DS_Store 파일 삭제\"\nrm **/.DS_Store\n```\n\n<br />\n\n삭제 명령이 실행 완료되면, Nextjs 프로젝트가 정상적으로 빌드되는 것을 확인할 수 있습니다.\n"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-02-29-01","href":"/blog/threejs/2024-02-29-01","frontmatter":{"id":16,"title":"Particle 로 반딧불이 표현하기","description":"3D 환경에서 반딧불이나 별을 표현할 때 Particle 을 활용합니다. 매우 많은 입자들로 표현하는 Particle 을 어떻게 구현하는지 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Particle","BufferGeometry","PointsMaterial","Points"],"createdAt":"$D2024-02-29T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-02-12-01","href":"/blog/threejs/2024-02-12-01","frontmatter":{"id":15,"title":"Material 의 map, bumpMap, normalMap","description":"Material 의 표현 방식과 울퉁불퉁한 재질을 처리하는 방식을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Material","Texture","map","bumpMap","normalMap"],"createdAt":"$D2024-02-12T15:17:30.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-02-06-01","href":"/blog/threejs/2024-02-06-01","frontmatter":{"id":14,"title":"click 이벤트에 animation 연동하기","description":"특정 버튼을 click 했을 때 animation 을 실행하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction","animation","AnimationMixer","AnimationClip","AnimationAction"],"createdAt":"$D2024-02-06T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2024-02-03-02","href":"/blog/threejs/2024-02-03-02","frontmatter":{"id":13,"title":"Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)","description":"Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction"],"createdAt":"$D2024-02-03T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1a"},{"category":"threejs","slug":"2024-02-03-01","href":"/blog/threejs/2024-02-03-01","frontmatter":{"id":13,"title":"(Issue) 조명이 어둡게 보이는 현상","description":"강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","DirectionalLgith","HemisphereLight","intensity"],"createdAt":"$D2024-02-03T14:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1b"},{"category":"threejs","slug":"2024-01-30-01","href":"/blog/threejs/2024-01-30-01","frontmatter":{"id":12,"title":"키보드를 사용하여 카메라 이동 인터렉션 만들기","description":"키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","keyboard event","camera","interaction"],"createdAt":"$D2024-01-30T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1c"},{"category":"threejs","slug":"2024-01-28-02","href":"/blog/threejs/2024-01-28-02","frontmatter":{"id":11,"title":"canvas 크기 설정 및 material 렌더링 side 설정","description":"사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","setSize()","setPixelRatio()","material","FrontSide","BackSide","DoubleSide"],"createdAt":"$D2024-01-28T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1d"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1e"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1f"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$20"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$21"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$22"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$23"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$24"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$25"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$26"}]}]
+b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"},{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$e"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"javascript","slug":"2023-12-30-01","href":"/blog/javascript/2023-12-30-01","frontmatter":{"id":2,"title":"AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정","description":"AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript","PDF","PDF Metadata","AWS","S3"],"createdAt":"$D2023-12-30T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2024-01-06-01","href":"/blog/jest/2024-01-06-01","frontmatter":{"id":4,"title":"Nextjs 의 useRouter mock 정의하기","description":"Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","@testing-library","useRouter","next-router-mock","유닛 테스트"],"createdAt":"$D2024-01-06T17:30:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"nextjs","slug":"2024-01-01-01","href":"/blog/nextjs/2024-01-01-01","frontmatter":{"id":2,"title":".DS_Store not found 에러","description":"Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs",".DS_Store"],"createdAt":"$D2024-01-01T15:20:00.000Z","modifiedHistories":[]},"markdownFile":"---\nid: 2\ntitle: .DS_Store not found 에러\ndescription: 'Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.'\nthumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg\n\nfeatured: false\ntags: [\n    'nextjs',\n    '.DS_Store',\n]\n\ncreatedAt: '2024-01-01 15:20:00'\nmodifiedHistories: []\n---\n\n# .DS_Store not found 에러\n\nNextjs 프로젝트에 이미지 파일을 추가하고 삭제한 후, 빌드 에러가 발생하였습니다.\n\n> Error: ENOENT: no such file or directory, open '/.../.DS_Store\n\n\n\n<br />\n\n\n\n## 에러 원인 파악\n\n.DS_Store 는 맥북의 폴더 관련 메타데이터 파일이며, Finder 로 폴더에 접근하게 되면 자동으로 생성됩니다.\n\n문제는 Nextjs 프로젝트를 개발 환경으로 실행하거나 빌드할 때, .DS_Store 파일이 추가되면, 빌드 에러가 발생합니다.\n\n\n\n\n<br />\n\n\n\n## 해결 방법\n\n* 참고: [Stack Overflow](https://github.com/vercel/next.js/discussions/15573#discussioncomment-2415012)\n\n<br />\n\nNextjs 프로젝트 하위에 존재하는 .DS_Store 파일을 모두 삭제하는 것으로 해결할 수 있었습니다.\n\n모든 폴더를 직접 열어보면서 지우는 방법도 있겠지만, 터미널을 사용하여 삭제 명령으로 처리할 수 있습니다.\n\n```bash title=\"프로젝트 내의 모든 .DS_Store 파일 삭제\"\nrm **/.DS_Store\n```\n\n<br />\n\n삭제 명령이 실행 완료되면, Nextjs 프로젝트가 정상적으로 빌드되는 것을 확인할 수 있습니다.\n"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-03-04-01","href":"/blog/threejs/2024-03-04-01","frontmatter":{"id":17,"title":"Particle 좌표를 사용한 애니메이션 구현","description":"각 Particle 의 좌표값을 변경하여, 흘러가는 애니메이션을 만드는 방법을 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Particle","BufferGeometry","Animation"],"createdAt":"$D2024-03-04T22:00:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-02-29-01","href":"/blog/threejs/2024-02-29-01","frontmatter":{"id":16,"title":"Particle 로 반딧불이 표현하기","description":"3D 환경에서 반딧불이나 별을 표현할 때 Particle 을 활용합니다. 매우 많은 입자들로 표현하는 Particle 을 어떻게 구현하는지 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Particle","BufferGeometry","PointsMaterial","Points"],"createdAt":"$D2024-02-29T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-02-12-01","href":"/blog/threejs/2024-02-12-01","frontmatter":{"id":15,"title":"Material 의 map, bumpMap, normalMap","description":"Material 의 표현 방식과 울퉁불퉁한 재질을 처리하는 방식을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Material","Texture","map","bumpMap","normalMap"],"createdAt":"$D2024-02-12T15:17:30.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2024-02-06-01","href":"/blog/threejs/2024-02-06-01","frontmatter":{"id":14,"title":"click 이벤트에 animation 연동하기","description":"특정 버튼을 click 했을 때 animation 을 실행하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction","animation","AnimationMixer","AnimationClip","AnimationAction"],"createdAt":"$D2024-02-06T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1a"},{"category":"threejs","slug":"2024-02-03-02","href":"/blog/threejs/2024-02-03-02","frontmatter":{"id":13,"title":"Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)","description":"Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction"],"createdAt":"$D2024-02-03T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1b"},{"category":"threejs","slug":"2024-02-03-01","href":"/blog/threejs/2024-02-03-01","frontmatter":{"id":13,"title":"(Issue) 조명이 어둡게 보이는 현상","description":"강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","DirectionalLgith","HemisphereLight","intensity"],"createdAt":"$D2024-02-03T14:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1c"},{"category":"threejs","slug":"2024-01-30-01","href":"/blog/threejs/2024-01-30-01","frontmatter":{"id":12,"title":"키보드를 사용하여 카메라 이동 인터렉션 만들기","description":"키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","keyboard event","camera","interaction"],"createdAt":"$D2024-01-30T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1d"},{"category":"threejs","slug":"2024-01-28-02","href":"/blog/threejs/2024-01-28-02","frontmatter":{"id":11,"title":"canvas 크기 설정 및 material 렌더링 side 설정","description":"사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","setSize()","setPixelRatio()","material","FrontSide","BackSide","DoubleSide"],"createdAt":"$D2024-01-28T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1e"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1f"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$20"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$21"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$22"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$23"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$24"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$25"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$26"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$27"}]}]
