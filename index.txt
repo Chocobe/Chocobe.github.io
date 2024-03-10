@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["K3X-sbbP7wEEH1b4HnM7Q",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["lfgskFw3mHwWMG_FQnEI1",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -9,7 +9,7 @@
 3:[null,["$","html",null,{"lang":"ko","children":["$","body",null,{"className":"__className_7bb6ba","children":["$","div",null,{"className":"w-full\n            h-full\n            overflow-y-scroll\n            overflow-x-auto","children":["$","$L5",null,{"children":[["$","$L6",null,{}],["$","$L7",null,{"style":{"minHeight":"calc(100% - 72px)"},"children":["$","$L8",null,{"parallelRouterKey":"children","segmentPath":["children"],"loading":"$undefined","loadingStyles":"$undefined","loadingScripts":"$undefined","hasLoading":false,"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[],"childProp":{"current":["$La","$Lb",null],"segment":"__PAGE__"},"styles":null}]}]]}]}]}]}],null]
 4:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Chocobe Blog v2"}],["$","meta","3",{"name":"description","content":"Frontend 기술 블로그 입니다."}],["$","link","4",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"16x16"}],["$","meta","5",{"name":"next-size-adjust"}]]
 a:null
-c:I[463,["281","static/chunks/08ffe114-a8e3ed06beefbf38.js","465","static/chunks/48507feb-6de01ca04009bb96.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","931","static/chunks/app/page-2a9b84f80b166504.js"],""]
+c:I[463,["281","static/chunks/08ffe114-360da778f6e05848.js","465","static/chunks/48507feb-6de01ca04009bb96.js","306","static/chunks/39209d7c-a33d4549f726b4ab.js","576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","128","static/chunks/128-a9a4b8134fdbdc1d.js","931","static/chunks/app/page-c6db3a7f2882d9a6.js"],""]
 d:T162a,---
 id: 1
 title: '"node:fs" 테스트 하기'
@@ -332,7 +332,150 @@ Three.js 스터디를 하는 중, gammaFactor 설정이 궁금하여 이번 포�
 의미와 용도 정도만 파악하려는 목적이었지만, gamma 와 sRGB 는 상당히 깊고 어려운 내용이었습니다.
 
 지금은 간단한 의미 정도만 파악한 후, 차후 필요성이 생겼을 때 좀 더 깊게 알아볼 예정입니다.
-f:T1171,---
+f:T1174,---
+id: 2
+title: AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정
+description: 'AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'javascript',
+    'PDF',
+    'PDF Metadata',
+    'AWS',
+    'S3',
+]
+
+createdAt: '2023-12-30 16:00:00'
+modifiedHistories: []
+---
+
+# 웹에서 PDF 뷰어를 제공하는 방법
+
+PDF 파일은 범용적으로 사용되는 문서 파일 입니다.
+
+PDF 뷰어를 제공하는 방법에는 여러가지가 있습니다.
+
+* `<iframe />`, `<object />`, `<embed />` 태그
+* PDF 뷰어 관련 라이드러리들
+
+
+
+<br />
+
+
+
+## `<object />` 를 사용한 PDF 뷰어 구현하기
+
+PDF 파일은 브라우저 내장 뷰어에서 다양한 기능을 제공합니다.
+
+구현 초기에는 `<iframe />` 이나 `<object />` 의 보안문제를 피하기 위해, PDF 라이브러리를 사용하고자 하였습니다.
+
+하지만 브라우저의 내장 PDF 뷰어의 강력한 기능들을 포기하거나 직접 구현해야 하는 문제가 있습니다.
+
+<br />
+
+이러한 이유로 `<object />` 태그를 사용하여 PDF 뷰어를 사용하기로 하였습니다.
+
+또한 `<iframe />` 보다는 `<object />` 태그가 PDF 에는 적합하다는 MDN 공식문서에 따르게 되었습니다.
+
+* 참고: [MDN 공식 문서](https://developer.mozilla.org/ko/docs/Learn/HTML/Multimedia_and_embedding/Other_embedding_technologies#embed_%EC%99%80_object_%EC%9A%94%EC%86%8C)
+
+
+
+<br />
+
+
+
+## `<object />` 를 사용하여 간단한 PDF 뷰어 만들기
+
+아래와 같이 `<object />` 태그를 사용하여 간단하게 PDF 뷰어 기능을 사용할 수 있습니다.
+
+```tsx title="PDF 뷰어 예시 코드" showLineNumbers
+type TMyPdfViewerProps = {
+    url: string;
+}
+
+function MyPdfViewer(props: TMyPdfViewerProps) {
+    const {
+        url,
+    } = props;
+
+    const data = `${url}#view=FitH`;
+
+    return (<>
+        <object 
+            data={data}
+            type='application/pdf' 
+            width='100%' 
+            height='100%' />
+    </>);
+}
+
+export default MyPdfViewer;
+```
+
+
+
+<br />
+
+
+
+## AWS S3 에 업로드한 PDF 파일이 다운로드되는 이슈
+
+AWS S3 는 널리 사용되는 클라우드 스토리지 입니다.
+
+PDF 파일을 S3 에 업로드한 후, `<MyPdfViewer />` 컴포넌트로 보여주고자 합니다.
+
+만약 단순히 S3 에 PDF 파일을 업로드 했다면, `<object />` 에 연동한 **PDF 파일이 렌더링 되지 않고 다운로드되는 현상**을 마주하게 됩니다.
+
+
+
+<br />
+
+
+
+## PDF 파일이 다운로드만 되는 이유
+
+AWS S3 에 파일을 업로드할 경우, 별도의 설정을 하지 않는다면 아래와 같은 **Metadata** 기본값으로 설정됩니다.
+
+* `Content-Type: binary/octet-stream`
+* `Content-Disposition: attachment`
+
+<br />
+
+위와 같은 파일을 브라우저에서 요청할 경우, 해당 파일은 첨부파일로 인식하고 다운로드하는 동작을 하게 됩니다.
+
+AWS S3 에 업로드한 파일이 **단순 첨부파일 응답 으로 처리되기 때문에** `<object />` 태그에 렌더링되는 것이 아닌 다운로드가 됩니다.
+
+<br />
+
+이를 PDF 뷰어로 동작하도록 하려면, **AWS S3 에 업로드한 PDF 파일의 Metadata 를 아래와 같이 수정** 해서 해결할 수 있습니다.
+
+* `Content-Type: application/pdf`
+* `Content-Disposition: inline`
+
+<br />
+
+위와 같이 Metadata 를 변경했다면, `<object />` 태그에서 요청한 PDF 파일은 다운로드되지 않고 브라우저 내장 PDF 뷰어로 렌더링됩니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+이번 이슈를 해결하기 위해, 최초 시도했던 방법은 AWS S3 에 PDF 파일을 별도로 요청한 후, 응답 결과인 PDF 파일 데이터를 `Blob` 으로 wrapping 하는 방식을 구현했습니다.
+
+하지만 이렇게 wrapping 한 Blob 은 파일내용에 따라 렌더링이 되지 않는 이슈가 발생하였습니다.
+
+Blob 으로 변환한 PDF 파일을 다운로드하여 확인하면 정상적으로 열리지만 `<object />` 태그에 렌더링되지 않는 경우가 있다보니, AWS S3 에 업로드한 파일의 Metadata 를 수정하는 방법을 사용하게 되었습니다.
+
+이번 이슈를 통해, 파일을 다루는 경우에는 Metadata 에 대한 확인 및 설정이 필요하다는 것을 배우게 되었습니다.
+10:T1171,---
 id: 1
 title: 구조 분해 할당의 기본값 지정, null 은 사용 불가!
 description: '구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.'
@@ -497,537 +640,7 @@ const keyD = _keyD ?? '값 없음';
 <br />
 
 다른분들은 저와 같은 실수가 없기를 바라며, 이번 포스팅을 마무리 합니다.
-10:T1174,---
-id: 2
-title: AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정
-description: 'AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.'
-thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
-
-featured: false
-tags: [
-    'javascript',
-    'PDF',
-    'PDF Metadata',
-    'AWS',
-    'S3',
-]
-
-createdAt: '2023-12-30 16:00:00'
-modifiedHistories: []
----
-
-# 웹에서 PDF 뷰어를 제공하는 방법
-
-PDF 파일은 범용적으로 사용되는 문서 파일 입니다.
-
-PDF 뷰어를 제공하는 방법에는 여러가지가 있습니다.
-
-* `<iframe />`, `<object />`, `<embed />` 태그
-* PDF 뷰어 관련 라이드러리들
-
-
-
-<br />
-
-
-
-## `<object />` 를 사용한 PDF 뷰어 구현하기
-
-PDF 파일은 브라우저 내장 뷰어에서 다양한 기능을 제공합니다.
-
-구현 초기에는 `<iframe />` 이나 `<object />` 의 보안문제를 피하기 위해, PDF 라이브러리를 사용하고자 하였습니다.
-
-하지만 브라우저의 내장 PDF 뷰어의 강력한 기능들을 포기하거나 직접 구현해야 하는 문제가 있습니다.
-
-<br />
-
-이러한 이유로 `<object />` 태그를 사용하여 PDF 뷰어를 사용하기로 하였습니다.
-
-또한 `<iframe />` 보다는 `<object />` 태그가 PDF 에는 적합하다는 MDN 공식문서에 따르게 되었습니다.
-
-* 참고: [MDN 공식 문서](https://developer.mozilla.org/ko/docs/Learn/HTML/Multimedia_and_embedding/Other_embedding_technologies#embed_%EC%99%80_object_%EC%9A%94%EC%86%8C)
-
-
-
-<br />
-
-
-
-## `<object />` 를 사용하여 간단한 PDF 뷰어 만들기
-
-아래와 같이 `<object />` 태그를 사용하여 간단하게 PDF 뷰어 기능을 사용할 수 있습니다.
-
-```tsx title="PDF 뷰어 예시 코드" showLineNumbers
-type TMyPdfViewerProps = {
-    url: string;
-}
-
-function MyPdfViewer(props: TMyPdfViewerProps) {
-    const {
-        url,
-    } = props;
-
-    const data = `${url}#view=FitH`;
-
-    return (<>
-        <object 
-            data={data}
-            type='application/pdf' 
-            width='100%' 
-            height='100%' />
-    </>);
-}
-
-export default MyPdfViewer;
-```
-
-
-
-<br />
-
-
-
-## AWS S3 에 업로드한 PDF 파일이 다운로드되는 이슈
-
-AWS S3 는 널리 사용되는 클라우드 스토리지 입니다.
-
-PDF 파일을 S3 에 업로드한 후, `<MyPdfViewer />` 컴포넌트로 보여주고자 합니다.
-
-만약 단순히 S3 에 PDF 파일을 업로드 했다면, `<object />` 에 연동한 **PDF 파일이 렌더링 되지 않고 다운로드되는 현상**을 마주하게 됩니다.
-
-
-
-<br />
-
-
-
-## PDF 파일이 다운로드만 되는 이유
-
-AWS S3 에 파일을 업로드할 경우, 별도의 설정을 하지 않는다면 아래와 같은 **Metadata** 기본값으로 설정됩니다.
-
-* `Content-Type: binary/octet-stream`
-* `Content-Disposition: attachment`
-
-<br />
-
-위와 같은 파일을 브라우저에서 요청할 경우, 해당 파일은 첨부파일로 인식하고 다운로드하는 동작을 하게 됩니다.
-
-AWS S3 에 업로드한 파일이 **단순 첨부파일 응답 으로 처리되기 때문에** `<object />` 태그에 렌더링되는 것이 아닌 다운로드가 됩니다.
-
-<br />
-
-이를 PDF 뷰어로 동작하도록 하려면, **AWS S3 에 업로드한 PDF 파일의 Metadata 를 아래와 같이 수정** 해서 해결할 수 있습니다.
-
-* `Content-Type: application/pdf`
-* `Content-Disposition: inline`
-
-<br />
-
-위와 같이 Metadata 를 변경했다면, `<object />` 태그에서 요청한 PDF 파일은 다운로드되지 않고 브라우저 내장 PDF 뷰어로 렌더링됩니다.
-
-
-
-<br />
-
-
-
-## 마치며
-
-이번 이슈를 해결하기 위해, 최초 시도했던 방법은 AWS S3 에 PDF 파일을 별도로 요청한 후, 응답 결과인 PDF 파일 데이터를 `Blob` 으로 wrapping 하는 방식을 구현했습니다.
-
-하지만 이렇게 wrapping 한 Blob 은 파일내용에 따라 렌더링이 되지 않는 이슈가 발생하였습니다.
-
-Blob 으로 변환한 PDF 파일을 다운로드하여 확인하면 정상적으로 열리지만 `<object />` 태그에 렌더링되지 않는 경우가 있다보니, AWS S3 에 업로드한 파일의 Metadata 를 수정하는 방법을 사용하게 되었습니다.
-
-이번 이슈를 통해, 파일을 다루는 경우에는 Metadata 에 대한 확인 및 설정이 필요하다는 것을 배우게 되었습니다.
-11:T1598,---
-id: 4
-title: 'Nextjs 의 useRouter mock 정의하기'
-description: 'Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.'
-thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
-
-featured: false
-tags: [
-    'jest',
-    '@testing-library',
-    'useRouter',
-    'next-router-mock',
-    '유닛 테스트',
-]
-
-createdAt: '2024-01-06 17:30:00'
-modifiedHistories: []
----
-
-# Nextjs 의 useRouter mock 정의하기
-
-페이지 이동을 위한 컴포넌트는 웹페이지에서 빠질 수 없는 컴포넌트 입니다.
-
-Nextjs 프로젝트에서 페이지 이동은 Nextjs 의 `useRouter` hook 을 사용하여 구현합니다.
-
-이러한 컴포넌트는 내부에서 `useRouter` 를 사용하고 있기 때문에, Jest 의 `render()` 를 사용한 렌더링 시, 에러가 발생하게 됩니다.
-
-이번 포스팅에서는 `useRouter` 를 mocking 하여 테스트 하는 방법에 대해 정리하고자 합니다.
-
-
-
-<br />
-
-
-
-## 컴포넌트 렌더링 실패
-
-`useRouter` 를 사용하는 컴포넌트를 아무런 설정없이 Jest 의 `render()` 를 실행시키면, 렌더링 에러가 발생합니다.
-
-이는 테스트 환경에서 `useRouter()` 가 렌더링 되지 않으면서 발생하게 됩니다.
-
-이를 해결하기 위해, `next-router-mock` 라이브러리를 활용할 수 있습니다.
-
-```bash
-yarn add -D next-router-mock
-```
-
-
-
-<br />
-
-
-
-## `useRouter` 를 사용하는 테스트용 컴포넌트
-
-이번 포스트에서 테스트할 컴포넌트는 아래와 같습니다.
-
-`onClick()` 내부에서 `router.push()` 를 사용하여 페이지를 이동 시키는 동작을 합니다.
-
-```tsx title="MyAnchor.tsx" showLineNumbers
-import {
-    useCallback,
-    PropsWithChildren,
-} from 'react';
-import {
-    useRouter,
-} from 'next/navigation';
-
-type TMyAnchorProps = PropsWithChildren<{
-    className?: string;
-    href: string;
-}>;
-
-function MyAnchor(props: TMyAnchorProps) {
-    const {
-        className,
-        href,
-        children,
-    } = props;
-
-    const router = useRouter();
-
-    const onClick = useCallback(() => {
-        router.push(href);
-    }, [href]);
-
-    return (
-        <a 
-            className={className}
-            href={href}>
-            {children}
-        </a>
-    );
-}
-
-export default MyAnchor;
-```
-
-
-
-<br />
-
-
-
-## `jest.mock()` 을 사용하여 `useRouter()` mocking 하기
-
-`jest.mock()` 을 사용하면, 특정 모듈을 mocking 할 수 있습니다.
-
-이를 활용하여, `next/navigation` 모듈을 mocking 하여 `useRouter` 가 테스트 환경에서 렌더링될 수 있도록 합니다.
-
-```ts title="jest.mock() 으로 useRouter mocking 하기"
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
-```
-
-* `jest.mock()`: 특정 모듈을 mocking 합니다.
-    * 첫번째 인자: mocking 할 모듈명
-    * 두번째 인자: mocking 반환 함수
-* `jest.requireActual()`: 실제 모듈을 가져옵니다. (`import`, `require`)
-
-<br />
-
-위 코드를 사용하여 `useRouter` 를 mocking 하게 되면, 정상적으로 렌더링됨을 확인할 수 있습니다.
-
-아래는 테스트 예시 코드 입니다.
-
-```tsx title="MyAnchor 테스트" showLineNumbers {7, 9, 12-15, 48-50}
-import MyAnchor from './MyAnchor';
-import {
-    render,
-    screen,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import mockRouter from 'next-router-mock';
-
-jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
-
-describe('<MyAnchor /> 테스트', () => {
-    beforeEach(() => {
-        // mockRouter 의 pathname 을 '/' 으로 초기화 합니다.
-        mockRouter.push('/');
-    });
-
-    it('DOM 에 렌더링 된다.', () => {
-        render(
-            <div data-testid="test-MyAnchor">
-                <MyAnchor href="/test-url">
-                    Test Page
-                </MyAnchor>
-            </div>
-        );
-
-        const $anchor = screen.getByTestId('test-MyAnchor');
-
-        expect($anchor).toBeInTheDocument();
-    });
-
-    it('click 시, href 경로로 페이지 이동한다.', async () => {
-        render(
-            <div data-testid="test-MyAnchor">
-                <MyAnchor 
-                    className="test-className"
-                    href="test-url">
-                    Test Page
-                </MyAnchor>
-            </div>
-        );
-
-        const $anchor = screen
-            .getByTestId('test-MyAnchor')
-            .querySelector('.test-className');
-
-        await userEvent.click($anchor);
-
-        expect(mockRouter).toMatchObject({
-            pathname: '/test-url',
-        });
-    });
-});
-```
-
-<br />
-
-그리고 `router` 가 클릭된 후, 페이지 이동이 되었는지 테스트하기 위해, `mockRouter` 를 활용할 수 있습니다.
-
-`mockRouter` 의 `pathname` 에 이동할 페이지의 url 이 반영되었다면, 실제로는 페이지 이동이 된 것으로 볼 수 있습니다.
-
-
-
-<br />
-
-
-
-## 마치며
-
-프레임워크는 개발에 필요한 다양한 기능을 제공합니다.
-
-이를 테스트하기 위해서는 프레임워크와 동일한 환경을 만들어주어야 함을 알게 되었습니다.
-
-단순 컴포넌트나 함수를 테스트할 때는 신경쓰지 않았던 **모듈 mocking** 이 필요하고, `jest.mock()` 을 사용하여 mocking 할 수 있었습니다.
-
-`next-router-mock` 라이브러리 처럼 오픈 소스 문화가 있기에 저도 웹 개발을 할 수 있음을 새삼 느끼게 됩니다. 🫠
-12:T14bb,---
-id: 3
-title: '"styled-components" 로 구현한 컴포넌트 테스트하기'
-description: '"styled-components" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.'
-thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
-
-featured: false
-tags: [
-    'jest',
-    'styled-components',
-    '@testing-library',
-    '유닛 테스트',
-]
-
-createdAt: '2023-12-26 23:50:00'
-modifiedHistories: []
----
-
-# styled-components 로 구현한 컴포넌트 테스트하기
-
-컴포넌트의 style 작성에는 여러가지 선택지가 있습니다.
-
-그 중 저는 **styled-components** 를 가장 선호합니다.
-
-이번 포스팅에서는 **styled-components** 를 사용한 컴포넌트를 테스트하기 위한 jest 환경을 설정해보겠습니다.
-
-
-
-<br />
-
-
-
-## 설정없이 jest 를 실행하면? throw Error!
-
-**styled-components** 는 `<ThemeProvider />` 하위에서 사용할 수 있습니다.
-
-만약 추가 설정없이 jest 를 실행하게 되면, `render()` 호출에서 에러가 발생합니다.
-
-```tsx title="에러 발생 예시" showLineNumbers {10-12}
-import MyComponent from './MyComponent';
-import {
-    render,
-} from '@testing-library/react';
-
-describe('MyComponent 테스트', () => {
-    it('DOM 에 렌더링 된다.', () => {
-        // render() 호출 시, Error 발생
-        render(
-            <div data-testid="my-component">
-                <MyComponent />
-            </div>
-        );
-
-        const $myComponent = screen.getByTestId('my-component');
-
-        expect($myComponent).toBeInTheDocument();
-    });
-});
-```
-
-```bash title="에러 메시지"
-TypeError: Cannot read properties of undefined (reading 'MarkdownAnchor')
-```
-
-<br />
-
-아래와 같이 `render()` 호출부에 `<ThemeProvider />` 를 함께 넘겨주면 테스트가 정상적으로 실행되는 것을 확인할 수 있습니다.
-
-```tsx title="테스트 정상 동작" showLineNumbers {11, 13}
-import MyComponent from './MyComponent';
-import {
-    render,
-} from '@testing-library/react';
-
-describe('MyComponent 테스트', () => {
-    it('DOM 에 렌더링 된다.', () => {
-        // render() 성공
-        render(
-            <div data-testid="my-component">
-                <ThemeProvier theme={theme}>
-                    <MyComponent />
-                </ThemeProvier>
-            </div>
-        );
-
-        const $myComponent = screen.getByTestId('my-component');
-
-        // 테스트 통과
-        expect($myComponent).toBeInTheDocument();
-    });
-});
-```
-
-
-
-<br />
-
-
-
-## util 또는 hook 으로 `<ThemeProvider />` 제공하기
-
-테스트 코드를 작성할 때, 각 테스트 케이스별로 중복되는 코드들이 생기게 됩니다.
-
-이러한 부분들을 공통 함수로 묶어내거나 추상화하지 않는 이유는, 테스트 코드를 읽어나가는 것으로 어떤 테스트를 수행하는지 파악할 수 있는 것이 더 테스트 코드의 가치를 높이기 때문입니다.
-
-<br />
-
-하지만 `<ThemeProvider />` 를 감싸는 코드는 **styled-components** 설정을 테스트하는 것이 아닌 이상, 특정 컴포넌트를 테스트하는데 의미를 두기 어렵습니다.
-
-그러므로 이 부분은 별도의 **util 함수** 또는 **custom hook** 으로 분리하여 사용해도 무방해 보입니다.
-
-<br />
-
-저는 **@testing-library** 에서 제공하는 `render()` 함수 처럼 `util 함수` 로 만드는 것이 좀 더 일관되는 패턴으로 생각하여 아래와 같이 작성해 보았습니다.
-
-```tsx title="@/utils/testing-library/renderTestComponent.tsx" showLineNumbers
-// react
-import { 
-    ReactElement,
-} from 'react';
-// jest
-import { 
-    render,
-} from '@testing-library/react';
-// styled-components
-import { 
-    ThemeProvider,
-} from 'styled-components';
-import theme from '@/styles/theme';
-
-const renderTestComponent = (element: ReactElement) => {
-    const { rerender } = render(
-        <ThemeProvider theme={theme('light')}>
-            {element}
-        </ThemeProvider>
-    );
-
-    return {
-        rerender,
-    };
-};
-
-export default renderTestComponent;
-```
-
-<br />
-
-이를 테스트 코드에 적용하면 다음과 같습니다.
-
-```tsx title="util 함수를 적용한 테스트 코드" showLineNumbers {5, 10}
-import MyComponent from './MyComponent';
-// import {
-//     render,
-// } from '@testing-library/react';
-import renderTestComponent from '@/utils/testing-library/renderTestComponent';
-
-describe('MyComponent 테스트', () => {
-    it('DOM 에 렌더링 된다.', () => {
-        // render() 성공
-        renderTestComponent(
-            <div data-testid="my-component">
-                <MyComponent />
-            </div>
-        );
-
-        const $myComponent = screen.getByTestId('my-component');
-
-        // 테스트 통과
-        expect($myComponent).toBeInTheDocument();
-    });
-});
-```
-
-
-
-<br />
-
-
-
-## 마치며
-
-유닛 테스트를 하나씩 추가하며, coverage 가 높아져 가는 것이 하나의 재미요소가 되었습니다.
-
-`renderTestComponent()` 처럼 테스트 환경을 위한 기능을 만드는 과정은 성취감과 연결되었습니다.
-
-이 블로그 프로젝트는 개발 초기 시점인 만큼, 모든 컴포넌트를 테스트할 수 있도록 목표를 잡아야겠습니다!
-13:T15fe,---
+11:T15fe,---
 id: 2
 title: '"jest.fn()" 으로 함수 테스트하기'
 description: '컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 "jest.fn()" 사용방법에 대한 정리 입니다.'
@@ -1244,6 +857,393 @@ describe('ChocobeInput 컴포넌트 테스트', () => {
 함수 테스트는 `jest.fn()` 뿐만 아니라 `jest.spyOn()` 으로도 가능합니다.
 
 다음 포스팅에서는 `jest.spyOn()` 으로 테스트하는 방법과 `jest.fn()` 과 차이점에 대해 정리하겠습니다.
+12:T14bb,---
+id: 3
+title: '"styled-components" 로 구현한 컴포넌트 테스트하기'
+description: '"styled-components" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'jest',
+    'styled-components',
+    '@testing-library',
+    '유닛 테스트',
+]
+
+createdAt: '2023-12-26 23:50:00'
+modifiedHistories: []
+---
+
+# styled-components 로 구현한 컴포넌트 테스트하기
+
+컴포넌트의 style 작성에는 여러가지 선택지가 있습니다.
+
+그 중 저는 **styled-components** 를 가장 선호합니다.
+
+이번 포스팅에서는 **styled-components** 를 사용한 컴포넌트를 테스트하기 위한 jest 환경을 설정해보겠습니다.
+
+
+
+<br />
+
+
+
+## 설정없이 jest 를 실행하면? throw Error!
+
+**styled-components** 는 `<ThemeProvider />` 하위에서 사용할 수 있습니다.
+
+만약 추가 설정없이 jest 를 실행하게 되면, `render()` 호출에서 에러가 발생합니다.
+
+```tsx title="에러 발생 예시" showLineNumbers {10-12}
+import MyComponent from './MyComponent';
+import {
+    render,
+} from '@testing-library/react';
+
+describe('MyComponent 테스트', () => {
+    it('DOM 에 렌더링 된다.', () => {
+        // render() 호출 시, Error 발생
+        render(
+            <div data-testid="my-component">
+                <MyComponent />
+            </div>
+        );
+
+        const $myComponent = screen.getByTestId('my-component');
+
+        expect($myComponent).toBeInTheDocument();
+    });
+});
+```
+
+```bash title="에러 메시지"
+TypeError: Cannot read properties of undefined (reading 'MarkdownAnchor')
+```
+
+<br />
+
+아래와 같이 `render()` 호출부에 `<ThemeProvider />` 를 함께 넘겨주면 테스트가 정상적으로 실행되는 것을 확인할 수 있습니다.
+
+```tsx title="테스트 정상 동작" showLineNumbers {11, 13}
+import MyComponent from './MyComponent';
+import {
+    render,
+} from '@testing-library/react';
+
+describe('MyComponent 테스트', () => {
+    it('DOM 에 렌더링 된다.', () => {
+        // render() 성공
+        render(
+            <div data-testid="my-component">
+                <ThemeProvier theme={theme}>
+                    <MyComponent />
+                </ThemeProvier>
+            </div>
+        );
+
+        const $myComponent = screen.getByTestId('my-component');
+
+        // 테스트 통과
+        expect($myComponent).toBeInTheDocument();
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## util 또는 hook 으로 `<ThemeProvider />` 제공하기
+
+테스트 코드를 작성할 때, 각 테스트 케이스별로 중복되는 코드들이 생기게 됩니다.
+
+이러한 부분들을 공통 함수로 묶어내거나 추상화하지 않는 이유는, 테스트 코드를 읽어나가는 것으로 어떤 테스트를 수행하는지 파악할 수 있는 것이 더 테스트 코드의 가치를 높이기 때문입니다.
+
+<br />
+
+하지만 `<ThemeProvider />` 를 감싸는 코드는 **styled-components** 설정을 테스트하는 것이 아닌 이상, 특정 컴포넌트를 테스트하는데 의미를 두기 어렵습니다.
+
+그러므로 이 부분은 별도의 **util 함수** 또는 **custom hook** 으로 분리하여 사용해도 무방해 보입니다.
+
+<br />
+
+저는 **@testing-library** 에서 제공하는 `render()` 함수 처럼 `util 함수` 로 만드는 것이 좀 더 일관되는 패턴으로 생각하여 아래와 같이 작성해 보았습니다.
+
+```tsx title="@/utils/testing-library/renderTestComponent.tsx" showLineNumbers
+// react
+import { 
+    ReactElement,
+} from 'react';
+// jest
+import { 
+    render,
+} from '@testing-library/react';
+// styled-components
+import { 
+    ThemeProvider,
+} from 'styled-components';
+import theme from '@/styles/theme';
+
+const renderTestComponent = (element: ReactElement) => {
+    const { rerender } = render(
+        <ThemeProvider theme={theme('light')}>
+            {element}
+        </ThemeProvider>
+    );
+
+    return {
+        rerender,
+    };
+};
+
+export default renderTestComponent;
+```
+
+<br />
+
+이를 테스트 코드에 적용하면 다음과 같습니다.
+
+```tsx title="util 함수를 적용한 테스트 코드" showLineNumbers {5, 10}
+import MyComponent from './MyComponent';
+// import {
+//     render,
+// } from '@testing-library/react';
+import renderTestComponent from '@/utils/testing-library/renderTestComponent';
+
+describe('MyComponent 테스트', () => {
+    it('DOM 에 렌더링 된다.', () => {
+        // render() 성공
+        renderTestComponent(
+            <div data-testid="my-component">
+                <MyComponent />
+            </div>
+        );
+
+        const $myComponent = screen.getByTestId('my-component');
+
+        // 테스트 통과
+        expect($myComponent).toBeInTheDocument();
+    });
+});
+```
+
+
+
+<br />
+
+
+
+## 마치며
+
+유닛 테스트를 하나씩 추가하며, coverage 가 높아져 가는 것이 하나의 재미요소가 되었습니다.
+
+`renderTestComponent()` 처럼 테스트 환경을 위한 기능을 만드는 과정은 성취감과 연결되었습니다.
+
+이 블로그 프로젝트는 개발 초기 시점인 만큼, 모든 컴포넌트를 테스트할 수 있도록 목표를 잡아야겠습니다!
+13:T1598,---
+id: 4
+title: 'Nextjs 의 useRouter mock 정의하기'
+description: 'Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'jest',
+    '@testing-library',
+    'useRouter',
+    'next-router-mock',
+    '유닛 테스트',
+]
+
+createdAt: '2024-01-06 17:30:00'
+modifiedHistories: []
+---
+
+# Nextjs 의 useRouter mock 정의하기
+
+페이지 이동을 위한 컴포넌트는 웹페이지에서 빠질 수 없는 컴포넌트 입니다.
+
+Nextjs 프로젝트에서 페이지 이동은 Nextjs 의 `useRouter` hook 을 사용하여 구현합니다.
+
+이러한 컴포넌트는 내부에서 `useRouter` 를 사용하고 있기 때문에, Jest 의 `render()` 를 사용한 렌더링 시, 에러가 발생하게 됩니다.
+
+이번 포스팅에서는 `useRouter` 를 mocking 하여 테스트 하는 방법에 대해 정리하고자 합니다.
+
+
+
+<br />
+
+
+
+## 컴포넌트 렌더링 실패
+
+`useRouter` 를 사용하는 컴포넌트를 아무런 설정없이 Jest 의 `render()` 를 실행시키면, 렌더링 에러가 발생합니다.
+
+이는 테스트 환경에서 `useRouter()` 가 렌더링 되지 않으면서 발생하게 됩니다.
+
+이를 해결하기 위해, `next-router-mock` 라이브러리를 활용할 수 있습니다.
+
+```bash
+yarn add -D next-router-mock
+```
+
+
+
+<br />
+
+
+
+## `useRouter` 를 사용하는 테스트용 컴포넌트
+
+이번 포스트에서 테스트할 컴포넌트는 아래와 같습니다.
+
+`onClick()` 내부에서 `router.push()` 를 사용하여 페이지를 이동 시키는 동작을 합니다.
+
+```tsx title="MyAnchor.tsx" showLineNumbers
+import {
+    useCallback,
+    PropsWithChildren,
+} from 'react';
+import {
+    useRouter,
+} from 'next/navigation';
+
+type TMyAnchorProps = PropsWithChildren<{
+    className?: string;
+    href: string;
+}>;
+
+function MyAnchor(props: TMyAnchorProps) {
+    const {
+        className,
+        href,
+        children,
+    } = props;
+
+    const router = useRouter();
+
+    const onClick = useCallback(() => {
+        router.push(href);
+    }, [href]);
+
+    return (
+        <a 
+            className={className}
+            href={href}>
+            {children}
+        </a>
+    );
+}
+
+export default MyAnchor;
+```
+
+
+
+<br />
+
+
+
+## `jest.mock()` 을 사용하여 `useRouter()` mocking 하기
+
+`jest.mock()` 을 사용하면, 특정 모듈을 mocking 할 수 있습니다.
+
+이를 활용하여, `next/navigation` 모듈을 mocking 하여 `useRouter` 가 테스트 환경에서 렌더링될 수 있도록 합니다.
+
+```ts title="jest.mock() 으로 useRouter mocking 하기"
+jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
+```
+
+* `jest.mock()`: 특정 모듈을 mocking 합니다.
+    * 첫번째 인자: mocking 할 모듈명
+    * 두번째 인자: mocking 반환 함수
+* `jest.requireActual()`: 실제 모듈을 가져옵니다. (`import`, `require`)
+
+<br />
+
+위 코드를 사용하여 `useRouter` 를 mocking 하게 되면, 정상적으로 렌더링됨을 확인할 수 있습니다.
+
+아래는 테스트 예시 코드 입니다.
+
+```tsx title="MyAnchor 테스트" showLineNumbers {7, 9, 12-15, 48-50}
+import MyAnchor from './MyAnchor';
+import {
+    render,
+    screen,
+} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import mockRouter from 'next-router-mock';
+
+jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
+
+describe('<MyAnchor /> 테스트', () => {
+    beforeEach(() => {
+        // mockRouter 의 pathname 을 '/' 으로 초기화 합니다.
+        mockRouter.push('/');
+    });
+
+    it('DOM 에 렌더링 된다.', () => {
+        render(
+            <div data-testid="test-MyAnchor">
+                <MyAnchor href="/test-url">
+                    Test Page
+                </MyAnchor>
+            </div>
+        );
+
+        const $anchor = screen.getByTestId('test-MyAnchor');
+
+        expect($anchor).toBeInTheDocument();
+    });
+
+    it('click 시, href 경로로 페이지 이동한다.', async () => {
+        render(
+            <div data-testid="test-MyAnchor">
+                <MyAnchor 
+                    className="test-className"
+                    href="test-url">
+                    Test Page
+                </MyAnchor>
+            </div>
+        );
+
+        const $anchor = screen
+            .getByTestId('test-MyAnchor')
+            .querySelector('.test-className');
+
+        await userEvent.click($anchor);
+
+        expect(mockRouter).toMatchObject({
+            pathname: '/test-url',
+        });
+    });
+});
+```
+
+<br />
+
+그리고 `router` 가 클릭된 후, 페이지 이동이 되었는지 테스트하기 위해, `mockRouter` 를 활용할 수 있습니다.
+
+`mockRouter` 의 `pathname` 에 이동할 페이지의 url 이 반영되었다면, 실제로는 페이지 이동이 된 것으로 볼 수 있습니다.
+
+
+
+<br />
+
+
+
+## 마치며
+
+프레임워크는 개발에 필요한 다양한 기능을 제공합니다.
+
+이를 테스트하기 위해서는 프레임워크와 동일한 환경을 만들어주어야 함을 알게 되었습니다.
+
+단순 컴포넌트나 함수를 테스트할 때는 신경쓰지 않았던 **모듈 mocking** 이 필요하고, `jest.mock()` 을 사용하여 mocking 할 수 있었습니다.
+
+`next-router-mock` 라이브러리 처럼 오픈 소스 문화가 있기에 저도 웹 개발을 할 수 있음을 새삼 느끼게 됩니다. 🫠
 14:T1e27,---
 id: 1
 title: LLMOps 와 친해지기 1 - 용어 정리
@@ -1489,7 +1489,755 @@ LLM 과 LangChain 을 사용하여 AI 앱을 만들 수 있는 플렛폼이 있�
     * [FlowiseAI Github](https://github.com/FlowiseAI/Flowise)
     * 서버: `Express(Typescript)`
     * 프론트: `React(Javascript)`
-15:T1d77,---
+15:T50ba,---
+id: 1
+title: 'Yarn workspace 를 사용하여 Monorepo 구성하기'
+description: 'Monorepo 에 대한 정리와 Yarn workspace 를 사용하여 Monorepo 를 구성합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'monrepo',
+    'yarn workspace',
+    'javascript',
+]
+
+createdAt: '2024-03-10 15:00:00'
+modifiedHistories: []
+---
+
+# Yarn workspace 를 사용하여 Monorepo 구성하기
+
+저는 AI 학습 데이터 가공 데이터를 만들기 위한 작업도구 개발을 위주로 개발하고 있습니다.
+
+작업도구는 단일 프로젝트로 구현하며 Nextjs 또는 Vite 로 개발하고 있습니다.
+
+개발을 진행하며 몇가지 떠오른 생각이 있었습니다.
+
+* 저작도구의 헤더와 같은 UI 는 모두 동일
+* API 의 BASE_URL 은 바뀌지만, 호출하는 인터페이스는 일반적으로 동일
+* 동일한 Design System 및 UI Component 사용
+
+<br />
+
+위와같이 공통영역으로 분리할 수 있는 부분이 떠올랐습니다.
+
+지금까지는 이 부분들을 구현한 Template 프로젝트를 만들고, 새로운 작업도구를 개발할 때 clone 해서 개발하고 이었습니다.
+
+<br />
+
+어느날 작업도구의 API 개편이 있었습니다.
+
+기존에 개발했던 모든 작업도구에 일일이 적용하고 배포하는 작업이 발생하였습니다.
+
+<br />
+
+이러한 생각이 떠올랐을 때, 어디선가 들어보았던 Monorepo 가 생각났습니다.
+
+* **각각의 프로젝트가 서로 의존하도록 구성할 수 있다!**
+
+<br />
+
+Monorepo 에 대해 알아본 결과, 더 많은 것을 할 수 있었고, 더 쾌적한 작업환경을 만들 수 있을 것이란 기대가 생겼습니다.
+
+<br />
+
+이번 포스팅에서는 Monorepo 에 대한 개념과, 구성방법에 대해 정리하고자 합니다.
+
+
+
+<br />
+
+
+
+## Monorepo 란?
+
+> 참고
+>
+> [Yarn 공식문서](https://classic.yarnpkg.com/blog/2018/02/15/nohoist/)
+>
+> [Naver D2 - 모던 프론트엔드 프로젝트 구성 기법 - 모노레포 도구 편](https://d2.naver.com/helloworld/7553804)
+>
+> [Create a React component library with Vite and Typescript](https://dev.to/nicolaserny/create-a-react-component-library-with-vite-and-typescript-1ih9)
+
+<br />
+
+Monrepo 는 **Monolithic Repositories** 의 약어입니다.
+
+기존에는 1개의 저장소가 1개의 프로젝트를 가지는 형식이었다면, Monorepo 는 1개의 저장소가 복수의 프로젝트를 가지는 형태입니다.
+
+<br />
+
+이로인해 얻고자 하는 것은 다음과 같습니다.
+
+* 복수의 프로젝트가 공통으로 가지는 코드를 별도의 프로젝트로 분리 및 참조
+* 공통 코드 프로젝트의 변경사항은 참조하는 다른 프로젝트에도 손쉽게 적용
+* 각 프로젝트들이 사용하는 동일한 node_modules 패키지들을 `<root>` node_modules 한곳에만 설치하여 참조 
+
+
+
+<br />
+
+만약 CommonUI 프로젝트를 만들면, Web1, Web2 와 같은 다른 프로젝트에서 참조하여 사용할 수 있습니다.
+
+<br />
+
+만약 CommonUI, Web1, Web2 가 React@18.x.x 버전을 사용한다고 가정해 보겠습니다.
+
+개별 프로젝트라면 React@18.x.x 를 각 프로젝트의 node_modules 에 설치하므로, 동일한 React@18.x.x 를 3번 설치하게 됩니다.
+
+Monorepo 를 사용하게 되면, `<root>` 의 node_modules 에만 설치하고, CommonUI, Web1, Web2 는 React@18.x.x 를 참조해서 사용할 수 있게 됩니다.
+
+즉, 3개의 프로젝트를 yarn install 을 하였을 때, React@18.x.x 를 3번 설치하는 것이 아닌, 1번만 설치하게 되는 장점이 생깁니다.
+
+<br />
+
+그리고 특정 프로젝트가 React@17.x.x 를 사용해야 한다면, **nohoist** 설정을 사용하여, 이 프로젝트의 node_modules 에 React@17.x.x 를 별도로 설치하여 사용할 수도 있습니다.
+
+<img src="/markdownAssets/monorepo/2024-03-10-01/2024-03-10-01-01.svg" alt="monorepo" />
+
+
+
+<br />
+
+
+
+## Monorepo 구성 도구
+
+Monorepo 를 구성하는 툴은 몇가지가 있습니다.
+
+* yarn workspace (yarn v1: classic)
+* yarn workspace + Lerna
+* yarn berry (yarn v2: berry)
+* NX
+* ...
+
+<br />
+
+이번 포스팅 시리즈는 **yarn workspace (yarn v1: classic)** 만으로 구성하는 방법에 대해 정리하고자 합니다.
+
+
+
+<br />
+
+
+
+## Yarn workspace 를 사용한 Monorepo 구성 작업 흐름
+
+yarn workspace 를 사용한 Monrepo 구성은 다음과 같은 과정을 작업하게 됩니다.
+
+1. Monrepo 디렉토리 만들기
+2. yarn init
+3. `<root>` package.json 에 workspace 설정
+4. `common-ui` Vite 프로젝트 생성
+5. `common-ui` vite.config.ts 라이브러리 프로젝트로 설정
+6. `common-ui` package.json 설정
+7. `<web>` Vite 프로젝트 생성
+8. `<web>` package.json 설정
+
+
+
+<br />
+
+
+
+## 1. Monrepo 디렉토리 만들기
+
+Monorepo 를 구성할 디렉토리를 만듭니다.
+
+생성한 디렉토리는 Monorepo 의 `<root>` 로 사용하게 됩니다.
+
+
+
+<br />
+
+
+
+## 2. yarn init
+
+터미널에서 `<root>` 경로로 이동한 다음, yarn 프로젝트를 초기화 생성합니다.
+
+```bash
+yarn init -y
+```
+
+
+
+<br />
+
+
+
+## 3. `<root>` package.json 에 workspace 설정
+
+`<root>` package.json 은 Monorepo 구성에 대한 설정을 합니다.
+
+```json title="<root> package.json" showLineNumbers
+{
+    "name": "chocobe-monorepo",
+    "version": "1.0.0",
+
+    // Yarn workspace v1 은 `private: true` 를 필수 설정입니다.
+    "private": true,
+
+    // Monorepo 에 속한 프로젝트 등록
+    "workspaces": {
+        // 의존성(node_modules) 를 개별적으로 사용할 프로젝트 등록
+        "nohoist": [],
+        // 공통 의존성(<root> node_modules) 를 사용할 프로젝트 등록
+        "packages": []
+    }
+}
+```
+
+
+
+<br />
+
+
+
+## 4. `common-ui` Vite 프로젝트 생성
+
+`common-ui` 프로젝트를 생성해 보겠습니다.
+
+이 프로젝트는 다른 프로젝트에서 사용할 UI Components 만을 개발하는 프로젝트입니다.
+
+즉, 다른 프로젝트의 의존성 패키지로 역할하게 됩니다.
+
+`<root>` 디렉토리에 `packages/common-ui` 디렉토리를 추가합니다.
+
+```bash
+mkdir packages packages/common-ui
+```
+
+```bash
+<root>
+├── package.json
+└── packages
+    └── common-ui
+```
+
+<br />
+
+터미널에서 common-ui 로 이동한 후, Vite 프로젝트를 생성합니다.
+
+```bash title="common-ui Vite 프로젝트 생성"
+yarn create vite . --template react-ts
+```
+
+common-ui 프로젝트를 생성하면, 다음과 같은 디렉토리 구조를 갖게 됩니다.
+
+```bash title="전체 디렉토리 구조"
+<root>
+├── package.json
+└── packages
+    └── common-ui
+        ├── README.md
+        ├── index.html
+        ├── package.json
+        │   │ # `<common-ui>` package.json
+        ├── public
+        │   └── vite.svg
+        ├── src
+        │   ├── App.css
+        │   ├── App.tsx
+        │   ├── assets
+        │   │   └── react.svg
+        │   ├── index.css
+        │   ├── main.tsx
+        │   └── vite-env.d.ts
+        ├── tsconfig.json
+        ├── tsconfig.node.json
+        └── vite.config.ts
+            │ # `<common-ui>` vite.config.ts
+```
+
+그리고 `<common-ui>` package.json 에서 name 을 수정합니다.
+
+이는 다른 프로젝트에서 `<common-ui>` 를 import 할 때의 이름이며, yarn workspace 가 의존성을 찾을 때 사용하는 name 입니다.
+
+```json title="<common-ui> package.json"
+{
+    "name": "@chocobe/common-ui",
+    // ...생략
+}
+```
+
+<br />
+
+yarn workspace 를 구성하면, yarn 명령의 대상이 어떤 프로젝트인지 지정해주어야 합니다.
+
+터미널에서 각 프로젝트 경로로 직접 이동하여 yarn 명령을 실행하면, 단일 프로젝트와 동일하게 사용가능하지만, `<root>` 경로에서 특정 프로젝트에 yarn 명령을 실행하기 위한 script 입니다.
+
+`<root>` package.json 에 "scripts" 를 추가하겠습니다.
+
+```json title="<root> package.json 에 common 명령어 추가"
+{
+    "name": "chocobe-monorepo",
+    "version": "1.0.0",
+    "scripts": {
+        // common-ui 프로젝트에 대한 명령을 의미합니다.
+        "common": "yarn workspace @chocobe/common-ui"
+    },
+    "private": true,
+    "workspaces": {
+        "nohoist": [],
+        "packages": []
+    }
+}
+```
+
+`<root>` 경로에서 `<common-ui>` 프로젝트에 yarn 명령을 실행할 때, 다음과 같이 사용할 수 있게 됩니다.
+
+```bash title="<common-ui> 에 lodash 설치 예시"
+yarn common add lodash
+```
+
+그리고 `common-ui` 를 Monorepo 로 등록해줍니다.
+
+```json title="<common-ui> 등록하기"
+{
+    "name": "chocobe-monorepo",
+    "version": "1.0.0",
+    "scripts": {
+        "common": "yarn workspace @chocobe/common-ui"
+    },
+    "private": true,
+    "workspaces": {
+        "nohoist": [
+            // `nohoist` 로 등록하게 되면 <root> 의 node_modules 를 사용하지 않고,
+            // 프로젝트 자신 내부의 node_modules 를 사용하게 됩니다.
+            // 즉, 의존성 hoisting 을 하지 않습니다.
+        ],
+        "packages": [
+            // `packages/common-ui` 경로를 하나의 package 로 등록합니다.
+            "packages/common-ui"
+        ]
+    }
+}
+```
+
+
+
+<br />
+
+
+
+## 5. `common-ui` vite.config.ts 라이브러리 프로젝트로 설정
+
+`common-ui` 프로젝트는 라이브러리 형식으로 빌드가 되어야 합니다.
+
+**vite.config.ts** 에 설정을 추가하여, Library Mode 를 적용해 보겠습니다.
+
+<br />
+
+Library Mode 빌드 시, `index.d.ts` 를 함께 생성하기 위한 plugin 을 설치합니다.
+
+```bash title="vite-plugin-dts 설치"
+yarn common add -D vite-plugin-dts @types/node
+```
+
+<br />
+
+Vite 의 Library Mode 로 빌드하기 위해, `vite.config.ts` 를 다음과 같이 설정합니다.
+
+```ts title="Library Mode 를 위한 vit.config.ts 설정" showLineNumbers {3, 9-11}
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        react(),
+        dts({
+            insertTypesEntry: true,
+        }),
+    ],
+})
+```
+
+그리고 `build` 속성에 빌드방식을 설정합니다.
+
+```ts title="Library Mode 빌드 설정" showLineNumbers {15-47}
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts';
+import path from 'node:path';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        react(),
+        dts({
+            insertTypesEntry: true,
+        }),
+    ],
+
+    build: {
+        // Library Mode 설정
+        lib: {
+            // 빌드 시, 진입점 파일
+            // (아직 만들지 않았지만, 다음 과정에서 생성할 예정입니다.)
+            entry: path.resolve(__dirname, 'src/lib/index.ts'),
+            // 패키지명 (빌드 파일명이나 import 에는 무관)
+            name: 'CommonUI',
+            // 빌드 시, 생성할 파일 형식
+            formats: ['es', 'umd'],
+            // 빌드 시, 실제 생성할 파일명
+            fileName: format => `common-ui.${format}.js`,
+        },
+        // rollup 번들러 설정
+        rollupOptions: {
+            // 이 라이브러리를 사용하는 프로젝트에서 가져올 의존성
+            // 즉, 빌드 결과에는 제외할 의존성
+            // <common-ui> 를 사용하는 라이브러리에 아래의 의존성이 있어야 함
+            external: [
+                'react',
+                'react-dom',
+                'styled-components',
+            ],
+            output: {
+                // UMD 모드에서 <common-ui> 를 사용할 때, 전역 변수로 사용할 의존성 바인딩 설정
+                globals: {
+                    'react': 'React',
+                    'react-dom': 'ReactDOM',
+                    'styled-components': 'styled',
+                },
+            },
+        },
+    },
+});
+```
+
+
+
+<br />
+
+
+
+## 6. `common-ui` package.json 설정
+
+위에서 설정한 `vite.config.ts` 는 `<common-ui>` 빌드에 대한 설정입니다.
+
+외부 프로젝트에서 `<common-ui>` 패키지를 사용할 때, **빌드 결과중 어떤 경로의 파일을 참조하도록 할지 설정** 이 필요합니다.
+
+이 부분은 `<common-ui>` package.json 에서 설정할 수 있습니다.
+
+```json title="<common-ui> package.json 빌드파일의 참조방식 설정" showLineNumbers {31-53}
+{
+    "name": "@chocobe/common-ui",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "styled-components": "^6.1.8"
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.25",
+        "@types/react": "^18.2.56",
+        "@types/react-dom": "^18.2.19",
+        "@typescript-eslint/eslint-plugin": "^7.0.2",
+        "@typescript-eslint/parser": "^7.0.2",
+        "@vitejs/plugin-react": "^4.2.1",
+        "eslint": "^8.56.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.5",
+        "typescript": "^5.2.2",
+        "vite": "^5.1.4",
+        "vite-plugin-dts": "^3.7.3"
+    },
+    // <common-ui> 를 사용하는 프로젝트에 요구하는 의존선 버전
+    "peerDependencies": {
+        "react": "^18.2.0",
+        "react-dom": "18.2.0",
+        "styled-components": "6.1.8"
+    },
+    // 외부 프로젝트가 <common-ui> 를 설치할 때, 포함시킬 디렉토리
+    "files": [
+        "dist"
+    ],
+    // <common-ui> 를 사용할 때, 진입 경로 설정
+    "main": "./dist/common-ui.umd.js",
+    // ES6 호환 환경(import, export) 에서 <common-ui> 를 사요앟 ㄹ때, 진입 경로 설정
+    "module": "./dist/common-ui.es.js",
+    // <common-ui> 의 하위 진입 경로 설정
+    "exports": {
+        // 전역 접근 시, 진입 경로
+        ".": {
+            "types": "./dist/index.d.ts",
+            "require": "./dist/common-ui.umd.js",
+            "import": "./dist/common-ui.es.js"
+        }
+    }
+}
+```
+
+
+
+<br />
+
+
+
+## 7. `ChocobeButton.tsx` 컴포넌트 구현하기
+
+`<common-ui>` 에서 제공할 버튼 컴포넌트를 만들어보겠습니다.
+
+구현한 컴포넌트는 `vite.config.ts` 에서 빌드 방식에 설정했던 **src/lib/index.ts** 에서 export 해주어야 외부 프로젝트에서 사용할 수 있게 됩니다.
+
+먼저 아래와 같이 디렉토리를 만들겠습니다.
+
+```bash {7, 13}
+<common-ui>
+├── README.md
+├── index.html
+├── package.json
+├── public
+│   └── vite.svg
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── index.css
+│   ├── lib
+│   ├── main.tsx
+│   └── vite-env.d.ts
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+```
+
+<br />
+
+`<common-ui>/src/lib/ChocobeButton.tsx` 파일을 만들고 아래와 같이 구현합니다.
+
+```tsx title="<common-ui>/src/lib/ChocobeButton.tsx" showLineNumbers
+// react
+import {
+    useCallback,
+    PropsWithChildren,
+    memo,
+} from 'react';
+// styled-components
+import styled from 'styled-components';
+
+const StyledChocobeButtonRoot = styled.button`
+    padding: 4px 8px;
+
+    color: #fff;
+    font-size: 24px;
+    line-height: 36px;
+    font-weight: 500;
+
+    background-color: #ff1493;
+`;
+
+type TChocobeButtonProps = PropsWithChildren<{
+    onClick: () => void;
+}>;
+
+function _ChocobeButton(props: TChocobeButtonProps) {
+    const {
+        onClick,
+        children,
+    } = props;
+
+    const _onClick = useCallback(() => {
+        console.group('_onClick() 호출');
+        onClick();
+        console.groupEnd();
+    }, [onClick]);
+
+    return (
+        <StyledChocobeButtonRoot
+            onClick={_onClick}>
+            {children}
+        </StyledChocobeButtonRoot>
+    );
+}
+
+const ChocobeButton = memo(_ChocobeButton) as typeof _ChocobeButton;
+export default ChocobeButton;
+```
+
+<br />
+
+`vite.config.ts` 의 `build.lib.entry` 에 설정한 index.ts 파일을 작성합니다.
+
+```ts title="<common-ui>/src/lib/index.ts" showLineNumbers
+export { default as ChocobeButton } from './ChocobeButton';
+```
+
+<br />
+
+이로써 `<common-ui>` 패키지는 `<ChocobeButton />` 컴포넌트를 제공하게 되었습니다.
+
+마지막으로 아래의 명령으로 빌드합니다.
+
+```bash
+yarn common build
+```
+
+
+
+<br />
+
+
+
+## 8. `<web>` Vite 프로젝트 생성
+
+`<common-ui>` 패키지를 사용하는 `<web>` 프로젝트를 생성하겠습니다.
+
+터미널에서 `<root>` 에 아래의 명령을 실행합니다.
+
+```bash title="<web> Vite 프로젝트 생성"
+yarn create vite packages/web --template react-ts
+```
+
+* 생성 시, project name 은 `@chocobe/web` 으로 변경합니다.
+
+<br />
+
+`<root>` package.json 에 `<web>` 프로젝트도 등록합니다.
+
+```json title="<root> package.json 에 <web> 프로젝트 등록" showLineNumbers {6, 13}
+{
+    "name": "chocobe-monorepo",
+    "version": "1.0.0",
+    "scripts": {
+        "common": "yarn workspace @chocobe/common-ui",
+        "web": "yarn workspace @chocobe/web"
+    },
+    "private": true,
+    "workspaces": {
+        "nohoist": [],
+        "packages": [
+            "packages/common-ui",
+            "packages/web"
+        ]
+    }
+}
+```
+
+
+
+<br />
+
+
+
+## 9. `<web>` package.json 설정
+
+`<web>` package.json 에 `<common-ui>` 의존성을 추가하겠습니다.
+
+```json title="<web> package.json 에 <common-ui> 의존성 추가" showLineNumbers {13}
+{
+    "name": "@chocobe/web",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@chocobe/common-ui": "*",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.2.56",
+        "@types/react-dom": "^18.2.19",
+        "@typescript-eslint/eslint-plugin": "^7.0.2",
+        "@typescript-eslint/parser": "^7.0.2",
+        "@vitejs/plugin-react": "^4.2.1",
+        "eslint": "^8.56.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.5",
+        "typescript": "^5.2.2",
+        "vite": "^5.1.4"
+    }
+}
+```
+
+`<web>` 에도 `styled-components` 를 설치합니다.
+
+```bash title="<web> install"
+yarn web add styled-components
+```
+
+
+
+<br />
+
+
+
+## 10. `<web>` 에서 `ChocobeButton` 사용하기
+
+드디어 `<common-ui>` 를 `<web>` 에서 사용할 준비가 되었습니다.
+
+`<web>` 의 App.tsx 에서 ChocobeButton 을 import 하면, 정상적으로 참조할 수 있게됩니다.
+
+```tsx title="<web> App.tsx" showLineNumbers
+// common-ui
+import { 
+    ChocobeButton,
+} from '@chocobe/common-ui';
+
+function App() {
+    return (
+        <div style={{
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+            <ChocobeButton onClick={() => {
+                console.log('여기는 Web 프로젝트입니다.');
+            }}>
+                Hello Web Project
+            </ChocobeButton>
+        </div>
+    );
+}
+
+export default App;
+```
+
+<img src="/markdownAssets/monorepo/2024-03-10-01/2024-03-10-01-02.png" alt="결과" />
+
+
+
+<br />
+
+
+
+## 마치며
+
+Yarn workspace 만을 사용하여 Monorepo 를 구성해 보았습니다.
+
+`<roo>` node_modules 의 의존성을 하위 패키지들이 참조하기 위해 Symlink 를 사용하는 등, 이번 포스팅에서 언급하지 않은 개념들이 있습니다.
+
+생략한 개념들은 Yarn Berry 포스팅에서 함께 다루면 좋을 것 같습니다.
+
+<br />
+
+주니어 frontend 개발자라는 생각이 지배적이었을 때는, 페이지를 만들고 컴포넌트를 만드는 것에만 관심이 있었습니다.
+
+이제는 미들급이라는 생각이 드는 순간, 작업 효율을 위한 환경 구성에 관심이 생기기 시작하였습니다.
+
+현재는 스터디 수준이지만, 차후 거대한 Monorepo 등, 고도화된 개발 환경을 받아들이기 위한 준비가 될 것 같습니다.
+16:T1d77,---
 id: 1
 title: Nextjs 프로젝트의 유닛 테스트
 description: '유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.'
@@ -1742,7 +2490,7 @@ describe('<Hello /> 컴포넌트 유닛 테스트', () => {
 ```bash title="jest 실행하기"
 yarn test
 ```
-16:T2361,---
+17:T2361,---
 id: 1
 title: Custom Hook 으로 분리하며 발생한 실수
 description: 'Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.'
@@ -2132,7 +2880,7 @@ export default MyPage;
 <br />
 
 사소한 실수에 의한 이슈라서 자책 포인트가 되었지만, Custom Hook 으로 분리하는 구조를 생각할 수 있는 계기가 되어서 성취감이 느껴졌습니다.
-17:T3653,---
+18:T3653,---
 id: 17
 title: 'Particle 좌표를 사용한 애니메이션 구현'
 description: '각 Particle 의 좌표값을 변경하여, 흘러가는 애니메이션을 만드는 방법을 정리하고자 합니다.'
@@ -2729,7 +3477,7 @@ function render() {
 (Y좌표 연산부를 Iterator 로 구현하면 좀 나아질까요?)
 
 테스트도 겸하는 블로그이므로, 첫번째 Three.js 적용에 도전해보고자 합니다.
-18:T4422,---
+19:T4422,---
 id: 16
 title: 'Particle 로 반딧불이 표현하기'
 description: '3D 환경에서 반딧불이나 별을 표현할 때 Particle 을 활용합니다. 매우 많은 입자들로 표현하는 Particle 을 어떻게 구현하는지 정리하고자 합니다.'
@@ -3490,7 +4238,7 @@ Three.js 의 Particle 생성 방법을 스터디하기 전까지는 개별 Parti
 배경이 투명하게 처리된 png 파일을 사용하면 정상적으로 렌더릴 되었습니다.
 
 <img src="/markdownAssets/threejs/2024-02-29-01/2024-02-29-01-04.png" alt="Particle 만들기" />
-19:Tf6c,---
+1a:Tf6c,---
 id: 15
 title: 'Material 의 map, bumpMap, normalMap'
 description: 'Material 의 표현 방식과 울퉁불퉁한 재질을 처리하는 방식을 정리합니다.'
@@ -3637,7 +4385,7 @@ map 방식에 따라 성능차이와 렌더링 차이가 있으므로, 사용처
 Three.js 자체의 학습보다는 3D Graphics 개념을 파악하는 것이 더 어려운 것 같습니다.
 
 Three.js 공식 문서는 API 소개 정도만 안내하고 있어서 아쉽습니다.
-1a:T4780,---
+1b:T4780,---
 id: 14
 title: 'click 이벤트에 animation 연동하기'
 description: '특정 버튼을 click 했을 때 animation 을 실행하는 방법을 정리합니다.'
@@ -4324,7 +5072,7 @@ function initClickInteraction($target) {
 <video width="100%" height="auto" preload="none" autoPlay={true} loop={true} muted={true} controls={false}>
     <source src="/markdownAssets/threejs/2024-02-06-01/2024-02-06-01-03.webm" type="video/webm" />
     animation
-</video>1b:T3178,---
+</video>1c:T3178,---
 id: 13
 title: 'Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)'
 description: 'Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.'
@@ -4833,7 +5581,7 @@ window.addEventListener('click', e => {
 Path2D 를 사용하여 구현했었던 Canvas API 에 비해, Raycaster 는 코드상으로도 가독성이 좋은 것 같습니다.
 
 Three.js 를 좀 더 잘 사용할 수 있게된다면, 지금까지 사용했던 Canvas API 를 대체하여 사용하고 싶습니다.
-1c:T1049,---
+1d:T1049,---
 id: 13
 title: '(Issue) 조명이 어둡게 보이는 현상'
 description: '강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.'
@@ -4982,7 +5730,7 @@ intensity 에 PI 를 적용하도록 변경된 Light 는 다음과 같습니다.
 <br />
 
 Three.js 의 공식 문서는 개요 파악 정도로 사용하고, Three.js 포럼에서 좀 더 자세한 내용을 찾아보아야 할 것 같습니다.
-1d:T2afe,---
+1e:T2afe,---
 id: 12
 title: '키보드를 사용하여 카메라 이동 인터렉션 만들기'
 description: '키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.'
@@ -5443,7 +6191,7 @@ Javascript 의 이벤트 처리 방식을 그대로 따르는 방법이라서 �
 만약 화면을 변경하는 부분을 `render()` 함수가 아닌, event listener 에서 직접 하게 되면, **뚝뚝 끊기면서 렌더링되는 현상** 이 나타났습니다.
 
 이는 키보드를 누르고 있을 때, 체터링 간격이 `1 /60` 보다 큰 값인 것으로 추측되었습니다.
-1e:T1d82,---
+1f:T1d82,---
 id: 11
 title: 'canvas 크기 설정 및 material 렌더링 side 설정'
 description: '사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.'
@@ -5706,7 +6454,7 @@ function initDoubleSideModel() {
 100% 를 기억하지는 못하더라도, 맥락과 주요 개념을 기억하기 위해서는 당연한 방법이라고 생각합니다.
 
 다만 투자하는 시간에 대한 아쉬움으로 짧은 푸념을 남깁니다.
-1f:T2b48,---
+20:T2b48,---
 id: 9
 title: 'Model 에 Animation 효과 적용하기'
 description: 'Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.'
@@ -6184,7 +6932,7 @@ function animateRocket() {
 원하는 Animation 을 구현하기 위해서는 3D Tool 사용방법도 익혀야 할 것 같습니다.
 
 Model 의 Animation 을 코드로 구현하는 것은 원하는 결과를 얻기에는 쉽지 않을 것으로 생각되었습니다.
-20:T25c2,---
+21:T25c2,---
 id: 8
 title: 'Model (.gltf, .glb) 객체 구조파악 및 그림자 적용'
 description: 'Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.'
@@ -6539,7 +7287,7 @@ Model 에 그림자 설정을 위한 코드는 `traverse()` 메소드를 사용�
 Model 객체가 어떻게 구성되고, 설정을 변경하는 이유 등을 파악하는 것이 쉽지는 않았습니다.
 
 이번 포스팅에서 정리한 내용은 Three.js 전반에 필요한 개념으로 생각되어 성취감이 느껴집니다.
-21:T2000,---
+22:T2000,---
 id: 7
 title: 모델 파일을 Three.js 에 렌더링하기
 description: '.gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.'
@@ -6888,7 +7636,7 @@ gltf 객체의 scene 과 children 의 중첩구조를 살펴보면 크게 2가�
 3D Mesh 파일(.glTF, .gbl) 을 불러온 상태에서는 빛 반사나 그림자와 같은 효과는 적용되지 않습니다.
 
 다음 포스팅에서는 3D Mesh 불러온 후, Mesh 내부 속성을 변경하는 방법을 알아보겠습니다.
-22:T3408,---
+23:T3408,---
 id: 6
 title: 배경화면 및 환경조명 설정하기
 description: '360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.'
@@ -7397,7 +8145,7 @@ Material 설정을 통해 배경화면을 반사하는 효과를 연출해 보�
 이 부분은 차후 정리할 예정입니다.
 
 [Three.js 공식문서 - 거울효과 예시](https://threejs.org/examples/?q=mirror#webgl_mirror)
-23:T2c06,---
+24:T2c06,---
 id: 5
 title: 그림자 표현하기
 description: '그림자 설정방법과 특징에 대해 정리합니다.'
@@ -7851,7 +8599,7 @@ VSMShadowMap 은 곡선에 대한 그림자를 부드럽게 표현할 수 있는
 그래서 그림자를 최소한으로 사용할 수 있도록 여러가지 설정을 분리시켜놓은 느낌이 들었습니다.
 
 Three.js 를 활용할 때, 그림자 설정이 성능 최적화 대상이라는 것을 알게 되었습니다.
-24:T1a79,---
+25:T1a79,---
 id: 4
 title: 평평한 바닥(땅) 만들기 (Plane Mesh)
 description: '바닥을 표현하기 위해 Plane Mesh 를 생성합니다.'
@@ -8149,7 +8897,7 @@ plane.rotation.set(
 Plane Mesh 를 생성하여 바닥(땅) 을 만들 수 있게 되었습니다.
 
 다음 포스팅에서는 바닥(땅) 에 그림자를 표현하여, 조명과 물체의 자연스러운 연출 방법을 정리해 보겠습니다.
-25:T2eef,---
+26:T2eef,---
 id: 3
 title: 조명 종류와 설정
 description: '조명 종류와 설정 방법에 대해 정리합니다.'
@@ -8723,7 +9471,7 @@ HemisphereLight 를 사용하므로써 그림자 부분이 검은색으로 보�
 <br />
 
 Three.js 는 개발 능력뿐만 아니라 사물을 표현하는 예술 능력도 필요하겠다는 느낌이 듭니다. 😱
-26:T3ac1,---
+27:T3ac1,---
 id: 2
 title: 카메라 설정 (PerspectiveCamera)
 description: 'Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.'
@@ -9327,7 +10075,7 @@ Three.js 의 인터렉션은 OrbitControls 하나를 접했을 뿐인데, 부드
 OrbitControls 가 제공하는 효과는 마치 물속의 부력이 작용하는 것처럼 느껴졌습니다.
 
 Three.js 의 기본 사용법과 원리를 이해한 후, 물리 엔진 커스터마이징에 대해서도 도전해 보고 싶어졌습니다.
-27:T5077,---
+28:T5077,---
 id: 1
 title: Three.js 설치 및 실행
 description: 'Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.'
@@ -10226,4 +10974,4 @@ Three.js 를 처음 시작하며 제가 느낀 어려움으로는 컴퓨터 그�
 단순히 Three.js 사용법을 익히는 것만으로 원하는 결과물을 얻기는 어려워 보입니다.
 
 지금까지의 코딩에 비해 학습 난이도는 높지만, 새로운 성취감과 즐거움이 기대됩니다.
-b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"},{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$e"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"javascript","slug":"2023-12-30-01","href":"/blog/javascript/2023-12-30-01","frontmatter":{"id":2,"title":"AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정","description":"AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript","PDF","PDF Metadata","AWS","S3"],"createdAt":"$D2023-12-30T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2024-01-06-01","href":"/blog/jest/2024-01-06-01","frontmatter":{"id":4,"title":"Nextjs 의 useRouter mock 정의하기","description":"Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","@testing-library","useRouter","next-router-mock","유닛 테스트"],"createdAt":"$D2024-01-06T17:30:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"nextjs","slug":"2024-01-01-01","href":"/blog/nextjs/2024-01-01-01","frontmatter":{"id":2,"title":".DS_Store not found 에러","description":"Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs",".DS_Store"],"createdAt":"$D2024-01-01T15:20:00.000Z","modifiedHistories":[]},"markdownFile":"---\nid: 2\ntitle: .DS_Store not found 에러\ndescription: 'Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.'\nthumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg\n\nfeatured: false\ntags: [\n    'nextjs',\n    '.DS_Store',\n]\n\ncreatedAt: '2024-01-01 15:20:00'\nmodifiedHistories: []\n---\n\n# .DS_Store not found 에러\n\nNextjs 프로젝트에 이미지 파일을 추가하고 삭제한 후, 빌드 에러가 발생하였습니다.\n\n> Error: ENOENT: no such file or directory, open '/.../.DS_Store\n\n\n\n<br />\n\n\n\n## 에러 원인 파악\n\n.DS_Store 는 맥북의 폴더 관련 메타데이터 파일이며, Finder 로 폴더에 접근하게 되면 자동으로 생성됩니다.\n\n문제는 Nextjs 프로젝트를 개발 환경으로 실행하거나 빌드할 때, .DS_Store 파일이 추가되면, 빌드 에러가 발생합니다.\n\n\n\n\n<br />\n\n\n\n## 해결 방법\n\n* 참고: [Stack Overflow](https://github.com/vercel/next.js/discussions/15573#discussioncomment-2415012)\n\n<br />\n\nNextjs 프로젝트 하위에 존재하는 .DS_Store 파일을 모두 삭제하는 것으로 해결할 수 있었습니다.\n\n모든 폴더를 직접 열어보면서 지우는 방법도 있겠지만, 터미널을 사용하여 삭제 명령으로 처리할 수 있습니다.\n\n```bash title=\"프로젝트 내의 모든 .DS_Store 파일 삭제\"\nrm **/.DS_Store\n```\n\n<br />\n\n삭제 명령이 실행 완료되면, Nextjs 프로젝트가 정상적으로 빌드되는 것을 확인할 수 있습니다.\n"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"threejs","slug":"2024-03-04-01","href":"/blog/threejs/2024-03-04-01","frontmatter":{"id":17,"title":"Particle 좌표를 사용한 애니메이션 구현","description":"각 Particle 의 좌표값을 변경하여, 흘러가는 애니메이션을 만드는 방법을 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Particle","BufferGeometry","Animation"],"createdAt":"$D2024-03-04T22:00:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-02-29-01","href":"/blog/threejs/2024-02-29-01","frontmatter":{"id":16,"title":"Particle 로 반딧불이 표현하기","description":"3D 환경에서 반딧불이나 별을 표현할 때 Particle 을 활용합니다. 매우 많은 입자들로 표현하는 Particle 을 어떻게 구현하는지 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Particle","BufferGeometry","PointsMaterial","Points"],"createdAt":"$D2024-02-29T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-02-12-01","href":"/blog/threejs/2024-02-12-01","frontmatter":{"id":15,"title":"Material 의 map, bumpMap, normalMap","description":"Material 의 표현 방식과 울퉁불퉁한 재질을 처리하는 방식을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Material","Texture","map","bumpMap","normalMap"],"createdAt":"$D2024-02-12T15:17:30.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2024-02-06-01","href":"/blog/threejs/2024-02-06-01","frontmatter":{"id":14,"title":"click 이벤트에 animation 연동하기","description":"특정 버튼을 click 했을 때 animation 을 실행하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction","animation","AnimationMixer","AnimationClip","AnimationAction"],"createdAt":"$D2024-02-06T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1a"},{"category":"threejs","slug":"2024-02-03-02","href":"/blog/threejs/2024-02-03-02","frontmatter":{"id":13,"title":"Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)","description":"Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction"],"createdAt":"$D2024-02-03T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1b"},{"category":"threejs","slug":"2024-02-03-01","href":"/blog/threejs/2024-02-03-01","frontmatter":{"id":13,"title":"(Issue) 조명이 어둡게 보이는 현상","description":"강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","DirectionalLgith","HemisphereLight","intensity"],"createdAt":"$D2024-02-03T14:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1c"},{"category":"threejs","slug":"2024-01-30-01","href":"/blog/threejs/2024-01-30-01","frontmatter":{"id":12,"title":"키보드를 사용하여 카메라 이동 인터렉션 만들기","description":"키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","keyboard event","camera","interaction"],"createdAt":"$D2024-01-30T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1d"},{"category":"threejs","slug":"2024-01-28-02","href":"/blog/threejs/2024-01-28-02","frontmatter":{"id":11,"title":"canvas 크기 설정 및 material 렌더링 side 설정","description":"사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","setSize()","setPixelRatio()","material","FrontSide","BackSide","DoubleSide"],"createdAt":"$D2024-01-28T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1e"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1f"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$20"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$21"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$22"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$23"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$24"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$25"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$26"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$27"}]}]
+b:["$","$Lc",null,{"featuredMarkdownFileDataList":[{"category":"jest","slug":"2023-12-17-01","href":"/blog/jest/2023-12-17-01","frontmatter":{"id":1,"title":"\"node:fs\" 테스트 하기","description":"node 모듈중 File System 기능, \"fs\" 를 테스트하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["mock-fs","fs","node:fs","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-17T15:33:00.000Z","modifiedHistories":[]},"markdownFile":"$d"},{"category":"threejs","slug":"2024-01-28-01","href":"/blog/threejs/2024-01-28-01","frontmatter":{"id":10,"title":"Gamma, GammFactor, sRGB 정리","description":"디지털 환경에서 색상을 표현하는데 사용되는 일부 개념들을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":true,"tags":["threejs","gamma","gamma factor","sRGB"],"createdAt":"$D2024-01-28T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$e"}],"commonMarkdownFileDataList":[{"category":"javascript","slug":"2023-12-30-01","href":"/blog/javascript/2023-12-30-01","frontmatter":{"id":2,"title":"AWS S3 를 사용한 PDF 뷰어 구현시, Metadata 설정","description":"AWS S3 에 업로드한 PDF 파일이 렌더링되지 않고 다운로드 되는 이슈에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript","PDF","PDF Metadata","AWS","S3"],"createdAt":"$D2023-12-30T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$f"},{"category":"javascript","slug":"2023-12-21-01","href":"/blog/javascript/2023-12-21-01","frontmatter":{"id":1,"title":"구조 분해 할당의 기본값 지정, null 은 사용 불가!","description":"구조 분해 할당의 기본값 설정은 Nullish(undefined 와 null) 가 아닌, 오직 undefined 일 때만 적용됩니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["javascript"],"createdAt":"$D2023-12-21T20:20:00.000Z","modifiedHistories":[]},"markdownFile":"$10"},{"category":"jest","slug":"2023-12-23-01","href":"/blog/jest/2023-12-23-01","frontmatter":{"id":2,"title":"\"jest.fn()\" 으로 함수 테스트하기","description":"컴포넌트 props 로 넘겨주는 함수를 테스트하는 방법으로 \"jest.fn()\" 사용방법에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest.fn","jest","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-23T14:45:00.000Z","modifiedHistories":[]},"markdownFile":"$11"},{"category":"jest","slug":"2023-12-26-01","href":"/blog/jest/2023-12-26-01","frontmatter":{"id":3,"title":"\"styled-components\" 로 구현한 컴포넌트 테스트하기","description":"\"styled-components\" 를 사용한 컴포넌트를 테스트하기 위한 환경설정에 대해 알아봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","styled-components","@testing-library","유닛 테스트"],"createdAt":"$D2023-12-26T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$12"},{"category":"jest","slug":"2024-01-06-01","href":"/blog/jest/2024-01-06-01","frontmatter":{"id":4,"title":"Nextjs 의 useRouter mock 정의하기","description":"Nextjs 의 useRouter 를 사용하는 컴포넌트를 테스트하기 위한 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["jest","@testing-library","useRouter","next-router-mock","유닛 테스트"],"createdAt":"$D2024-01-06T17:30:00.000Z","modifiedHistories":[]},"markdownFile":"$13"},{"category":"llmops","slug":"2023-12-16-01","href":"/blog/llmops/2023-12-16-01","frontmatter":{"id":1,"title":"LLMOps 와 친해지기 1 - 용어 정리","description":"AI 학습 모델인 Large Language Model 에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":[],"createdAt":"$D2023-12-16T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$14"},{"category":"monorepo","slug":"2024-03-10-01","href":"/blog/monorepo/2024-03-10-01","frontmatter":{"id":1,"title":"Yarn workspace 를 사용하여 Monorepo 구성하기","description":"Monorepo 에 대한 정리와 Yarn workspace 를 사용하여 Monorepo 를 구성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["monrepo","yarn workspace","javascript"],"createdAt":"$D2024-03-10T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$15"},{"category":"nextjs","slug":"2024-01-01-01","href":"/blog/nextjs/2024-01-01-01","frontmatter":{"id":2,"title":".DS_Store not found 에러","description":"Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs",".DS_Store"],"createdAt":"$D2024-01-01T15:20:00.000Z","modifiedHistories":[]},"markdownFile":"---\nid: 2\ntitle: .DS_Store not found 에러\ndescription: 'Nextjs 빌드 시, .DS_Store 파일을 찾을 수 없다는 에러를 마주하게 되었습니다.'\nthumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg\n\nfeatured: false\ntags: [\n    'nextjs',\n    '.DS_Store',\n]\n\ncreatedAt: '2024-01-01 15:20:00'\nmodifiedHistories: []\n---\n\n# .DS_Store not found 에러\n\nNextjs 프로젝트에 이미지 파일을 추가하고 삭제한 후, 빌드 에러가 발생하였습니다.\n\n> Error: ENOENT: no such file or directory, open '/.../.DS_Store\n\n\n\n<br />\n\n\n\n## 에러 원인 파악\n\n.DS_Store 는 맥북의 폴더 관련 메타데이터 파일이며, Finder 로 폴더에 접근하게 되면 자동으로 생성됩니다.\n\n문제는 Nextjs 프로젝트를 개발 환경으로 실행하거나 빌드할 때, .DS_Store 파일이 추가되면, 빌드 에러가 발생합니다.\n\n\n\n\n<br />\n\n\n\n## 해결 방법\n\n* 참고: [Stack Overflow](https://github.com/vercel/next.js/discussions/15573#discussioncomment-2415012)\n\n<br />\n\nNextjs 프로젝트 하위에 존재하는 .DS_Store 파일을 모두 삭제하는 것으로 해결할 수 있었습니다.\n\n모든 폴더를 직접 열어보면서 지우는 방법도 있겠지만, 터미널을 사용하여 삭제 명령으로 처리할 수 있습니다.\n\n```bash title=\"프로젝트 내의 모든 .DS_Store 파일 삭제\"\nrm **/.DS_Store\n```\n\n<br />\n\n삭제 명령이 실행 완료되면, Nextjs 프로젝트가 정상적으로 빌드되는 것을 확인할 수 있습니다.\n"},{"category":"nextjs","slug":"2023-12-16-01","href":"/blog/nextjs/2023-12-16-01","frontmatter":{"id":1,"title":"Nextjs 프로젝트의 유닛 테스트","description":"유닛 테스트를 위해 Jest 와 @testing-library 설치 및 설정에 대한 정리 입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["nextjs","jest","@testing-library","react","유닛 테스트"],"createdAt":"$D2023-12-16T22:13:00.000Z","modifiedHistories":[]},"markdownFile":"$16"},{"category":"react","slug":"2023-12-19-01","href":"/blog/react/2023-12-19-01","frontmatter":{"id":1,"title":"Custom Hook 으로 분리하며 발생한 실수","description":"Custom Hook 으로 분리한 useEffect 가 여러번 호출 케이스 중 한가지를 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["react","custom hook"],"createdAt":"$D2023-12-19T22:50:00.000Z","modifiedHistories":[]},"markdownFile":"$17"},{"category":"threejs","slug":"2024-03-04-01","href":"/blog/threejs/2024-03-04-01","frontmatter":{"id":17,"title":"Particle 좌표를 사용한 애니메이션 구현","description":"각 Particle 의 좌표값을 변경하여, 흘러가는 애니메이션을 만드는 방법을 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Particle","BufferGeometry","Animation"],"createdAt":"$D2024-03-04T22:00:00.000Z","modifiedHistories":[]},"markdownFile":"$18"},{"category":"threejs","slug":"2024-02-29-01","href":"/blog/threejs/2024-02-29-01","frontmatter":{"id":16,"title":"Particle 로 반딧불이 표현하기","description":"3D 환경에서 반딧불이나 별을 표현할 때 Particle 을 활용합니다. 매우 많은 입자들로 표현하는 Particle 을 어떻게 구현하는지 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Particle","BufferGeometry","PointsMaterial","Points"],"createdAt":"$D2024-02-29T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$19"},{"category":"threejs","slug":"2024-02-12-01","href":"/blog/threejs/2024-02-12-01","frontmatter":{"id":15,"title":"Material 의 map, bumpMap, normalMap","description":"Material 의 표현 방식과 울퉁불퉁한 재질을 처리하는 방식을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","Material","Texture","map","bumpMap","normalMap"],"createdAt":"$D2024-02-12T15:17:30.000Z","modifiedHistories":[]},"markdownFile":"$1a"},{"category":"threejs","slug":"2024-02-06-01","href":"/blog/threejs/2024-02-06-01","frontmatter":{"id":14,"title":"click 이벤트에 animation 연동하기","description":"특정 버튼을 click 했을 때 animation 을 실행하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction","animation","AnimationMixer","AnimationClip","AnimationAction"],"createdAt":"$D2024-02-06T15:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1b"},{"category":"threejs","slug":"2024-02-03-02","href":"/blog/threejs/2024-02-03-02","frontmatter":{"id":13,"title":"Model 에 Click Event 적용하기 (추가: ToneMapping, light.shadow.camera)","description":"Canvas 에 렌더링된 Model 에 Click 인터렉션을 적용 해봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","mouse event","click interaction"],"createdAt":"$D2024-02-03T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1c"},{"category":"threejs","slug":"2024-02-03-01","href":"/blog/threejs/2024-02-03-01","frontmatter":{"id":13,"title":"(Issue) 조명이 어둡게 보이는 현상","description":"강좌의 결과물에 비해 실습 결과물의 밝기가 어둡게 렌더링되는 현상이 발생하였습니다. 현상 원인과 해결 방법에 대해 정리하고자 합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","DirectionalLgith","HemisphereLight","intensity"],"createdAt":"$D2024-02-03T14:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1d"},{"category":"threejs","slug":"2024-01-30-01","href":"/blog/threejs/2024-01-30-01","frontmatter":{"id":12,"title":"키보드를 사용하여 카메라 이동 인터렉션 만들기","description":"키보드 입력에 대한 event listener 를 사용하여 카메라를 이동할 수 있는 인터렉션을 구현해 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","3D","keyboard event","camera","interaction"],"createdAt":"$D2024-01-30T18:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1e"},{"category":"threejs","slug":"2024-01-28-02","href":"/blog/threejs/2024-01-28-02","frontmatter":{"id":11,"title":"canvas 크기 설정 및 material 렌더링 side 설정","description":"사용자 모니터 대응을 위한 WebGLRenderer 설정과 material 의 렌더링 side 설정에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","setSize()","setPixelRatio()","material","FrontSide","BackSide","DoubleSide"],"createdAt":"$D2024-01-28T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$1f"},{"category":"threejs","slug":"2024-01-26-01","href":"/blog/threejs/2024-01-26-01","frontmatter":{"id":9,"title":"Model 에 Animation 효과 적용하기","description":"Model 파일인 .gltf, .glb 에 Animation 을 적용하는 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","animation"],"createdAt":"$D2024-01-26T20:00:00.000Z","modifiedHistories":[]},"markdownFile":"$20"},{"category":"threejs","slug":"2024-01-21-01","href":"/blog/threejs/2024-01-21-01","frontmatter":{"id":8,"title":"Model (.gltf, .glb) 객체 구조파악 및 그림자 적용","description":"Three.js 환경에 불러온 Model 객체의 주요 구성요소를 파악하고, 속성값을 변경하여 그림자를 만들어 봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d",".gltf",".glb","model","traverse","shadow"],"createdAt":"$D2024-01-21T16:00:00.000Z","modifiedHistories":[]},"markdownFile":"$21"},{"category":"threejs","slug":"2024-01-10-01","href":"/blog/threejs/2024-01-10-01","frontmatter":{"id":7,"title":"모델 파일을 Three.js 에 렌더링하기","description":".gltf 또는 .glb 확장자인 모델 파일을 Three.js 에 불러오고 렌더링하는 방법을 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr",".gltf",".glb","model"],"createdAt":"$D2024-01-10T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$22"},{"category":"threejs","slug":"2024-01-08-01","href":"/blog/threejs/2024-01-08-01","frontmatter":{"id":6,"title":"배경화면 및 환경조명 설정하기","description":"360도 이미지 확장자인 .hdr 파일을 사용하여 배경화면을 설정하고, 배경화면에 의한 환경조명 설정에 대한 정리입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","hdr","background","3D 배경화면","환경조명"],"createdAt":"$D2024-01-08T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$23"},{"category":"threejs","slug":"2024-01-07-02","href":"/blog/threejs/2024-01-07-02","frontmatter":{"id":5,"title":"그림자 표현하기","description":"그림자 설정방법과 특징에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","shadow"],"createdAt":"$D2024-01-07T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$24"},{"category":"threejs","slug":"2024-01-07-01","href":"/blog/threejs/2024-01-07-01","frontmatter":{"id":4,"title":"평평한 바닥(땅) 만들기 (Plane Mesh)","description":"바닥을 표현하기 위해 Plane Mesh 를 생성합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","plane"],"createdAt":"$D2024-01-07T23:20:00.000Z","modifiedHistories":[]},"markdownFile":"$25"},{"category":"threejs","slug":"2024-01-06-01","href":"/blog/threejs/2024-01-06-01","frontmatter":{"id":3,"title":"조명 종류와 설정","description":"조명 종류와 설정 방법에 대해 정리합니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","light"],"createdAt":"$D2024-01-06T23:00:00.000Z","modifiedHistories":[]},"markdownFile":"$26"},{"category":"threejs","slug":"2024-01-01-01","href":"/blog/threejs/2024-01-01-01","frontmatter":{"id":2,"title":"카메라 설정 (PerspectiveCamera)","description":"Three.js 의 카메라인 PerspectiveCamera 설정에 대한 포스팅입니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d","camera"],"createdAt":"$D2024-01-01T23:50:00.000Z","modifiedHistories":[]},"markdownFile":"$27"},{"category":"threejs","slug":"2023-12-31-01","href":"/blog/threejs/2023-12-31-01","frontmatter":{"id":1,"title":"Three.js 설치 및 실행","description":"Three.js 를 사용하기 위한 설치와 첫번째 화면을 그려봅니다.","thumbnail":"https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg","featured":false,"tags":["threejs","javascript","3d"],"createdAt":"$D2023-12-31T22:47:00.000Z","modifiedHistories":[]},"markdownFile":"$28"}]}]
