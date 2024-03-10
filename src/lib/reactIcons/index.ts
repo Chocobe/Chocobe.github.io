@@ -12,6 +12,7 @@ export {
 export {
     SiReactivex,
     SiJest,
+    SiYarn,
 } from 'react-icons/si';
 
 // fontawsome 6

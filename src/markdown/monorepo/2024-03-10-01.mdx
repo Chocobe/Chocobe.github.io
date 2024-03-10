@@ -1,0 +1,750 @@
+---
+id: 1
+title: 'Yarn workspace 를 사용하여 Monorepo 구성하기'
+description: 'Monorepo 에 대한 정리와 Yarn workspace 를 사용하여 Monorepo 를 구성합니다.'
+thumbnail: https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+
+featured: false
+tags: [
+    'monrepo',
+    'yarn workspace',
+    'javascript',
+]
+
+createdAt: '2024-03-10 15:00:00'
+modifiedHistories: []
+---
+
+# Yarn workspace 를 사용하여 Monorepo 구성하기
+
+저는 AI 학습 데이터 가공 데이터를 만들기 위한 작업도구 개발을 위주로 개발하고 있습니다.
+
+작업도구는 단일 프로젝트로 구현하며 Nextjs 또는 Vite 로 개발하고 있습니다.
+
+개발을 진행하며 몇가지 떠오른 생각이 있었습니다.
+
+* 저작도구의 헤더와 같은 UI 는 모두 동일
+* API 의 BASE_URL 은 바뀌지만, 호출하는 인터페이스는 일반적으로 동일
+* 동일한 Design System 및 UI Component 사용
+
+<br />
+
+위와같이 공통영역으로 분리할 수 있는 부분이 떠올랐습니다.
+
+지금까지는 이 부분들을 구현한 Template 프로젝트를 만들고, 새로운 작업도구를 개발할 때 clone 해서 개발하였습니다.
+
+<br />
+
+어느날 작업도구의 API 개편이 있었습니다.
+
+기존에 개발했던 모든 작업도구에 일일이 적용하고 배포하는 작업이 발생하였습니다.
+
+<br />
+
+이러한 생각이 떠올랐을 때, 어디선가 들어보았던 Monorepo 가 생각났습니다.
+
+* **각각의 프로젝트가 서로 의존하도록 구성할 수 있다!**
+
+<br />
+
+Monorepo 에 대해 알아본 결과, 더 많은 것을 할 수 있었고, 더 쾌적한 작업환경을 만들 수 있을 것이란 기대가 생겼습니다.
+
+<br />
+
+이번 포스팅에서는 Monorepo 에 대한 개념과, 구성방법에 대해 정리하고자 합니다.
+
+
+
+<br />
+
+
+
+## Monorepo 란?
+
+> 참고
+>
+> [Yarn 공식문서](https://classic.yarnpkg.com/blog/2018/02/15/nohoist/)
+>
+> [Naver D2 - 모던 프론트엔드 프로젝트 구성 기법 - 모노레포 도구 편](https://d2.naver.com/helloworld/7553804)
+>
+> [Create a React component library with Vite and Typescript](https://dev.to/nicolaserny/create-a-react-component-library-with-vite-and-typescript-1ih9)
+
+<br />
+
+Monrepo 는 **Monolithic Repositories** 의 약어입니다.
+
+기존에는 1개의 저장소가 1개의 프로젝트를 가지는 형식이었다면, Monorepo 는 1개의 저장소가 복수의 프로젝트를 가지는 형태입니다.
+
+<br />
+
+이로인해 얻고자 하는 것은 다음과 같습니다.
+
+* 복수의 프로젝트가 공통으로 가지는 코드를 별도의 프로젝트로 분리 및 참조
+* 공통 코드 프로젝트의 변경사항은 참조하는 다른 프로젝트에도 손쉽게 적용
+* 각 프로젝트들이 사용하는 동일한 node_modules 패키지들을 `<root>` node_modules 한곳에만 설치하여 참조 
+
+
+
+<br />
+
+만약 CommonUI 프로젝트를 만들면, Web1, Web2 와 같은 다른 프로젝트에서 참조하여 사용할 수 있습니다.
+
+<br />
+
+CommonUI, Web1, Web2 가 `React@18.x.x` 버전을 사용한다고 가정해 보겠습니다.
+
+개별 프로젝트라면 `React@18.x.x` 를 각 프로젝트의 node_modules 에 설치하므로, 동일한 `React@18.x.x` 를 3번 설치하게 됩니다.
+
+Monorepo 를 사용하게 되면, `<root>` 의 node_modules 에만 설치하고, CommonUI, Web1, Web2 는 `React@18.x.x` 를 참조해서 사용할 수 있게 됩니다.
+
+즉, 3개의 프로젝트를 yarn install 을 하였을 때, `React@18.x.x` 를 3번 설치하는 것이 아닌, 1번만 설치하게 되는 장점이 생깁니다.
+
+<br />
+
+그리고 특정 프로젝트가 `React@17.x.x` 를 사용해야 한다면, **nohoist** 설정을 사용하여, 이 프로젝트의 node_modules 에 `React@17.x.x` 를 별도로 설치하여 사용할 수도 있습니다.
+
+<img src="/markdownAssets/monorepo/2024-03-10-01/2024-03-10-01-01.svg" alt="monorepo" />
+
+
+
+<br />
+
+
+
+## Monorepo 구성 도구
+
+Monorepo 를 구성하는 툴은 몇가지가 있습니다.
+
+* yarn workspace (yarn v1: classic)
+* yarn workspace + Lerna
+* yarn berry (yarn v2: berry)
+* NX
+* ...
+
+<br />
+
+이번 포스팅 시리즈는 **yarn workspace (yarn v1: classic)** 만으로 구성하는 방법에 대해 정리하고자 합니다.
+
+
+
+<br />
+
+
+
+## Yarn workspace 를 사용한 Monorepo 구성 작업 흐름
+
+yarn workspace 를 사용한 Monrepo 구성은 다음과 같은 과정을 작업하게 됩니다.
+
+1. Monrepo 디렉토리 만들기
+2. yarn init
+3. `<root>` package.json 에 workspace 설정
+4. `common-ui` Vite 프로젝트 생성
+5. `common-ui` vite.config.ts 라이브러리 프로젝트로 설정
+6. `common-ui` package.json 설정
+7. `ChocobeButton.tsx` 컴포넌트 구현하기
+8. `<web>` Vite 프로젝트 생성
+9. `<web>` package.json 설정
+10. `<web>` 에서 ChocobeButton 사용하기
+
+
+
+<br />
+
+
+
+## 1. Monrepo 디렉토리 만들기
+
+Monorepo 를 구성할 디렉토리를 만듭니다.
+
+생성한 디렉토리는 Monorepo 의 `<root>` 로 사용하게 됩니다.
+
+
+
+<br />
+
+
+
+## 2. yarn init
+
+터미널에서 `<root>` 경로로 이동한 다음, yarn 프로젝트를 초기화 생성합니다.
+
+```bash
+yarn init -y
+```
+
+
+
+<br />
+
+
+
+## 3. `<root>` package.json 에 workspace 설정
+
+`<root>` package.json 은 Monorepo 구성에 대한 설정을 합니다.
+
+```json title="<root> package.json" showLineNumbers
+{
+    "name": "chocobe-monorepo",
+    "version": "1.0.0",
+
+    // Yarn workspace v1 은 `private: true` 를 필수 설정입니다.
+    "private": true,
+
+    // Monorepo 에 속한 프로젝트 등록
+    "workspaces": {
+        // 의존성(node_modules) 를 개별적으로 사용할 프로젝트 등록
+        "nohoist": [],
+        // 공통 의존성(<root> node_modules) 를 사용할 프로젝트 등록
+        "packages": []
+    }
+}
+```
+
+
+
+<br />
+
+
+
+## 4. `common-ui` Vite 프로젝트 생성
+
+`common-ui` 프로젝트를 생성해 보겠습니다.
+
+이 프로젝트는 다른 프로젝트에서 사용할 UI Components 만을 개발하는 프로젝트입니다.
+
+즉, 다른 프로젝트의 의존성 패키지로 역할하게 됩니다.
+
+`<root>` 디렉토리에 `packages/common-ui` 디렉토리를 추가합니다.
+
+```bash
+mkdir packages packages/common-ui
+```
+
+```bash
+<root>
+├── package.json
+└── packages
+    └── common-ui
+```
+
+<br />
+
+터미널에서 common-ui 로 이동한 후, Vite 프로젝트를 생성합니다.
+
+```bash title="common-ui Vite 프로젝트 생성"
+yarn create vite . --template react-ts
+```
+
+common-ui 프로젝트를 생성하면, 다음과 같은 디렉토리 구조를 갖게 됩니다.
+
+```bash title="전체 디렉토리 구조"
+<root>
+├── package.json
+└── packages
+    └── common-ui
+        ├── README.md
+        ├── index.html
+        ├── package.json
+        │   │ # `<common-ui>` package.json
+        ├── public
+        │   └── vite.svg
+        ├── src
+        │   ├── App.css
+        │   ├── App.tsx
+        │   ├── assets
+        │   │   └── react.svg
+        │   ├── index.css
+        │   ├── main.tsx
+        │   └── vite-env.d.ts
+        ├── tsconfig.json
+        ├── tsconfig.node.json
+        └── vite.config.ts
+            │ # `<common-ui>` vite.config.ts
+```
+
+그리고 `<common-ui>` package.json 에서 name 을 수정합니다.
+
+이는 다른 프로젝트에서 `<common-ui>` 를 import 할 때의 이름이며, yarn workspace 가 의존성을 찾을 때 사용하는 name 입니다.
+
+```json title="<common-ui> package.json"
+{
+    "name": "@chocobe/common-ui",
+    // ...생략
+}
+```
+
+<br />
+
+yarn workspace 를 구성하면, yarn 명령의 대상이 어떤 프로젝트인지 지정해주어야 합니다.
+
+터미널에서 각 프로젝트 경로로 직접 이동하여 yarn 명령을 실행하면, 단일 프로젝트와 동일하게 사용가능하지만, `<root>` 경로에서 특정 프로젝트에 yarn 명령을 실행하기 위한 script 입니다.
+
+`<root>` package.json 에 "scripts" 를 추가하겠습니다.
+
+```json title="<root> package.json 에 common 명령어 추가"
+{
+    "name": "chocobe-monorepo",
+    "version": "1.0.0",
+    "scripts": {
+        // common-ui 프로젝트에 대한 명령을 의미합니다.
+        "common": "yarn workspace @chocobe/common-ui"
+    },
+    "private": true,
+    "workspaces": {
+        "nohoist": [],
+        "packages": []
+    }
+}
+```
+
+`<root>` 경로에서 `<common-ui>` 프로젝트에 yarn 명령을 실행할 때, 다음과 같이 사용할 수 있게 됩니다.
+
+```bash title="<common-ui> 에 lodash 설치 예시"
+yarn common add lodash
+```
+
+그리고 `common-ui` 를 Monorepo 로 등록해줍니다.
+
+```json title="<common-ui> 등록하기"
+{
+    "name": "chocobe-monorepo",
+    "version": "1.0.0",
+    "scripts": {
+        "common": "yarn workspace @chocobe/common-ui"
+    },
+    "private": true,
+    "workspaces": {
+        "nohoist": [
+            // `nohoist` 로 등록하게 되면 <root> 의 node_modules 를 사용하지 않고,
+            // 프로젝트 자신 내부의 node_modules 를 사용하게 됩니다.
+            // 즉, 의존성 hoisting 을 하지 않습니다.
+        ],
+        "packages": [
+            // `packages/common-ui` 경로를 하나의 package 로 등록합니다.
+            "packages/common-ui"
+        ]
+    }
+}
+```
+
+
+
+<br />
+
+
+
+## 5. `common-ui` vite.config.ts 라이브러리 프로젝트로 설정
+
+`common-ui` 프로젝트는 라이브러리 형식으로 빌드가 되어야 합니다.
+
+**vite.config.ts** 에 설정을 추가하여, Library Mode 를 적용해 보겠습니다.
+
+<br />
+
+Library Mode 빌드 시, `index.d.ts` 를 함께 생성하기 위한 plugin 을 설치합니다.
+
+```bash title="vite-plugin-dts 설치"
+yarn common add -D vite-plugin-dts @types/node
+```
+
+<br />
+
+Vite 의 Library Mode 로 빌드하기 위해, `vite.config.ts` 를 다음과 같이 설정합니다.
+
+```ts title="Library Mode 를 위한 vit.config.ts 설정" showLineNumbers {3, 9-11}
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        react(),
+        dts({
+            insertTypesEntry: true,
+        }),
+    ],
+})
+```
+
+그리고 `build` 속성에 빌드방식을 설정합니다.
+
+```ts title="Library Mode 빌드 설정" showLineNumbers {15-47}
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts';
+import path from 'node:path';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    plugins: [
+        react(),
+        dts({
+            insertTypesEntry: true,
+        }),
+    ],
+
+    build: {
+        // Library Mode 설정
+        lib: {
+            // 빌드 시, 진입점 파일
+            // (아직 만들지 않았지만, 다음 과정에서 생성할 예정입니다.)
+            entry: path.resolve(__dirname, 'src/lib/index.ts'),
+            // 패키지명 (빌드 파일명이나 import 에는 무관)
+            name: 'CommonUI',
+            // 빌드 시, 생성할 파일 형식
+            formats: ['es', 'umd'],
+            // 빌드 시, 실제 생성할 파일명
+            fileName: format => `common-ui.${format}.js`,
+        },
+        // rollup 번들러 설정
+        rollupOptions: {
+            // 이 라이브러리를 사용하는 프로젝트에서 가져올 의존성
+            // 즉, 빌드 결과에는 제외할 의존성
+            // <common-ui> 를 사용하는 라이브러리에 아래의 의존성이 있어야 함
+            external: [
+                'react',
+                'react-dom',
+                'styled-components',
+            ],
+            output: {
+                // UMD 모드에서 <common-ui> 를 사용할 때, 전역 변수로 사용할 의존성 바인딩 설정
+                globals: {
+                    'react': 'React',
+                    'react-dom': 'ReactDOM',
+                    'styled-components': 'styled',
+                },
+            },
+        },
+    },
+});
+```
+
+
+
+<br />
+
+
+
+## 6. `common-ui` package.json 설정
+
+위에서 설정한 `vite.config.ts` 는 `<common-ui>` 빌드에 대한 설정입니다.
+
+외부 프로젝트에서 `<common-ui>` 패키지를 사용할 때, **빌드 결과중 어떤 경로의 파일을 참조하도록 할지 설정** 이 필요합니다.
+
+이 부분은 `<common-ui>` package.json 에서 설정할 수 있습니다.
+
+```json title="<common-ui> package.json 빌드파일의 참조방식 설정" showLineNumbers {31-53}
+{
+    "name": "@chocobe/common-ui",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "styled-components": "^6.1.8"
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.25",
+        "@types/react": "^18.2.56",
+        "@types/react-dom": "^18.2.19",
+        "@typescript-eslint/eslint-plugin": "^7.0.2",
+        "@typescript-eslint/parser": "^7.0.2",
+        "@vitejs/plugin-react": "^4.2.1",
+        "eslint": "^8.56.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.5",
+        "typescript": "^5.2.2",
+        "vite": "^5.1.4",
+        "vite-plugin-dts": "^3.7.3"
+    },
+    // <common-ui> 를 사용하는 프로젝트에 요구하는 의존선 버전
+    "peerDependencies": {
+        "react": "^18.2.0",
+        "react-dom": "18.2.0",
+        "styled-components": "6.1.8"
+    },
+    // 외부 프로젝트가 <common-ui> 를 설치할 때, 포함시킬 디렉토리
+    "files": [
+        "dist"
+    ],
+    // <common-ui> 를 사용할 때, 진입 경로 설정
+    "main": "./dist/common-ui.umd.js",
+    // ES6 호환 환경(import, export) 에서 <common-ui> 를 사요앟 ㄹ때, 진입 경로 설정
+    "module": "./dist/common-ui.es.js",
+    // <common-ui> 의 하위 진입 경로 설정
+    "exports": {
+        // 전역 접근 시, 진입 경로
+        ".": {
+            "types": "./dist/index.d.ts",
+            "require": "./dist/common-ui.umd.js",
+            "import": "./dist/common-ui.es.js"
+        }
+    }
+}
+```
+
+
+
+<br />
+
+
+
+## 7. `ChocobeButton.tsx` 컴포넌트 구현하기
+
+`<common-ui>` 에서 제공할 버튼 컴포넌트를 만들어보겠습니다.
+
+구현한 컴포넌트는 `vite.config.ts` 에서 빌드 방식에 설정했던 **src/lib/index.ts** 에서 export 해주어야 외부 프로젝트에서 사용할 수 있게 됩니다.
+
+먼저 아래와 같이 디렉토리를 만들겠습니다.
+
+```bash {7, 13}
+<common-ui>
+├── README.md
+├── index.html
+├── package.json
+├── public
+│   └── vite.svg
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── index.css
+│   ├── lib
+│   ├── main.tsx
+│   └── vite-env.d.ts
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
+```
+
+<br />
+
+`<common-ui>/src/lib/ChocobeButton.tsx` 파일을 만들고 아래와 같이 구현합니다.
+
+```tsx title="<common-ui>/src/lib/ChocobeButton.tsx" showLineNumbers
+// react
+import {
+    useCallback,
+    PropsWithChildren,
+    memo,
+} from 'react';
+// styled-components
+import styled from 'styled-components';
+
+const StyledChocobeButtonRoot = styled.button`
+    padding: 4px 8px;
+
+    color: #fff;
+    font-size: 24px;
+    line-height: 36px;
+    font-weight: 500;
+
+    background-color: #ff1493;
+`;
+
+type TChocobeButtonProps = PropsWithChildren<{
+    onClick: () => void;
+}>;
+
+function _ChocobeButton(props: TChocobeButtonProps) {
+    const {
+        onClick,
+        children,
+    } = props;
+
+    const _onClick = useCallback(() => {
+        console.group('_onClick() 호출');
+        onClick();
+        console.groupEnd();
+    }, [onClick]);
+
+    return (
+        <StyledChocobeButtonRoot
+            onClick={_onClick}>
+            {children}
+        </StyledChocobeButtonRoot>
+    );
+}
+
+const ChocobeButton = memo(_ChocobeButton) as typeof _ChocobeButton;
+export default ChocobeButton;
+```
+
+<br />
+
+`vite.config.ts` 의 `build.lib.entry` 에 설정한 index.ts 파일을 작성합니다.
+
+```ts title="<common-ui>/src/lib/index.ts" showLineNumbers
+export { default as ChocobeButton } from './ChocobeButton';
+```
+
+<br />
+
+이로써 `<common-ui>` 패키지는 `<ChocobeButton />` 컴포넌트를 제공하게 되었습니다.
+
+마지막으로 아래의 명령으로 빌드합니다.
+
+```bash
+yarn common build
+```
+
+
+
+<br />
+
+
+
+## 8. `<web>` Vite 프로젝트 생성
+
+`<common-ui>` 패키지를 사용하는 `<web>` 프로젝트를 생성하겠습니다.
+
+터미널에서 `<root>` 에 아래의 명령을 실행합니다.
+
+```bash title="<web> Vite 프로젝트 생성"
+yarn create vite packages/web --template react-ts
+```
+
+* 생성 시, project name 은 `@chocobe/web` 으로 변경합니다.
+
+<br />
+
+`<root>` package.json 에 `<web>` 프로젝트도 등록합니다.
+
+```json title="<root> package.json 에 <web> 프로젝트 등록" showLineNumbers {6, 13}
+{
+    "name": "chocobe-monorepo",
+    "version": "1.0.0",
+    "scripts": {
+        "common": "yarn workspace @chocobe/common-ui",
+        "web": "yarn workspace @chocobe/web"
+    },
+    "private": true,
+    "workspaces": {
+        "nohoist": [],
+        "packages": [
+            "packages/common-ui",
+            "packages/web"
+        ]
+    }
+}
+```
+
+
+
+<br />
+
+
+
+## 9. `<web>` package.json 설정
+
+`<web>` package.json 에 `<common-ui>` 의존성을 추가하겠습니다.
+
+```json title="<web> package.json 에 <common-ui> 의존성 추가" showLineNumbers {13}
+{
+    "name": "@chocobe/web",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@chocobe/common-ui": "*",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.2.56",
+        "@types/react-dom": "^18.2.19",
+        "@typescript-eslint/eslint-plugin": "^7.0.2",
+        "@typescript-eslint/parser": "^7.0.2",
+        "@vitejs/plugin-react": "^4.2.1",
+        "eslint": "^8.56.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.4.5",
+        "typescript": "^5.2.2",
+        "vite": "^5.1.4"
+    }
+}
+```
+
+`<web>` 에도 `styled-components` 를 설치합니다.
+
+```bash title="<web> install"
+yarn web add styled-components
+```
+
+
+
+<br />
+
+
+
+## 10. `<web>` 에서 `ChocobeButton` 사용하기
+
+드디어 `<common-ui>` 를 `<web>` 에서 사용할 준비가 되었습니다.
+
+`<web>` 의 App.tsx 에서 ChocobeButton 을 import 하면, 정상적으로 참조할 수 있게됩니다.
+
+```tsx title="<web> App.tsx" showLineNumbers
+// common-ui
+import { 
+    ChocobeButton,
+} from '@chocobe/common-ui';
+
+function App() {
+    return (
+        <div style={{
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+            <ChocobeButton onClick={() => {
+                console.log('여기는 Web 프로젝트입니다.');
+            }}>
+                Hello Web Project
+            </ChocobeButton>
+        </div>
+    );
+}
+
+export default App;
+```
+
+<img src="/markdownAssets/monorepo/2024-03-10-01/2024-03-10-01-02.png" alt="결과" />
+
+
+
+<br />
+
+
+
+## 마치며
+
+Yarn workspace 만을 사용하여 Monorepo 를 구성해 보았습니다.
+
+`<roo>` node_modules 의 의존성을 하위 패키지들이 참조하기 위해 Symlink 를 사용하는 등, 이번 포스팅에서 언급하지 않은 개념들이 있습니다.
+
+생략한 개념들은 Yarn Berry 포스팅에서 함께 다루면 좋을 것 같습니다.
+
+<br />
+
+주니어 frontend 개발자라는 생각이 지배적이었을 때는, 페이지를 만들고 컴포넌트를 만드는 것에만 관심이 있었습니다.
+
+이제는 미들급이라는 생각이 드는 순간, 작업 효율을 위한 환경 구성에 관심이 생기기 시작하였습니다.
+
+현재는 스터디 수준이지만, 차후 거대한 Monorepo 등, 고도화된 개발 환경을 받아들이기 위한 준비가 될 것 같습니다.

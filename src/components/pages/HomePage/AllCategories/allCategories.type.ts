@@ -9,6 +9,7 @@ import {
     TbBrandReact,
     SiJest,
     TbBrandThreejs,
+    SiYarn,
 } from '@icons';
 import { 
     IconType,
@@ -64,4 +65,10 @@ export const allBlogCategoryInfoList = [
         description: 'LLMOps 를 통해 AI 와 가까워지기 위한 정리입니다.',
         IconComponent: FaGraduationCap,
     },
+    {
+        category: 'monorepo',
+        displayName: 'Monrepo',
+        description: 'Monroepo 에 대한 정리입니다.',
+        IconComponent: SiYarn,
+    }
 ] as Readonly<TBlogCategoryInfo[]>;
