@@ -1,6 +1,6 @@
 1:HL["/_next/static/media/0c7e3e2387401c47-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:HL["/_next/static/css/6566b64e7f0e478f.css","style",{"crossOrigin":""}]
-0:["lfgskFw3mHwWMG_FQnEI1",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
+0:["KlMsOb6oLd8_kRPIqzIEv",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],"$L3",[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/6566b64e7f0e478f.css","precedence":"next","crossOrigin":""}]],"$L4"]]]]
 5:I[9248,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 6:I[179,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
 7:I[6962,["576","static/chunks/576-dc377cf448834f03.js","251","static/chunks/251-ef7560cc4f7a9f6d.js","185","static/chunks/app/layout-5bdea2f994faa404.js"],""]
@@ -1489,7 +1489,7 @@ LLM 과 LangChain 을 사용하여 AI 앱을 만들 수 있는 플렛폼이 있�
     * [FlowiseAI Github](https://github.com/FlowiseAI/Flowise)
     * 서버: `Express(Typescript)`
     * 프론트: `React(Javascript)`
-15:T50ba,---
+15:T5119,---
 id: 1
 title: 'Yarn workspace 를 사용하여 Monorepo 구성하기'
 description: 'Monorepo 에 대한 정리와 Yarn workspace 를 사용하여 Monorepo 를 구성합니다.'
@@ -1522,7 +1522,7 @@ modifiedHistories: []
 
 위와같이 공통영역으로 분리할 수 있는 부분이 떠올랐습니다.
 
-지금까지는 이 부분들을 구현한 Template 프로젝트를 만들고, 새로운 작업도구를 개발할 때 clone 해서 개발하고 이었습니다.
+지금까지는 이 부분들을 구현한 Template 프로젝트를 만들고, 새로운 작업도구를 개발할 때 clone 해서 개발하였습니다.
 
 <br />
 
@@ -1582,17 +1582,17 @@ Monrepo 는 **Monolithic Repositories** 의 약어입니다.
 
 <br />
 
-만약 CommonUI, Web1, Web2 가 React@18.x.x 버전을 사용한다고 가정해 보겠습니다.
+CommonUI, Web1, Web2 가 `React@18.x.x` 버전을 사용한다고 가정해 보겠습니다.
 
-개별 프로젝트라면 React@18.x.x 를 각 프로젝트의 node_modules 에 설치하므로, 동일한 React@18.x.x 를 3번 설치하게 됩니다.
+개별 프로젝트라면 `React@18.x.x` 를 각 프로젝트의 node_modules 에 설치하므로, 동일한 `React@18.x.x` 를 3번 설치하게 됩니다.
 
-Monorepo 를 사용하게 되면, `<root>` 의 node_modules 에만 설치하고, CommonUI, Web1, Web2 는 React@18.x.x 를 참조해서 사용할 수 있게 됩니다.
+Monorepo 를 사용하게 되면, `<root>` 의 node_modules 에만 설치하고, CommonUI, Web1, Web2 는 `React@18.x.x` 를 참조해서 사용할 수 있게 됩니다.
 
-즉, 3개의 프로젝트를 yarn install 을 하였을 때, React@18.x.x 를 3번 설치하는 것이 아닌, 1번만 설치하게 되는 장점이 생깁니다.
+즉, 3개의 프로젝트를 yarn install 을 하였을 때, `React@18.x.x` 를 3번 설치하는 것이 아닌, 1번만 설치하게 되는 장점이 생깁니다.
 
 <br />
 
-그리고 특정 프로젝트가 React@17.x.x 를 사용해야 한다면, **nohoist** 설정을 사용하여, 이 프로젝트의 node_modules 에 React@17.x.x 를 별도로 설치하여 사용할 수도 있습니다.
+그리고 특정 프로젝트가 `React@17.x.x` 를 사용해야 한다면, **nohoist** 설정을 사용하여, 이 프로젝트의 node_modules 에 `React@17.x.x` 를 별도로 설치하여 사용할 수도 있습니다.
 
 <img src="/markdownAssets/monorepo/2024-03-10-01/2024-03-10-01-01.svg" alt="monorepo" />
 
@@ -1632,8 +1632,10 @@ yarn workspace 를 사용한 Monrepo 구성은 다음과 같은 과정을 작업
 4. `common-ui` Vite 프로젝트 생성
 5. `common-ui` vite.config.ts 라이브러리 프로젝트로 설정
 6. `common-ui` package.json 설정
-7. `<web>` Vite 프로젝트 생성
-8. `<web>` package.json 설정
+7. `ChocobeButton.tsx` 컴포넌트 구현하기
+8. `<web>` Vite 프로젝트 생성
+9. `<web>` package.json 설정
+10. `<web>` 에서 ChocobeButton 사용하기
 
 
 
