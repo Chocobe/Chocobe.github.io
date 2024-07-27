@@ -34,6 +34,10 @@ function RootLayoutNav() {
             name: 'Profile',
             href: '/profile',
         },
+        {
+            name: 'Three.js practice',
+            href: '/threejs-practices',
+        },
     ], []);
 
     return (
