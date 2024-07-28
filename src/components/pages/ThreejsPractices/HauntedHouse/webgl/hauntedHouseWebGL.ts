@@ -4,12 +4,16 @@ import * as THREE from 'three';
 import {
     OrbitControls,
 } from 'three/addons/controls/OrbitControls.js';
+import { 
+    Timer,
+} from 'three/examples/jsm/Addons.js';
 // mesh
 import MainLight from './mainLight';
 import Floor from './floor';
 import House from './house';
 import Graves from './graves';
 import SkyEnvironment from './skyEnvironment';
+import Ghosts from './ghosts';
 
 export default class HauntedHouseWegGL {
     private _$parent: HTMLElement;
@@ -18,7 +22,16 @@ export default class HauntedHouseWegGL {
     private _scene: THREE.Scene;
     private _camera: THREE.PerspectiveCamera;
     private _controls: OrbitControls;
+    private _timer: Timer;
+
     private _textureLoader: THREE.TextureLoader;
+    private _mainLight: MainLight;
+
+    private _floor: Floor;
+    private _house: House;
+    private _graves: Graves;
+    private _skyEnvironment: SkyEnvironment;
+    private _ghosts: Ghosts;
 
     private _config: {
         size: {
@@ -27,13 +40,6 @@ export default class HauntedHouseWegGL {
         };
         resizeTimeoutId: ReturnType<typeof setTimeout> | null;
     };
-
-    private _mainLight: MainLight;
-
-    private _floor: Floor;
-    private _house: House;
-    private _graves: Graves;
-    private _skyEnvironment: SkyEnvironment;
 
     constructor($canvas: HTMLCanvasElement) {
         if (!$canvas?.parentElement) {
@@ -68,7 +74,7 @@ export default class HauntedHouseWegGL {
         camera.aspect = width / height;
         camera.near = 1;
         camera.far = 2000;
-        camera.position.set(10, 7.5, 15);
+        camera.position.set(7, 5, 15);
         camera.lookAt(0, 0, 0);
         camera.updateProjectionMatrix();
 
@@ -79,6 +85,9 @@ export default class HauntedHouseWegGL {
         controls.enableDamping = true;
 
         this._controls = controls;
+
+        // timer
+        this._timer = new Timer();
 
         // renderer
         const renderer = new THREE.WebGLRenderer({
@@ -93,13 +102,13 @@ export default class HauntedHouseWegGL {
         this._initResize();
 
         this._textureLoader = new THREE.TextureLoader();
-
         this._mainLight = this._createMainLight();
 
         this._floor = this._createFloor();
         this._house = this._createHouse();
         this._graves = this._createGraves();
         this._skyEnvironment = this._createSkyEnvironment();
+        this._ghosts = this._createGhosts();
     }
 
     private _resize() {
@@ -178,9 +187,23 @@ export default class HauntedHouseWegGL {
         return skyEnvironment;
     }
 
+    private _createGhosts() {
+        const ghosts = new Ghosts();
+
+        this._scene.add(ghosts.mesh);
+
+        return ghosts;
+    }
+
     private tick() {
         window.requestAnimationFrame(this.tick.bind(this));
 
+        const elapsedTime = this._timer.getElapsed();
+
+        // ghosts
+        this._ghosts.animateGhosts(elapsedTime);
+
+        this._timer.update();
         this._controls.update();
         this._renderer.render(this._scene, this._camera);
     }
