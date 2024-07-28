@@ -18,6 +18,10 @@ const GlobalStyles = createGlobalStyle`
 
         overflow: hidden;
     }
+
+    canvas.webgl {
+        display: block;
+    }
 `;
 
 export default GlobalStyles;
