@@ -9,6 +9,7 @@ import MainLight from './mainLight';
 import Floor from './floor';
 import House from './house';
 import Graves from './graves';
+import SkyEnvironment from './skyEnvironment';
 
 export default class HauntedHouseWegGL {
     private _$parent: HTMLElement;
@@ -17,6 +18,7 @@ export default class HauntedHouseWegGL {
     private _scene: THREE.Scene;
     private _camera: THREE.PerspectiveCamera;
     private _controls: OrbitControls;
+    private _textureLoader: THREE.TextureLoader;
 
     private _config: {
         size: {
@@ -31,6 +33,7 @@ export default class HauntedHouseWegGL {
     private _floor: Floor;
     private _house: House;
     private _graves: Graves;
+    private _skyEnvironment: SkyEnvironment;
 
     constructor($canvas: HTMLCanvasElement) {
         if (!$canvas?.parentElement) {
@@ -83,16 +86,20 @@ export default class HauntedHouseWegGL {
         });
         renderer.pixelRatio = Math.min(window.devicePixelRatio, 2);
         renderer.setSize(width, height);
+        renderer.shadowMap.enabled = true;
 
         this._renderer = renderer;
 
         this._initResize();
+
+        this._textureLoader = new THREE.TextureLoader();
 
         this._mainLight = this._createMainLight();
 
         this._floor = this._createFloor();
         this._house = this._createHouse();
         this._graves = this._createGraves();
+        this._skyEnvironment = this._createSkyEnvironment();
     }
 
     private _resize() {
@@ -132,18 +139,22 @@ export default class HauntedHouseWegGL {
         this._scene.add(mainLight.ambientLight);
         this._scene.add(mainLight.directionalLight);
 
+        // shadow debug
+        // const shadowCamera = mainLight.directionalLight.shadow.camera;
+        // this._scene.add(new THREE.CameraHelper(shadowCamera));
+
         return mainLight;
     }
 
     private _createFloor() {
-        const floor = new Floor();
+        const floor = new Floor(this._textureLoader);
         this._scene.add(floor.mesh);
 
         return floor;
     }
 
     private _createHouse() {
-        const house = new House();
+        const house = new House(this._textureLoader);
         house.mesh.position.set(0, 1.25, 0);
 
         this._scene.add(house.mesh);
@@ -152,11 +163,19 @@ export default class HauntedHouseWegGL {
     }
 
     private _createGraves() {
-        const graves = new Graves();
+        const graves = new Graves(this._textureLoader);
 
         this._scene.add(graves.mesh);
 
         return graves;
+    }
+
+    private _createSkyEnvironment() {
+        const skyEnvironment = new SkyEnvironment();
+
+        this._scene.add(skyEnvironment.mesh);
+
+        return skyEnvironment;
     }
 
     private tick() {
