@@ -49,6 +49,10 @@ function ThreejsPractices() {
             title: '석양과 무덤지기의 집',
             path: '/threejs-practices/1',
         },
+        {
+            title: '겔럭시',
+            path: '/threejs-practices/2',
+        },
     ], []);
 
     return (

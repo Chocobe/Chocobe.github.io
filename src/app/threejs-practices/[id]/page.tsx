@@ -1,11 +1,16 @@
+// page
 import HauntedHouse from '@/components/pages/ThreejsPractices/HauntedHouse/HauntedHouse';
+import GalaxyGenerator from '@/components/pages/ThreejsPractices/GalaxyGenerator/GalaxyGenerator';
+
+const contentMapper = [
+    HauntedHouse,
+    GalaxyGenerator,
+];
 
 export const generateStaticParams = () => {
-    return [
-        {
-            id: '1',
-        },
-    ];
+    return contentMapper.map((_, i) => ({
+        id: `${i + 1}`
+    }));
 };
 
 function ThreejsPracticesContentPage({ params }: {
@@ -17,10 +22,9 @@ function ThreejsPracticesContentPage({ params }: {
         id,
     } = params;
 
-    switch(id) {
-        case '1':
-            return <HauntedHouse />;
-    }
+    const ContentComponent = contentMapper[`${Number(id) - 1}`] ?? <></>;
+
+    return <ContentComponent />;
 }
 
 export default ThreejsPracticesContentPage;
