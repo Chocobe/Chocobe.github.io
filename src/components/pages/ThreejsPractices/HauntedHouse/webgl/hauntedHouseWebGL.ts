@@ -1,4 +1,7 @@
 // three
+import BaseWebGL, {
+    TBaseWebGLConfig,
+} from '../../ThreejsPracticesPageTemplate/BaseWebGL';
 import * as THREE from 'three';
 // three - addons
 import {
@@ -15,9 +18,7 @@ import Graves from './graves';
 import SkyEnvironment from './skyEnvironment';
 import Ghosts from './ghosts';
 
-export default class HauntedHouseWegGL {
-    private _$parent: HTMLElement;
-
+export default class HauntedHouseWegGL extends BaseWebGL {
     private _renderer: THREE.WebGLRenderer;
     private _scene: THREE.Scene;
     private _camera: THREE.PerspectiveCamera;
@@ -33,35 +34,18 @@ export default class HauntedHouseWegGL {
     private _skyEnvironment: SkyEnvironment;
     private _ghosts: Ghosts;
 
-    private _config: {
-        size: {
-            width: number;
-            height: number;
-        };
-        resizeTimeoutId: ReturnType<typeof setTimeout> | null;
-    };
+    protected _config: TBaseWebGLConfig;
 
     constructor($canvas: HTMLCanvasElement) {
-        if (!$canvas?.parentElement) {
-            throw new Error('can not access parentElement');
-        }
+        super($canvas);
 
-        // $parent
-        this._$parent = $canvas.parentElement;
-
-        // config.size
+        this._config = this._createInitialBaseConfig();
         const {
-            width,
-            height,
-        } = $canvas.parentElement.getBoundingClientRect();
-
-        this._config = {
             size: {
                 width,
                 height,
             },
-            resizeTimeoutId: null,
-        };
+        } = this._config;
 
         // scene
         this._scene = new THREE.Scene();
@@ -113,20 +97,19 @@ export default class HauntedHouseWegGL {
 
     private _resize() {
         const {
-            _$parent: $parent,
             _renderer: renderer,
             _camera: camera,
         } = this;
 
-        if (this._config.resizeTimeoutId) {
-            window.clearTimeout(this._config.resizeTimeoutId);
+        if (this._config.resizeTimeoutID) {
+            window.clearTimeout(this._config.resizeTimeoutID);
         }
 
-        this._config.resizeTimeoutId = setTimeout(() => {
+        this._config.resizeTimeoutID = setTimeout(() => {
             const {
                 width,
                 height,
-            } = $parent.getBoundingClientRect();
+            } = this._getSize();
 
             renderer.pixelRatio = Math.min(window.devicePixelRatio, 2);
             renderer.setSize(width, height);
@@ -134,7 +117,7 @@ export default class HauntedHouseWegGL {
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
 
-            this._config.resizeTimeoutId = null;
+            this._config.resizeTimeoutID = null;
         }, 500);
     }
 
@@ -195,7 +178,7 @@ export default class HauntedHouseWegGL {
         return ghosts;
     }
 
-    private tick() {
+    protected override tick() {
         window.requestAnimationFrame(this.tick.bind(this));
 
         const elapsedTime = this._timer.getElapsed();
@@ -208,7 +191,7 @@ export default class HauntedHouseWegGL {
         this._renderer.render(this._scene, this._camera);
     }
 
-    run() {
+    override run() {
         this.tick();
     }
 
