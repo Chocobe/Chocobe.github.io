@@ -20,6 +20,7 @@
     "dayjs": "^1.11.10",
     "github-markdown-css": "^5.4.0",
     "gray-matter": "^4.0.3",
+    "lil-gui": "^0.19.2",
     "next": "14.0.1",
     "next-mdx-remote": "^4.4.1",
     "react": "^18",
