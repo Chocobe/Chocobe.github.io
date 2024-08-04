@@ -12,6 +12,7 @@ class GalaxyParticle {
         maxRadius: number;
         spin: number;
         spread: number;
+        spreadPower: number;
 
         innerColor: string;
         outerColor: string;
@@ -21,14 +22,15 @@ class GalaxyParticle {
         this.config = {
             size: 0.01,
 
-            count: 25_000,
+            count: 50_000,
             branch: 3,
             maxRadius: 5,
             spin: 1,
             spread: 0.3,
+            spreadPower: 5,
 
-            innerColor: '#ad61d6',
-            outerColor: '#7f96f0',
+            innerColor: '#415695',
+            outerColor: '#b24ec6',
         };
 
         this._mesh = this.generateGalaxy();
@@ -41,6 +43,7 @@ class GalaxyParticle {
             maxRadius,
             spin,
             spread,
+            spreadPower,
 
             innerColor,
             outerColor,
@@ -60,9 +63,21 @@ class GalaxyParticle {
             const radius = Math.random() * maxRadius;
             const spinAngle = radius * spin;
 
-            const spreadX = (Math.random() - 0.5) * spread * radius;
-            const spreadY = (Math.random() - 0.5) * spread * radius;
-            const spreadZ = (Math.random() - 0.5) * spread * radius;
+            // const spreadX = (Math.random() - 0.5) * spread * radius;
+            // const spreadY = (Math.random() - 0.5) * spread * radius;
+            // const spreadZ = (Math.random() - 0.5) * spread * radius;
+
+            const spreadX = Math.pow(Math.random(), spreadPower) *
+                (Math.random() > 0.5 ? 1 : -1) *
+                (radius * spread);
+
+            const spreadY = Math.pow(Math.random(), spreadPower) *
+                (Math.random() > 0.5 ? 1 : -1) *
+                (radius * spread);
+
+            const spreadZ = Math.pow(Math.random(), spreadPower) *
+                (Math.random() > 0.5 ? 1 : -1) *
+                (radius * spread);
 
             positionBuffer[i3] = Math.cos(branchAngle + spinAngle) * radius + spreadX;
             positionBuffer[i3 + 1] = spreadY;

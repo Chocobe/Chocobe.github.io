@@ -16,18 +16,35 @@ export default class GalaxyGeneratorWebGL extends BaseWebGL {
     private _renderer: THREE.WebGLRenderer;
     private _scene: THREE.Scene;
     private _camera: THREE.PerspectiveCamera;
+    private _axesHelper: THREE.AxesHelper;
     private _controls: OrbitControls;
     private _gui: GUI;
 
     private _particle: GalaxyParticle;
 
-    protected override _config: TBaseWebGLConfig;
+    protected override _config: TBaseWebGLConfig & {
+        helper: {
+            showAxes: boolean;
+        };
+        controls: {
+            autoRotate: boolean;
+        };
+    };
 
     constructor($canvas: HTMLCanvasElement) {
         super($canvas);
 
         // config
-        this._config = super._createInitialBaseConfig();
+        this._config = {
+            ...super._createInitialBaseConfig(),
+            helper: {
+                showAxes: false,
+            },
+            controls: {
+                autoRotate: true,
+            },
+        };
+
         const {
             size: {
                 width,
@@ -49,12 +66,14 @@ export default class GalaxyGeneratorWebGL extends BaseWebGL {
         this._camera = camera;
 
         // axes helper
-        // const axesHelper = new THREE.AxesHelper(10);
-        // this._scene.add(axesHelper);
+        this._axesHelper = new THREE.AxesHelper(3);
+        this._axesHelper.visible = this._config.helper.showAxes;
+        this._scene.add(this._axesHelper);
 
         // controls
         this._controls = new OrbitControls(camera, $canvas);
         this._controls.enableDamping = true;
+        this._controls.autoRotate = this._config.controls.autoRotate;
 
         // particle
         this._particle = new GalaxyParticle();
@@ -84,10 +103,33 @@ export default class GalaxyGeneratorWebGL extends BaseWebGL {
             _particle: particle,
         } = this;
 
+        // helper
+        const helperGUI = gui.addFolder('Helper');
+
+        helperGUI.add(this._config.helper, 'showAxes').onChange(() => {
+            const {
+                showAxes,
+            } = this._config.helper;
+
+            this._axesHelper.visible = showAxes;
+        });
+
+        // controls
+        const controlsGUI = gui.addFolder('Controls');
+
+        controlsGUI.add(this._config.controls, 'autoRotate').onChange(() => {
+            const {
+                autoRotate,
+            } = this._config.controls;
+
+            this._controls.autoRotate = autoRotate;
+        });
+
         // galaxyParticle
         const particleGUI = gui.addFolder('Particle');
 
-        particleGUI.add(particle.config, 'count').min(100).max(50_000).step(100).onFinishChange(() => {
+        // particleGUI.add(particle.config, 'count').min(100).max(50_000).step(100).onFinishChange(() => {
+        particleGUI.add(particle.config, 'count').min(100).max(100_000).step(100).onFinishChange(() => {
             scene.remove(particle.particle);
 
             particle.generateGalaxy();
@@ -101,7 +143,7 @@ export default class GalaxyGeneratorWebGL extends BaseWebGL {
             scene.add(particle.particle);
         });
 
-        particleGUI.add(particle.config, 'maxRadius').min(1).max(8).step(0.0001).onFinishChange(() => {
+        particleGUI.add(particle.config, 'maxRadius').min(1).max(10).step(0.0001).onFinishChange(() => {
             scene.remove(particle.particle);
 
             particle.generateGalaxy();
@@ -116,6 +158,13 @@ export default class GalaxyGeneratorWebGL extends BaseWebGL {
         });
 
         particleGUI.add(particle.config, 'spread').min(0).max(1).step(0.0001).onFinishChange(() => {
+            scene.remove(particle.particle);
+
+            particle.generateGalaxy();
+            scene.add(particle.particle);
+        });
+
+        particleGUI.add(particle.config, 'spreadPower').min(1).max(10).step(0.0001).onFinishChange(() => {
             scene.remove(particle.particle);
 
             particle.generateGalaxy();
